@@ -1,0 +1,37 @@
+purpose:
+  stands_in_for: Mindy-BE read API, using synthetic phase 1 DTO examples.
+  unblocks: Exercise the actual mobile adapter over HTTP and verify HTML upstream failures fail closed.
+assumptions:
+  - id: active-status-lazy-loading
+    status: supported
+    claim: The mobile class lists initially request only IN_PROGRESS (list and count); other statuses and session rosters/units load on user selection.
+    reason: The UI no longer preloads inactive status counts or requests per-card session enrichment. The roster adapter returns the authorized class shell for its heading.
+    verification: UI tests using the actual adapter and an Axios spy assert two requests per selected class status. Separate UI tests assert deferred roster/units. The existing simulation HTTP adapter run on port 4013 exercised list, scope check and roster reads, with seven 200 responses and the configured context HTML 503. This does not prove production traffic counts.
+    source: src/modules/teaching/screens/ClassesScreens.tsx; src/modules/teaching/screens/SessionContextScreen.tsx; src/modules/teaching/services/teachingService.ts; __tests__/teaching-manager.test.tsx; __tests__/teaching-ui.test.tsx; build-logs/api-loading-simulation.ndjson
+    updated_at: '2026-11-01'
+  - id: mentor-card-session-progress
+    status: supported
+    claim: Mentor cards can derive elapsed and remaining sessions from all visible session pages and count ACTIVE enrollments when workspace grants roster access.
+    reason: The list DTO omits these facts; the adapter reads workspace, sessions and roster without changing the backend contract.
+    verification: 2026-10-31 verify-teaching-api.cjs --simulation --cards passed over HTTP (1/1 elapsed, zero remaining, zero active students); simulation request events confirmed workspace, sessions and roster reads. Live --cards passed for the sampled mentor class (6/10 elapsed, four remaining, one active student). Pagination, cancellations and scope boundaries are covered by local adapter tests; live pagination beyond the sampled class remains unverified.
+    source: src/modules/teaching/services/classSessionSummary.ts; src/modules/teaching/services/teachingService.ts; __tests__/teaching-api.test.ts; scripts/verify-teaching-api.cjs
+    updated_at: '2026-10-31'
+  - id: teaching-read-contract
+    status: supported
+    claim: Phase 1 read routes use separate mentor, manager and management namespaces.
+    reason: Local backend controllers and authenticated live adapter checks agree on the exercised routes.
+    verification: 2026-10-31 scripts/verify-teaching-api.cjs passed against configured backend for both roles. Simulation evidence is recorded in api-integration.md.
+    source: docs/api-contract/phase-001-teaching-workspace/README.md; scripts/verify-teaching-api.cjs; ../Mindy-BE/src/modules/classes/controllers
+    updated_at: '2026-10-31'
+  - id: upstream-html-error
+    status: unknown
+    claim: An upstream proxy may respond with HTML instead of the backend JSON error envelope.
+    reason: This is a resilience scenario; the stand-in models it but does not prove provider behavior.
+    verification: 2026-10-31 actual adapter HTTP run observed 8 GET requests (7 responses 200, context HTML 503). Caller returned error for context and success for other reads. This establishes client behavior against the stand-in, not provider HTML behavior.
+    source: postman/mocks/teaching/default.js; src/modules/teaching/services/teachingService.ts
+    updated_at: '2026-10-31'
+fingerprints:
+  - id: source-and-cli
+    date: '2026-10-31'
+    commit: null
+    cli: Postman CLI 1.77.0

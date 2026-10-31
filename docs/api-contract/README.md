@@ -1,5 +1,7 @@
 # API contract — nguồn backend và mapping mobile
 
+**Hiện hành phase 1 — 31/10/2026:** Theo yêu cầu “Triển khai API cho phase 1”, đã nối API thật cho 7 slice; [contract](phase-001-teaching-workspace/README.md), [snapshot SHA-256](legacy/2026-10-31-teaching/README.md), [kết quả tích hợp](../implement/phase-001-teaching-workspace/api-integration.md). Phần khảo sát cũ bên dưới giữ làm lịch sử, không mô tả trạng thái P1 hiện tại.
+
 **Hiện hành 30/10/2026:** người dùng “Duyệt UI, gắn API vào đi”, mở tích hợp phase 0. Đã có [contract bốn slice](phase-000-foundation-auth/README.md), [legacy snapshot](legacy/README.md) và [ADR Auth](../adr/ADR-019-phase-0-cookie-auth.md). API_URL development hiện có là HTTPS; xem [kết quả và giới hạn](../implement/phase-000-foundation-auth/api-integration.md). Không sửa backend hoặc collection nguồn.
 
 Phần khảo sát bên dưới giữ làm lịch sử trước tích hợp; các câu “chưa tích hợp/chưa chốt API_URL/chưa có legacy” không còn mô tả phase 0 hiện hành. P1–P8 chưa triển khai.

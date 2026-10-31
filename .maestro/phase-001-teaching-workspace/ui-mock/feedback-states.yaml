@@ -1,0 +1,58 @@
+appId: com.mindymobile_admin
+name: 'P1 feedback states - warm Manager session after phase-1-ui'
+---
+# Requires the Manager session and English/dark preferences left by phase-1-ui.yaml.
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-manager-classes
+    timeout: 120000
+- tapOn:
+    id: workspace-open-manager-classes
+- tapOn:
+    id: manager-classes-card-primary
+- tapOn:
+    id: teaching-mock-badge
+- scrollUntilVisible:
+    element:
+      id: teaching-scenario-studentsError
+    direction: DOWN
+- tapOn:
+    id: teaching-scenario-studentsError
+- tapOn:
+    id: manager-detail-tab-students
+- assertVisible:
+    id: manager-detail-students-empty
+- assertVisible:
+    id: manager-detail-students-error
+- assertVisible:
+    id: manager-detail-students-retry
+- takeScreenshot: build-logs/phase-1/ui-spacing/roster-error
+- tapOn:
+    id: teaching-mock-badge
+- tapOn:
+    id: teaching-scenario-offline
+- assertVisible:
+    id: manager-detail-students-empty
+- assertVisible: No network connection
+- assertNotVisible:
+    id: manager-detail-students-retry
+- takeScreenshot: build-logs/phase-1/ui-spacing/roster-offline
+- tapOn:
+    id: teaching-mock-badge
+- tapOn:
+    id: teaching-scenario-loading
+- assertVisible:
+    id: manager-detail-students-empty
+- assertNotVisible:
+    id: manager-detail-students-error
+- assertNotVisible:
+    id: manager-detail-students-retry
+- takeScreenshot: build-logs/phase-1/ui-spacing/roster-loading
+- tapOn:
+    id: teaching-mock-badge
+- tapOn:
+    id: teaching-scenario-success
+- assertVisible:
+    id: manager-detail-student-enrollment-1
+- takeScreenshot: build-logs/phase-1/ui-spacing/roster-success

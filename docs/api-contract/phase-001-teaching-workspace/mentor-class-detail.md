@@ -1,0 +1,9 @@
+# P1-S3 — Mentor class detail
+
+GET `/mentor/classes/:classId` trả MentorWorkspaceDto trực tiếp; kiểm id/classId, capabilities.readClass, readClassRoster, accessScope và assignmentType. course.title, visibleUnitCount/visibleSessionCount là dữ liệu scoped. Chỉ mở roster khi CLASS và readClassRoster=true.
+
+GET `/mentor/classes/:classId/sessions`, page/pageSize và unitId tùy chọn, trả page TeachingSessionDto cộng capabilities.readSessionContext. Chỉ capability true mới mở context; effectiveMentor=null giữ trạng thái thiếu snapshot. GET `/mentor/classes/:classId/units` trả page id/title/position dùng cho tên chương trong context. Không gọi endpoint mở khóa, không tự đoán tiến độ hoặc ngày/phòng từ shell. Xem [quy tắc chung](README.md).
+
+Card chi tiết chỉ dùng workspace `/mentor/classes/:classId` cho tên/mã lớp, course.title, status, accessScope và visibleUnitCount/visibleSessionCount. Không gọi `/mentor/classes` để bổ sung summary; không gọi sessions riêng cho card; không có thanh tiến độ, lịch hoặc deliveryMode suy đoán từ dữ liệu ngoài workspace. Không tải/đếm học viên khi mở chi tiết. Nút “Học viên” chỉ hiện với CLASS/readClassRoster, mở màn học viên rồi mới gọi `/mentor/classes/:classId/students` (vẫn kiểm lại quyền qua workspace).
+
+Danh sách buổi học bên dưới gọi sessions một lần mỗi trang; tái sử dụng danh sách này để chọn buổi IN_PROGRESS, hoặc SCHEDULED chưa kết thúc, có readSessionContext. Phòng và meetingUrl lấy từ `/class-sessions/:sessionId/context` của buổi được chọn; kiểm sessionId/classId trước khi hiển thị. Nút “Vào lớp học” chỉ hiện khi có link HTTP(S) hợp lệ và lớp chưa COMPLETED/CANCELLED/DRAFT; response session đơn thuần không chứa link này. Không tạo phòng/link giả để khớp ảnh thiết kế. Thông thường mở chi tiết cần 3 request: workspace, sessions cho danh sách bên dưới, context; request học viên chỉ có sau khi người dùng mở “Học viên”.

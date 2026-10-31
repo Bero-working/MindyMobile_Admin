@@ -1,0 +1,6 @@
+simulation: teaching
+routing: path
+mocks:
+  - name: teaching
+    routeKey: teaching
+    path: postman/mocks/teaching

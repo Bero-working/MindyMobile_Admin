@@ -1,0 +1,7 @@
+version: 1
+name: teaching
+description: Read-only phase 1 contract fixture from Mindy-BE DTOs; synthetic data only.
+interceptRequests: true
+scenarios:
+  - name: default
+    path: default.js

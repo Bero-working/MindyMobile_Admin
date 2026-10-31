@@ -1,0 +1,33 @@
+appId: com.mindymobile_admin
+name: 'P0 API - complete phase regression'
+tags:
+  - api
+---
+- assertTrue:
+    condition: ${typeof MAESTRO_MENTOR_EMAIL === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(MAESTRO_MENTOR_EMAIL)}
+    label: Set MAESTRO_MENTOR_EMAIL to a valid test account email in this terminal
+- assertTrue:
+    condition: ${typeof MAESTRO_MENTOR_PASSWORD === 'string' && MAESTRO_MENTOR_PASSWORD.trim().length > 0 && MAESTRO_MENTOR_PASSWORD !== 'undefined'}
+    label: Set MAESTRO_MENTOR_PASSWORD in this terminal
+- assertTrue:
+    condition: ${typeof MAESTRO_MANAGER_EMAIL === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(MAESTRO_MANAGER_EMAIL)}
+    label: Set MAESTRO_MANAGER_EMAIL to a valid test account email in this terminal
+- assertTrue:
+    condition: ${typeof MAESTRO_MANAGER_PASSWORD === 'string' && MAESTRO_MANAGER_PASSWORD.trim().length > 0 && MAESTRO_MANAGER_PASSWORD !== 'undefined'}
+    label: Set MAESTRO_MANAGER_PASSWORD in this terminal
+- runFlow:
+    file: api/01-signed-out-and-invalid-login.yaml
+- runFlow:
+    file: api/02-session-settings-logout.yaml
+    env:
+      MAESTRO_TEST_EMAIL: ${MAESTRO_MENTOR_EMAIL}
+      MAESTRO_TEST_PASSWORD: ${MAESTRO_MENTOR_PASSWORD}
+      EXPECTED_WORKSPACE: workspace-mentor-root
+      LOGOUT_ROW: settings-logout-row
+- runFlow:
+    file: api/02-session-settings-logout.yaml
+    env:
+      MAESTRO_TEST_EMAIL: ${MAESTRO_MANAGER_EMAIL}
+      MAESTRO_TEST_PASSWORD: ${MAESTRO_MANAGER_PASSWORD}
+      EXPECTED_WORKSPACE: workspace-manager-root
+      LOGOUT_ROW: settings-logout-all-row

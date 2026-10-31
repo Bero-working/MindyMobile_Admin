@@ -1,0 +1,30 @@
+appId: com.mindymobile_admin
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-email-input
+    timeout: 120000
+- tapOn:
+    id: login-email-input
+- inputText:
+    text: ${TEST_EMAIL}
+    label: Enter test email
+- tapOn:
+    id: login-password-input
+- inputText:
+    text: ${TEST_PASSWORD}
+    label: Enter test password
+- scrollUntilVisible:
+    element:
+      id: login-submit-button
+    direction: DOWN
+- tapOn:
+    id: login-submit-button
+- extendedWaitUntil:
+    visible:
+      id: ${WORKSPACE}
+    timeout: 30000
+- assertNotVisible:
+    id: teaching-mock-badge

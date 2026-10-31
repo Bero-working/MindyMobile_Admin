@@ -26,6 +26,7 @@ import {
   Text as RNText,
   View,
   type TextProps,
+  type ScrollViewProps,
 } from 'react-native';
 import Animated, {
   FadeIn,
@@ -46,6 +47,7 @@ import Svg, {
   Stop,
 } from 'react-native-svg';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import { BlurView } from '@react-native-community/blur';
 import { cn } from '@/utils/cn';
 import mascot from '@/assets/images/mascot-login.png';
 import { useMindyTheme, type Palette } from './theme';
@@ -58,6 +60,14 @@ cssInterop(KeyboardAwareScrollView, {
   contentContainerClassName: 'contentContainerStyle',
 });
 
+// react-native-svg ignores the alpha of stopColor; it only reads stopOpacity.
+function stopPaint(color: string) {
+  const match = /^rgba\((.+),\s*([\d.]+)\)$/.exec(color);
+  return match
+    ? { stopColor: `rgb(${match[1]})`, stopOpacity: Number(match[2]) }
+    : { stopColor: color };
+}
+
 export function Gradient({
   variant = 'header',
   id,
@@ -68,14 +78,19 @@ export function Gradient({
   id: string;
 }) {
   const { colors } = useMindyTheme();
+  // Percent sizes don't repaint on Android when async content grows the parent.
+  const [size, setSize] = useState<{ width: number; height: number }>();
   return (
     <View
       pointerEvents="none"
       style={StyleSheet.absoluteFill}
+      onLayout={({ nativeEvent: { layout } }) =>
+        setSize({ width: layout.width, height: layout.height })
+      }
     >
       <Svg
-        width="100%"
-        height="100%"
+        width={size?.width ?? '100%'}
+        height={size?.height ?? '100%'}
         accessible={false}
       >
         <Defs>
@@ -88,19 +103,21 @@ export function Gradient({
           >
             <Stop
               offset="0"
-              stopColor={
+              {...stopPaint(
                 variant === 'header' ? colors.headerStart : colors.glass
-              }
+              )}
             />
             <Stop
               offset="0.55"
-              stopColor={variant === 'header' ? colors.headerMid : colors.glass}
+              {...stopPaint(
+                variant === 'header' ? colors.headerMid : colors.glass
+              )}
             />
             <Stop
               offset="1"
-              stopColor={
+              {...stopPaint(
                 variant === 'header' ? colors.headerEnd : colors.glassEnd
-              }
+              )}
             />
           </LinearGradient>
           <RadialGradient
@@ -169,21 +186,21 @@ export function Screen({
   variant = 'login',
   keyboardAware = false,
   flushBottom = false,
+  refreshControl,
+  onScroll,
 }: PropsWithChildren<{
   testID: string;
   variant?: 'login' | 'app';
   keyboardAware?: boolean;
   flushBottom?: boolean;
+  refreshControl?: ScrollViewProps['refreshControl'];
+  onScroll?: ScrollViewProps['onScroll'];
 }>) {
   const { variables } = useMindyTheme();
   const insets = useSafeAreaInsets();
-  const reduced = useReducedMotion();
   const ContentScroll = keyboardAware ? KeyboardAwareScrollView : ScrollView;
   return (
-    <Animated.View
-      {...(testID.startsWith('workspace-') && !reduced
-        ? { entering: FadeIn.duration(tokens.motion.base) }
-        : {})}
+    <View
       testID={testID}
       className={cn(ui.flex, 'bg-mdy-bg')}
       style={variables}
@@ -195,6 +212,9 @@ export function Screen({
         app={variant === 'app'}
       />
       <ContentScroll
+        refreshControl={refreshControl}
+        onScroll={onScroll}
+        scrollEventThrottle={200}
         className={cn(ui.flex)}
         bottomOffset={tokens.layout.keyboardOffset}
         keyboardShouldPersistTaps="handled"
@@ -210,21 +230,26 @@ export function Screen({
       >
         {children}
       </ContentScroll>
-    </Animated.View>
+    </View>
   );
 }
 export function BrandHeader({
   tagline,
   children,
   subpage = false,
-}: PropsWithChildren<{ tagline?: string; subpage?: boolean }>) {
+  flush = false,
+}: PropsWithChildren<{
+  tagline?: string;
+  subpage?: boolean;
+  flush?: boolean;
+}>) {
   const insets = useSafeAreaInsets();
   return (
     <View
       className={cn(
         ui.header,
         subpage
-          ? cn(ui.subpageHeader, 'rounded-none')
+          ? cn(ui.subpageHeader, 'rounded-none', flush && 'pb-space-0')
           : tagline
             ? ui.authHeader
             : ui.workspaceHeader
@@ -269,15 +294,19 @@ export function Card({
   testID,
   center = false,
   animate = false,
+  frosted = false,
   className,
+  skeletonLabel,
 }: PropsWithChildren<{
   animate?: boolean;
+  frosted?: boolean;
+  skeletonLabel?: string;
   overlap?: boolean;
   testID?: string;
   center?: boolean;
   className?: string;
 }>) {
-  const { colors } = useMindyTheme();
+  const { colors, isDark } = useMindyTheme();
   const reduced = useReducedMotion();
   return (
     <Animated.View
@@ -296,11 +325,55 @@ export function Card({
         boxShadow: `0px ${tokens.layout.cardShadowY}px ${tokens.layout.cardShadowBlur}px ${colors.shadow}`,
       }}
     >
+      {(frosted || overlap) && (
+        <BlurView
+          testID={testID ? `${testID}-blur` : undefined}
+          pointerEvents="none"
+          style={StyleSheet.absoluteFill}
+          blurType={isDark ? 'dark' : 'light'}
+          blurAmount={tokens.layout.glassBlur}
+          overlayColor={colors.transparent}
+          reducedTransparencyFallbackColor={colors.glass}
+        />
+      )}
       <Gradient
         id={testID ?? 'glass-card'}
         variant="glass"
       />
-      {children}
+      {skeletonLabel ? (
+        <View
+          testID={testID ? `${testID}-checking` : undefined}
+          accessible
+          accessibilityRole="progressbar"
+          accessibilityLabel={skeletonLabel}
+          accessibilityState={{ busy: true }}
+          accessibilityLiveRegion="polite"
+        >
+          <View
+            pointerEvents="none"
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+            className="opacity-0 gap-space-16"
+          >
+            {children}
+          </View>
+          <View
+            pointerEvents="none"
+            accessibilityElementsHidden
+            importantForAccessibility="no-hide-descendants"
+            className="absolute inset-0 gap-space-16"
+          >
+            <View className="h-space-24 w-1/2 rounded-radius-7 bg-mdy-muted" />
+            <View className="h-space-16 w-3/4 rounded-radius-7 bg-mdy-muted" />
+            <View className="flex-1 rounded-radius-12 bg-mdy-muted" />
+            <View className="flex-1 rounded-radius-12 bg-mdy-muted" />
+            <View className="h-space-44 w-1/2 self-end rounded-radius-7 bg-mdy-muted" />
+            <View className="h-space-52 rounded-radius-99 bg-mdy-muted" />
+          </View>
+        </View>
+      ) : (
+        children
+      )}
     </Animated.View>
   );
 }
@@ -366,10 +439,12 @@ export function Avatar({
   name,
   profile = false,
   testID,
+  size,
 }: {
   name: string;
   profile?: boolean;
   testID?: string;
+  size?: 36 | 40 | 52;
 }) {
   const words = name.trim().split(/\s+/).filter(Boolean);
   const initials =
@@ -379,6 +454,9 @@ export function Avatar({
   return (
     <View
       testID={testID}
+      {...(size
+        ? { style: { width: size, height: size, borderRadius: size / 2 } }
+        : {})}
       className={cn(
         ui.avatar,
         'bg-mdy-avatar',
@@ -403,7 +481,14 @@ export function Chip({
   variant = 'brand',
 }: PropsWithChildren<{
   testID?: string;
-  variant?: 'brand' | 'neutral' | 'header';
+  variant?:
+    | 'brand'
+    | 'neutral'
+    | 'header'
+    | 'success'
+    | 'warning'
+    | 'danger'
+    | 'info';
 }>) {
   return (
     <View
@@ -414,7 +499,15 @@ export function Chip({
           ? 'bg-mdy-headerGlass'
           : variant === 'neutral'
             ? 'bg-mdy-muted'
-            : 'bg-mdy-tint2'
+            : variant === 'success'
+              ? 'bg-mdy-successBg'
+              : variant === 'warning'
+                ? 'bg-mdy-warningBg'
+                : variant === 'danger'
+                  ? 'bg-mdy-dangerBg'
+                  : variant === 'info'
+                    ? 'bg-mdy-infoBg'
+                    : 'bg-mdy-tint2'
       )}
     >
       <Text
@@ -424,7 +517,15 @@ export function Chip({
             ? 'text-mdy-onBrand'
             : variant === 'neutral'
               ? 'text-mdy-secondary'
-              : 'text-mdy-link'
+              : variant === 'success'
+                ? 'text-mdy-success'
+                : variant === 'warning'
+                  ? 'text-mdy-warning'
+                  : variant === 'danger'
+                    ? 'text-mdy-danger'
+                    : variant === 'info'
+                      ? 'text-mdy-info'
+                      : 'text-mdy-link'
         )}
       >
         {children}

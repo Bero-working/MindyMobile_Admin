@@ -1,0 +1,23 @@
+appId: com.mindymobile_admin
+name: Home today card compact layout
+---
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: workspace-today-session
+    timeout: 30000
+- assertVisible:
+    id: workspace-today-schedule
+- assertVisible:
+    id: workspace-today-meet
+- takeScreenshot: build-logs/phase-1/ui/home-today-compact
+- tapOn:
+    id: workspace-today-schedule
+- assertVisible:
+    id: schedule-screen
+- pressKey: Back
+- tapOn:
+    id: workspace-today-session
+- assertVisible:
+    id: session-title

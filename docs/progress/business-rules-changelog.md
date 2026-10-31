@@ -70,3 +70,15 @@ Nguồn: người dùng “duyệt” sau báo cáo thực hiện ADR-014. Xác 
 30/10/2026 — ADR-017 Accepted: kế hoạch tổng trùng tên folder phase; chỉ tách kế hoạch chi tiết theo slice sau khi người dùng duyệt tổng. Không đổi BR hoặc triển khai code.
 
 30/10/2026 — ADR-018 ghi yêu cầu triển khai trực tiếp: secure storage, Android network security, lazy component/router và native viewport observation. Không đổi BR nghiệp vụ hoặc auth contract; không mở cổng API. Kết quả tại [hồ sơ hạ tầng](../implement/phase-000-foundation-auth/security-lazy-loading.md).
+
+
+## Đề xuất E2E tương ứng từng phase — 31/10/2026
+
+Theo yêu cầu người dùng ghi quy tắc vào ADR, tạo [ADR-020](../adr/ADR-020-e2e-suite-per-phase.md) Proposed: mỗi phase có bộ E2E Maestro, flow tổng, lệnh npm và hồ sơ kiểm chứng riêng; pass trước nghiệm thu theo cổng ADR-009 hiện hành. ADR-020 chờ duyệt theo ADR-012; giữ nguyên các file ADR Accepted và tiến độ phase. Đã gỡ AGENTS.md vừa tạo cho yêu cầu này và chuyển liên kết README sang ADR.
+
+## Duyệt ADR-020 — 31/10/2026
+
+Nguồn: người dùng “Duyệt adr 20”. [ADR-020](../adr/ADR-020-e2e-suite-per-phase.md) Proposed → Accepted; ghi nguồn/ngày duyệt và đóng băng file theo ADR-012. Quy định bộ E2E Maestro, flow tổng, lệnh npm và hồ sơ bằng chứng riêng từng phase có hiệu lực; bổ sung ADR-009, giữ cổng E2E pass trước nghiệm thu. Đã đồng bộ sổ ADR và kế hoạch/progress P1; kế hoạch tổng P1 vẫn chờ duyệt riêng, UI/API giữ 0/7. Không thay đổi BR nghiệp vụ hoặc triển khai code.
+
+
+31/10/2026 (Asia/Bangkok) — Người dùng “Duyệt tất cả adr”: xác nhận ADR-001–ADR-022; ADR-021 (chiều điều hướng) và ADR-022 (blur native) chuyển Accepted, ghi nguồn/ngày duyệt và đóng băng theo ADR-012. Sổ ADR đã đồng bộ; các ghi nhận Proposed trước đây là lịch sử. Không thay đổi tiến độ UI/API hoặc trạng thái nghiệm thu phase.

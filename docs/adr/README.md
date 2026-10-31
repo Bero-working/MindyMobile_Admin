@@ -1,6 +1,6 @@
 # Sổ quyết định kiến trúc
 
-Ngày khởi tạo: 30/10/2026. **0 ADR Proposed, 18 Accepted.** Ngày 30/10/2026 (Asia/Bangkok), người dùng xác nhận: “Chốt tất cả adr 1->9”. ADR-001–ADR-009 được chấp nhận; các câu hỏi còn mở và cổng duyệt riêng vẫn giữ nguyên. ADR-010 và ADR-011 được người dùng duyệt ngày 30/10/2026 qua phản hồi “Duyệt adr 10 và 11, sau đó hoàn thành adr 11 đi”. ADR-011 đã thực hiện. ADR-010 đã thực hiện ngày 30/10/2026: tạo `docs/design/global.css` từ 3 mẫu; 7 xung đột token chờ người phụ trách design quyết định.
+Ngày khởi tạo: 30/10/2026. **0 ADR Proposed, 22 Accepted (gồm ADR-019 Accepted for implementation).** Ngày 30/10/2026 (Asia/Bangkok), người dùng xác nhận: “Chốt tất cả adr 1->9”. ADR-001–ADR-009 được chấp nhận; các câu hỏi còn mở và cổng duyệt riêng vẫn giữ nguyên. ADR-010 và ADR-011 được người dùng duyệt ngày 30/10/2026 qua phản hồi “Duyệt adr 10 và 11, sau đó hoàn thành adr 11 đi”. ADR-011 đã thực hiện. ADR-010 đã thực hiện ngày 30/10/2026: tạo `docs/design/global.css` từ 3 mẫu; 7 xung đột token chờ người phụ trách design quyết định.
 
 | ADR                                                    | Nội dung                                             | Trạng thái |
 | ------------------------------------------------------ | ---------------------------------------------------- | ---------- |
@@ -22,6 +22,10 @@ Ngày khởi tạo: 30/10/2026. **0 ADR Proposed, 18 Accepted.** Ngày 30/10/202
 | [ADR-016](ADR-016-plan-before-implementation.md) | Kế hoạch trước implement, UI trước API | Accepted |
 | [ADR-017](ADR-017-phase-plan-name-and-slice-breakdown.md) | Tên kế hoạch và tách slice | Accepted |
 | [ADR-018](ADR-018-secure-storage-network-and-lazy-loading.md) | Secure storage, network security và lazy loading | Accepted |
+| [ADR-019](ADR-019-phase-0-cookie-auth.md) | API auth cookie phase 0 | Accepted for implementation |
+| [ADR-020](ADR-020-e2e-suite-per-phase.md) | Bộ E2E tương ứng sau mỗi phase | Accepted — hiệu lực toàn bộ |
+| [ADR-021](ADR-021-entry-side-navigation.md) | Hướng mở UI cho avatar, Back và điều hướng tiến | Accepted — hiệu lực toàn bộ |
+| [ADR-022](ADR-022-frosted-glass-blur.md) | Kính mờ thật bằng thư viện blur native | Accepted — hiệu lực toàn bộ |
 
 ## Vòng đời
 
@@ -86,3 +90,20 @@ Sau khi nhận báo cáo chuyển tài liệu design thành `docs/design/global.
 ## ADR-019 — API auth phase 0 · 30/10/2026
 
 [ADR-019](ADR-019-phase-0-cookie-auth.md) ghi chỉ thị “Duyệt UI, gắn API vào đi”, mở tích hợp bốn slice và dùng API HTTPS đã cấu hình. Native cookie jar, schema validation, me roundtrip, refresh single flight và logout retry có phạm vi/giới hạn kiểm chứng cụ thể; không sửa ADR Accepted cũ hoặc tự nghiệm thu phase. Xem [hồ sơ API](../implement/phase-000-foundation-auth/api-integration.md).
+
+## ADR-020 — E2E riêng theo phase · 31/10/2026
+
+[ADR-020](ADR-020-e2e-suite-per-phase.md) Accepted theo phản hồi người dùng “Duyệt adr 20”. Bổ sung ADR-009 về bộ Maestro E2E, flow tổng, lệnh npm và hồ sơ bằng chứng riêng từng phase; hiệu lực toàn bộ. Giữ nguyên file ADR-009 và các ADR đã đóng băng, cổng duyệt kế hoạch/UI và quyền nghiệm thu của người dùng. ADR-020 được đóng băng từ lần duyệt này theo ADR-012.
+
+
+## Duyệt toàn bộ ADR — 31/10/2026
+
+Nguồn: người dùng “Duyệt tất cả adr” ngày 31/10/2026 (Asia/Bangkok). Xác nhận chấp thuận toàn bộ ADR-001–ADR-022 hiện có. ADR-021 và ADR-022 chuyển Proposed → Accepted; đã ghi nguồn/ngày duyệt và đóng băng hai file theo ADR-012. ADR-001–ADR-020 giữ nguyên bản đã duyệt.
+
+ADR-021 bổ sung ADR-005/013 về chiều chuyển màn và các ngoại lệ Avatar/Profile, MentorClasses, TeachingSchedule; quyết định mới được ưu tiên trong phạm vi này. ADR-022 bổ sung ADR-003/010/014 về blur native, alpha gradient và HomeTile; quyết định mới được ưu tiên trong phạm vi hiển thị kính. Các quyết định còn lại tiếp tục có hiệu lực theo mapping thay thế hiện có.
+
+Các ghi nhận Proposed trước đây trong sổ và hồ sơ triển khai là lịch sử trước lần duyệt này. Việc duyệt ADR ghi nhận quyết định kiến trúc; các câu hỏi còn mở, giới hạn kiểm chứng và cổng duyệt UI/API/nghiệm thu phase vẫn theo hồ sơ tương ứng.
+
+## ADR-023 — Mở màn hình từ nút được bấm · 31/10/2026
+
+[ADR-023](ADR-023-button-origin-navigation.md) Proposed, ghi nhận chuỗi yêu cầu về hiệu ứng điều hướng. Chỉ thị mới nhất ngày 01/11/2026 bỏ animation cả khi mở và Back UI; code dùng điều hướng trực tiếp và bỏ lớp chuyển động tùy chỉnh. Chưa ghi nhận duyệt riêng ADR. Đề xuất thay toàn bộ quy tắc chuyển động của ADR-021; giữ nguyên file ADR-021 đã đóng băng.

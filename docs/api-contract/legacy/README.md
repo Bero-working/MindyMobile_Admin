@@ -1,5 +1,7 @@
 # Backend auth source snapshot
 
+Phase 1: [teaching snapshot nguyên byte và SHA-256 ngày 31/10/2026](2026-10-31-teaching/README.md). Bảng bên dưới giữ nguồn auth phase 0.
+
 Source: `D:/FPT_University/FA26/WDP301/Mindy-BE`. Imported 30/10/2026 (Asia/Bangkok). Files copied byte-for-byte; source is evidence of the checkout contract, not a deployed-build guarantee. No environment files, credentials or tokens copied.
 
 | Source path | Snapshot | SHA-256 |

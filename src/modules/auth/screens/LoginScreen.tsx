@@ -19,7 +19,7 @@ import { TextField } from '@/components/ui/text-field';
 import { useAuth } from '../hooks/useAuth';
 import type { AuthError } from '../types';
 
-export function LoginScreen() {
+export function LoginScreen({ skeleton = false }: { skeleton?: boolean }) {
   const { t } = useTranslation('foundation');
   const { state, busy, login } = useAuth();
   const [email, setEmail] = useState('');
@@ -69,13 +69,14 @@ export function LoginScreen() {
   };
   return (
     <Screen
-      testID="login-screen"
-      keyboardAware
+      testID={skeleton ? 'bootstrap-screen' : 'login-screen'}
+      keyboardAware={!skeleton}
     >
       <BrandHeader tagline={t('tagline')} />
       <Card
         overlap
-        animate
+        testID={skeleton ? 'bootstrap-skeleton-card' : 'login-card'}
+        {...(skeleton ? { skeletonLabel: t('checking') } : {})}
       >
         <View>
           <Text
@@ -180,7 +181,11 @@ export function LoginScreen() {
           {t(busy ? 'submitting' : 'submit')}
         </Button>
       </Card>
-      <View className={cn(local.footer)}>
+      <View
+        className={cn(local.footer, skeleton && 'opacity-0')}
+        accessibilityElementsHidden={skeleton}
+        importantForAccessibility={skeleton ? 'no-hide-descendants' : 'auto'}
+      >
         <Text className={cn(ui.caption, local.center, 'text-mdy-secondary')}>
           {t('footer')}
         </Text>

@@ -48,6 +48,7 @@ const open = (auth: AuthService) => {
     >
       <MindyThemeProvider>
         <AuthApp
+          teachingMock
           service={auth}
           cache={cache}
         />
@@ -88,8 +89,12 @@ test('TC-P0-S4-10 locks sheet cancel, scrim and back while logging out exactly o
     fireEvent.press(screen.getByTestId('workspace-account-button'));
   });
   await screen.findByTestId('profile-screen');
+  fireEvent.press(screen.getByTestId('profile-back-button'));
+  await screen.findByTestId('workspace-settings-button');
+  fireEvent.press(screen.getByTestId('workspace-settings-button'));
+  await screen.findByTestId('settings-screen');
   await act(async () => {
-    fireEvent.press(screen.getByTestId('profile-logout-row'));
+    fireEvent.press(screen.getByTestId('settings-logout-row'));
   });
   await act(async () => {
     fireEvent.press(screen.getByTestId('logout-sheet-confirm'));
@@ -124,8 +129,14 @@ test.each([
     await screen.findByTestId('workspace-account-button');
     fireEvent.press(screen.getByTestId('workspace-account-button'));
     await screen.findByTestId('profile-screen');
+    fireEvent.press(screen.getByTestId('profile-back-button'));
+    await screen.findByTestId('workspace-settings-button');
+    fireEvent.press(screen.getByTestId('workspace-settings-button'));
+    await screen.findByTestId('settings-screen');
     fireEvent.press(
-      screen.getByTestId(all ? 'profile-logout-all-row' : 'profile-logout-row')
+      screen.getByTestId(
+        all ? 'settings-logout-all-row' : 'settings-logout-row'
+      )
     );
     const dialog = within(screen.getByTestId('logout-sheet'));
     expect(dialog.getByText(title)).toBeTruthy();
@@ -136,7 +147,7 @@ test.each([
     await waitFor(() =>
       expect(screen.queryByTestId('logout-sheet')).toBeNull()
     );
-    expect(screen.getByTestId('profile-screen')).toBeTruthy();
+    expect(screen.getByTestId('settings-screen')).toBeTruthy();
     expect(auth.logout).not.toHaveBeenCalled();
   }
 );
@@ -164,15 +175,15 @@ test.each([false, true])(
     auth.logout.mockResolvedValue({ kind: 'expired' });
     const cache = open(auth);
     cache.setQueryData(['private'], user);
-    await screen.findByTestId('workspace-account-button');
+    await screen.findByTestId('workspace-settings-button');
     await act(async () => {
-      fireEvent.press(screen.getByTestId('workspace-account-button'));
+      fireEvent.press(screen.getByTestId('workspace-settings-button'));
     });
-    await screen.findByTestId('profile-screen');
+    await screen.findByTestId('settings-screen');
     await act(async () => {
       fireEvent.press(
         screen.getByTestId(
-          all ? 'profile-logout-all-row' : 'profile-logout-row'
+          all ? 'settings-logout-all-row' : 'settings-logout-row'
         )
       );
     });
@@ -183,6 +194,15 @@ test.each([false, true])(
     expect(cache.getQueryCache().getAll()).toHaveLength(0);
     expect(auth.logout).toHaveBeenCalledWith(all);
     expect(screen.queryByText(user.email)).toBeNull();
+    expect(screen.getByTestId('login-alert')).toBeTruthy();
+    expect(
+      screen.getByText('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.')
+    ).toBeTruthy();
+    await act(async () => {
+      fireEvent.press(screen.getByTestId('login-submit-button'));
+    });
+    expect(screen.queryByTestId('login-alert')).toBeNull();
+    expect(screen.getByTestId('login-email-error')).toBeTruthy();
   }
 );
 
@@ -198,15 +218,19 @@ test('TC-P0-S4-14 server logout error hides support code and leaves the account 
     fireEvent.press(screen.getByTestId('workspace-account-button'));
   });
   await screen.findByTestId('profile-screen');
+  fireEvent.press(screen.getByTestId('profile-back-button'));
+  await screen.findByTestId('workspace-settings-button');
+  fireEvent.press(screen.getByTestId('workspace-settings-button'));
+  await screen.findByTestId('settings-screen');
   await act(async () => {
-    fireEvent.press(screen.getByTestId('profile-logout-row'));
+    fireEvent.press(screen.getByTestId('settings-logout-row'));
   });
   await act(async () => {
     fireEvent.press(screen.getByTestId('logout-sheet-confirm'));
   });
   await screen.findByTestId('logout-sheet-error');
   expect(screen.queryByText('Mã hỗ trợ: req-5')).toBeNull();
-  expect(screen.getByTestId('profile-screen')).toBeTruthy();
+  expect(screen.getByTestId('settings-screen')).toBeTruthy();
 });
 
 test('TC-P0-S4-16 user B never sees A after logout and login', async () => {
@@ -223,8 +247,12 @@ test('TC-P0-S4-16 user B never sees A after logout and login', async () => {
     fireEvent.press(screen.getByTestId('workspace-account-button'));
   });
   await screen.findByTestId('profile-screen');
+  fireEvent.press(screen.getByTestId('profile-back-button'));
+  await screen.findByTestId('workspace-settings-button');
+  fireEvent.press(screen.getByTestId('workspace-settings-button'));
+  await screen.findByTestId('settings-screen');
   await act(async () => {
-    fireEvent.press(screen.getByTestId('profile-logout-row'));
+    fireEvent.press(screen.getByTestId('settings-logout-row'));
   });
   await act(async () => {
     fireEvent.press(screen.getByTestId('logout-sheet-confirm'));
@@ -395,9 +423,12 @@ test('TC-P0-S4-18 dark manager settings use translated role and danger confirmat
     fireEvent.press(screen.getByTestId('workspace-account-button'));
   });
   await screen.findByTestId('profile-screen');
-  expect(screen.getByText('Manager')).toBeTruthy();
+  fireEvent.press(screen.getByTestId('profile-back-button'));
+  await screen.findByTestId('workspace-settings-button');
+  fireEvent.press(screen.getByTestId('workspace-settings-button'));
+  await screen.findByTestId('settings-screen');
   await act(async () => {
-    fireEvent.press(screen.getByTestId('profile-logout-all-row'));
+    fireEvent.press(screen.getByTestId('settings-logout-all-row'));
   });
   const button = screen.getByTestId('logout-sheet-confirm');
   const stateStyle =
@@ -408,7 +439,7 @@ test('TC-P0-S4-18 dark manager settings use translated role and danger confirmat
 });
 
 test.each(['vi', 'en'])(
-  'TC-P0-S1-01/02 checking starts at 600ms in %s',
+  'TC-P0-S1-01/02 skeleton card appears immediately in %s',
   async (language) => {
     await i18n.changeLanguage(language);
     jest.useFakeTimers();
@@ -416,20 +447,22 @@ test.each(['vi', 'en'])(
       const auth = service();
       auth.restore.mockImplementation(() => new Promise(() => {}));
       open(auth);
+      expect(screen.getByTestId('bootstrap-skeleton-card')).toBeTruthy();
+      expect(screen.getByRole('progressbar').props.accessibilityLabel).toBe(
+        language === 'vi'
+          ? 'Đang kiểm tra phiên đăng nhập…'
+          : 'Checking your session…'
+      );
       act(() => {
         jest.advanceTimersByTime(599);
       });
-      expect(screen.queryByTestId('bootstrap-checking')).toBeNull();
+      expect(
+        screen.getByTestId('bootstrap-skeleton-card-checking')
+      ).toBeTruthy();
       act(() => {
         jest.advanceTimersByTime(1);
       });
-      expect(
-        screen.getByText(
-          language === 'vi'
-            ? 'Đang kiểm tra phiên đăng nhập…'
-            : 'Checking your session…'
-        )
-      ).toBeTruthy();
+      expect(screen.getByTestId('bootstrap-skeleton-card')).toBeTruthy();
     } finally {
       jest.useRealTimers();
     }
@@ -467,12 +500,11 @@ test.each(['MANAGER', 'offline'])(
   }
 );
 
-test('TC-P0-S1-12 inactive clears private memory and shows the correct notice', async () => {
+test('TC-P0-S1-12 inactive restore clears private memory without a startup warning', async () => {
   const cache = open(service({ kind: 'signedOut', notice: 'accountInactive' }));
   cache.setQueryData(['old-user'], user);
-  await screen.findByText(
-    'Tài khoản không còn hoạt động. Liên hệ trung tâm nếu cần hỗ trợ.'
-  );
+  await screen.findByTestId('login-screen');
+  expect(screen.queryByTestId('login-alert')).toBeNull();
   expect(cache.getQueryCache().getAll()).toHaveLength(0);
   expect(screen.getByTestId('login-email-input').props.value).toBe('');
 });
@@ -511,9 +543,10 @@ test('TC-P0-S2-16 toggle changes accessibility label twice without editing passw
   expect(screen.getByTestId('login-password-input').props.value).toBe('secret');
 });
 
-test('TC-P0-S2-18 submitting dismisses expired notice even when validation fails', async () => {
+test('cold start without a valid session opens login without a warning and retains validation', async () => {
   open(service({ kind: 'signedOut', notice: 'sessionExpired' }));
-  await screen.findByTestId('login-alert');
+  await screen.findByTestId('login-screen');
+  expect(screen.queryByTestId('login-alert')).toBeNull();
   await act(async () => {
     fireEvent.press(screen.getByTestId('login-submit-button'));
   });
@@ -608,7 +641,7 @@ test('TC-P0-S4-07 system color changes apply without navigating away', async () 
   });
 });
 
-test('S1 delays checking indicator and never opens a cached workspace offline', async () => {
+test('S1 replaces the startup skeleton with an error and never opens a cached workspace offline', async () => {
   jest.useFakeTimers();
   const auth = service();
   let finish: (value: SessionResult) => void = () => {};
@@ -619,15 +652,16 @@ test('S1 delays checking indicator and never opens a cached workspace offline', 
       })
   );
   open(auth);
-  expect(screen.queryByTestId('bootstrap-checking')).toBeNull();
+  expect(screen.getByTestId('bootstrap-skeleton-card')).toBeTruthy();
   act(() => {
     jest.advanceTimersByTime(600);
   });
-  expect(screen.getByTestId('bootstrap-checking')).toBeTruthy();
+  expect(screen.getByTestId('bootstrap-skeleton-card-checking')).toBeTruthy();
   await act(async () => {
     finish({ kind: 'error', error: { code: 'offline' } });
   });
   expect(screen.getByTestId('bootstrap-error-card')).toBeTruthy();
+  expect(screen.queryByTestId('bootstrap-skeleton-card')).toBeNull();
   expect(screen.queryByTestId('workspace-mentor-root')).toBeNull();
   jest.useRealTimers();
 });
@@ -651,10 +685,11 @@ test.each(['MENTOR', 'MANAGER', 'INVALID_ROLE', '', 'mentor'])(
 );
 
 test.each(['sessionExpired', 'accountInactive'] as const)(
-  'S1 shows %s on login',
+  'S1 suppresses %s on cold-start login',
   async (notice) => {
     open(service({ kind: 'signedOut', notice }));
-    expect(await screen.findByTestId('login-alert')).toBeTruthy();
+    await screen.findByTestId('login-screen');
+    expect(screen.queryByTestId('login-alert')).toBeNull();
   }
 );
 
@@ -831,15 +866,19 @@ test('S4 changes language/theme in place; cancel does not logout; logout-all cle
     fireEvent.press(screen.getByTestId('workspace-account-button'));
   });
   await screen.findByTestId('profile-screen');
+  fireEvent.press(screen.getByTestId('profile-back-button'));
+  await screen.findByTestId('workspace-settings-button');
+  fireEvent.press(screen.getByTestId('workspace-settings-button'));
+  await screen.findByTestId('settings-screen');
   await act(async () => {
-    fireEvent.press(screen.getByTestId('profile-logout-row'));
+    fireEvent.press(screen.getByTestId('settings-logout-row'));
   });
   await act(async () => {
     fireEvent.press(screen.getByTestId('logout-sheet-cancel'));
   });
   expect(auth.logout).not.toHaveBeenCalled();
   await act(async () => {
-    fireEvent.press(screen.getByTestId('profile-logout-all-row'));
+    fireEvent.press(screen.getByTestId('settings-logout-all-row'));
   });
   await act(async () => {
     fireEvent.press(screen.getByTestId('logout-sheet-confirm'));
@@ -862,8 +901,12 @@ test('S4 failed logout stays open and unlocks cancel', async () => {
     fireEvent.press(screen.getByTestId('workspace-account-button'));
   });
   await screen.findByTestId('profile-screen');
+  fireEvent.press(screen.getByTestId('profile-back-button'));
+  await screen.findByTestId('workspace-settings-button');
+  fireEvent.press(screen.getByTestId('workspace-settings-button'));
+  await screen.findByTestId('settings-screen');
   await act(async () => {
-    fireEvent.press(screen.getByTestId('profile-logout-row'));
+    fireEvent.press(screen.getByTestId('settings-logout-row'));
   });
   await act(async () => {
     fireEvent.press(screen.getByTestId('logout-sheet-confirm'));
@@ -873,7 +916,7 @@ test('S4 failed logout stays open and unlocks cancel', async () => {
     fireEvent.press(screen.getByTestId('logout-sheet-cancel'));
   });
   await waitFor(() => expect(screen.queryByTestId('logout-sheet')).toBeNull());
-  expect(screen.getByTestId('profile-email')).toBeTruthy();
+  expect(screen.getByTestId('settings-screen')).toBeTruthy();
 });
 
 test.each([null, '0912 345 678'])(
@@ -891,6 +934,7 @@ test.each([null, '0912 345 678'])(
       true
     );
     expect(screen.queryByTestId('settings-language-vi')).toBeNull();
+    expect(screen.queryByTestId('settings-logout-row')).toBeNull();
     expect(screen.queryByText('Cơ sở')).toBeNull();
     expect(screen.queryByText('Mã nhân viên')).toBeNull();
     expect(auth.restore).toHaveBeenCalledTimes(1);
@@ -909,7 +953,7 @@ test('updated settings stay separate from profile and unchanged preferences do n
   fireEvent.press(screen.getByTestId('settings-theme-system'));
   expect(screen.queryByTestId('toast')).toBeNull();
   expect(screen.queryByTestId('profile-email')).toBeNull();
-  expect(screen.queryByTestId('profile-logout-row')).toBeNull();
+  expect(screen.getByTestId('settings-logout-row')).toBeTruthy();
   expect(screen.getByTestId('settings-theme-note').props.children).toBe(
     'Giao diện tự đổi theo cài đặt sáng/tối của thiết bị.'
   );

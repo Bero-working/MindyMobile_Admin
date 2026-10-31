@@ -1,0 +1,21 @@
+appId: com.mindymobile_admin
+name: 'Home layout - verified Manager session, English dark'
+---
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: workspace-manager-root
+    timeout: 30000
+- tapOn:
+    id: workspace-settings-button
+- tapOn:
+    id: settings-language-en
+- tapOn:
+    id: settings-theme-dark
+- tapOn:
+    id: settings-back-button
+- assertVisible: Teaching coordination
+- assertVisible:
+    id: workspace-open-manager-classes
+- takeScreenshot: build-logs/phase-1/ui/home-manager-en-dark-360-font130

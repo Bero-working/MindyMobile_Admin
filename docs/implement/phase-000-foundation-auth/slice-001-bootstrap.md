@@ -1,5 +1,7 @@
 # P0-S1 — bootstrap · Kế hoạch triển khai slice
 
+**Cập nhật 31/10/2026:** bootstrap skeleton dùng layout card đăng nhập thật, không có spinner/delay; cold start không hiện cảnh báo mất phiên. Người dùng đã duyệt phase 0 và đóng đợt sửa. Xem [hồ sơ cập nhật](startup-ui-update.md); nội dung kế hoạch cũ bên dưới là lịch sử khi khác với cập nhật này.
+
 Ngày tách: 30/10/2026 (Asia/Bangkok). Người lập: Codex.
 
 **Kế hoạch tổng đã được người dùng duyệt qua phản hồi “Duyệt”. Người dùng đã duyệt và yêu cầu “duyệt và triển khai”; đã triển khai UI mock và bàn giao review. UI chưa được approve; API chưa được phép triển khai.**

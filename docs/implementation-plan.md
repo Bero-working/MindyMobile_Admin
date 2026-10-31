@@ -1,5 +1,7 @@
 # Kế hoạch triển khai
 
+**P1 hiện hành 31/10/2026:** Đã triển khai UI mock 7 màn theo design Claude; lint/typecheck/Jest 120 test, Android build và Maestro UI smoke pass. Chờ người dùng approve UI toàn phase; API 0/7, chưa nghiệm thu. Xem [review P1](implement/phase-001-teaching-workspace/ui-review.md).
+
 **Hiện hành 31/10/2026:** Phase 0 đã được duyệt kế hoạch/UI và tích hợp API thật 4/4; người dùng xác nhận duyệt phase 0, yêu cầu kiểm tra và dọn dẹp. Tra [tiến độ P0](progress/phase/phase-000-foundation-auth.md) và [hồ sơ rà soát](implement/phase-000-foundation-auth/review-cleanup.md). Trạng thái Todo/chờ duyệt trong bản kế hoạch ban đầu bên dưới là lịch sử.
 
 **Cập nhật 30/10/2026:** [ADR-016](adr/ADR-016-plan-before-implementation.md) bổ sung cổng: kế hoạch trong folder phase → người dùng đọc và yêu cầu implement → UI mock → người dùng approve UI → API. [Kế hoạch phase 0](implement/phase-000-foundation-auth/phase-000-foundation-auth.md) đang chờ đọc/implement; đã có [design Claude P0](design/foundation-auth/design.md). Tên hồ sơ phase-000–008 theo ADR-015. Những ghi nhận thiếu design/ADR trong bản nháp ban đầu bên dưới là lịch sử, tra progress hiện tại trước thực hiện.

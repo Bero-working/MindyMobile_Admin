@@ -51,7 +51,7 @@ tags:
     id: mock-logout-offline
 - tapOn: Đóng
 - tapOn:
-    id: workspace-account-button
+    id: workspace-settings-button
 - scrollUntilVisible:
     element:
       id: settings-logout-row

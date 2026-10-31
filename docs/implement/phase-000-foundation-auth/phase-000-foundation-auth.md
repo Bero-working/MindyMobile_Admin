@@ -1,5 +1,7 @@
 # Phase 0 — Kế hoạch triển khai Foundation & Auth
 
+**Cập nhật mới nhất 31/10/2026:** người dùng “Duyệt phase 0” sau các chỉnh sửa bootstrap skeleton và cảnh báo phiên. Đã cập nhật progress/hồ sơ implement và đóng đợt sửa; phạm vi, kết quả kiểm tra và giới hạn native tại [startup-ui-update.md](startup-ui-update.md).
+
 **Hiện hành 31/10/2026:** kế hoạch/UI đã duyệt, API thật 4/4 đã tích hợp. Người dùng xác nhận duyệt phase 0 và yêu cầu kiểm tra/dọn dẹp; xem [hồ sơ rà soát](review-cleanup.md). Các điểm dừng đã vượt qua bên dưới được giữ như kế hoạch lịch sử.
 
 Ngày lập: 30/10/2026 (Asia/Bangkok). Người lập: Codex.

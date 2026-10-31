@@ -1,0 +1,38 @@
+appId: com.mindymobile_admin
+name: 'P1 Home offline padding - warm Mentor offline state'
+---
+# Requires a warm authenticated Mentor session; restart the activity to load current JS.
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-classes
+    timeout: 90000
+- tapOn:
+    id: workspace-open-classes
+- extendedWaitUntil:
+    visible:
+      id: teaching-mock-badge
+    timeout: 10000
+- tapOn:
+    id: teaching-mock-badge
+- tapOn:
+    id: teaching-scenario-offline
+- tapOn:
+    id: classes-back-button
+- extendedWaitUntil:
+    visible:
+      id: workspace-today-offline
+    timeout: 10000
+- assertNotVisible:
+    id: workspace-today-session
+- assertNotVisible:
+    id: workspace-today-schedule
+- assertNotVisible:
+    id: workspace-today-context-error
+- assertNotVisible:
+    id: workspace-today-refresh-alert
+- waitForAnimationToEnd:
+    timeout: 10000
+- assertVisible: Không có kết nối mạng
+- takeScreenshot: build-logs/phase-1/ui-spacing/today-offline-padding

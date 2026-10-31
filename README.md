@@ -32,6 +32,26 @@ npm run build:android:bundle
 
 `check` chạy ESLint (0 warning), Prettier, TypeScript và Jest. Build Android dùng wrapper phù hợp Windows/macOS/Linux. Bản Release vẫn dùng debug signing của checkout; chưa cấu hình phát hành store.
 
+## E2E theo phase
+
+Mỗi phase có một script `test:e2e:phase-<số>`, flow đặt trong `.maestro/phase-NNN-<slug>/`. Phase 0 và phase 1 đã có E2E tích hợp; các flow `ui-mock/` là hồ sơ kiểm thử UI trước tích hợp API.
+
+**Bắt buộc sau mỗi phase:** viết và chạy E2E Maestro tương ứng, gồm hồi quy các luồng bị ảnh hưởng, đạt pass trước khi trình nghiệm thu theo ADR-009. Chi tiết về flow tổng, lệnh npm và báo cáo riêng cho từng phase được ghi trong [ADR-020 — Accepted](docs/adr/ADR-020-e2e-suite-per-phase.md). Xem [quy ước E2E](docs/implement/e2e-maestro.md); người dùng vẫn quyết định chuyển phase sang Done.
+
+`npm run test:e2e:phase-0` tự nạp tài khoản từ `.maestro/accounts.local.json` (file local được Git bỏ qua), theo cấu trúc `{ "mentor": { "email": "...", "password": "..." }, "manager": { "email": "...", "password": "..." } }`. Biến môi trường đã đặt trong terminal được ưu tiên hơn file local. Có thể dùng các biến sau nếu không dùng file local:
+
+```powershell
+$env:MAESTRO_MENTOR_EMAIL = "mentor-test-email"
+$env:MAESTRO_MENTOR_PASSWORD = "mentor-test-password"
+$env:MAESTRO_MANAGER_EMAIL = "manager-test-email"
+$env:MAESTRO_MANAGER_PASSWORD = "manager-test-password"
+npm run test:e2e:phase-0
+```
+
+Lệnh chạy lần lượt toàn bộ các ca E2E tích hợp hiện có của phase 0: signed-out/đăng nhập sai → Mentor/cài đặt/đăng xuất → Manager/cài đặt/đăng xuất mọi phiên. Flow tổng tự truyền tài khoản đúng role cho từng ca; khi một ca lỗi, lệnh dừng và trả kết quả thất bại. Trước khi chạy, cài Maestro, mở emulator đã cài app Debug và bật Metro bằng `npm start`. Thay các giá trị mẫu bằng tài khoản test thật trong môi trường terminal, không ghi credentials vào source. Các giới hạn độ bao phủ native vẫn theo hồ sơ kiểm chứng phase 0.
+
+Nếu cấu hình bằng biến môi trường, đặt cả bốn biến trong **cùng terminal** chạy lệnh npm; `.env.development` chỉ cấu hình app, không tự nạp tài khoản cho Maestro. Flow kiểm tra đủ biến trước khi mở app và báo tên biến thiếu hoặc sai định dạng. Nếu debug hierarchy hiển thị email `undefined` và `login-email-error`, hãy kiểm tra các biến này trước: app chưa gửi request đăng nhập nên chưa thể hiện workspace. Khi chạy bằng Maestro Studio, cấu hình bốn biến trong environment của Studio; Studio không tự đọc biến của shell như CLI ([tài liệu Maestro](https://docs.maestro.dev/maestro-flows/flow-control-and-logic/parameters-and-constants)).
+
 ## Cấu hình và cấu trúc
 
 - `src/config/env.ts`: validate env bằng Zod; `app.ts`: metadata, timeout, feature flags.
@@ -47,3 +67,12 @@ App chính đã dùng API auth thật cho bootstrap/login/access-denied/settings
 Phase 0 được người dùng xác nhận duyệt ngày 31/10/2026; [hồ sơ rà soát và dọn dẹp](docs/implement/phase-000-foundation-auth/review-cleanup.md) ghi kết quả và phần còn thiếu bằng chứng. Contract và giới hạn kiểm chứng: [API phase 0](docs/api-contract/phase-000-foundation-auth/README.md), [hồ sơ tích hợp](docs/implement/phase-000-foundation-auth/api-integration.md). Kết quả Android không thay thế kiểm chứng iOS.
 
 Kết quả và giới hạn kiểm chứng: [hồ sơ cấu hình nền P0](docs/implement/phase-000-foundation-auth/README.md).
+
+Phase 1 đã nối API lịch/lớp/context/roster cho Mentor và Manager, gồm Home Today. App dùng API thật cả khi DEBUG_MODE=true. Xem [contract 7 slice](docs/api-contract/phase-001-teaching-workspace/README.md), [hồ sơ tích hợp](docs/implement/phase-001-teaching-workspace/api-integration.md) và [E2E API](docs/implement/phase-001-teaching-workspace/e2e.md).
+
+```powershell
+npm run test:api:phase-1
+npm run test:e2e:phase-1
+```
+
+Lệnh đầu đọc backend bằng adapter thật và tạo `.maestro/phase-1-dataset.local.json` chứa ID để Maestro chọn đúng lớp/buổi. Lệnh E2E dùng tài khoản test local và dataset có học viên. Dữ liệu chưa có trong endpoint được để trống/“—”, không thay bằng mock. Phase 1 vẫn chờ người dùng nghiệm thu.

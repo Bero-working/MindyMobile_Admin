@@ -54,7 +54,7 @@ Phạm vi công việc: `P0-S1 — bootstrap`; `P0-S2 — login`; `P0-S3 — acc
 
 P1 — Mentor xem lịch/lớp → Manager theo dõi lớp.
 
-Folder khi triển khai: `docs/implement/phase-001-teaching-workspace/`.
+Đã tạo [hồ sơ phase 1](phase-001-teaching-workspace/README.md) và [kế hoạch tổng](phase-001-teaching-workspace/phase-001-teaching-workspace.md) ngày 31/10/2026. Người dùng đã duyệt kế hoạch tổng qua yêu cầu “Duyệt và tách slice đi”; đã tách 7 kế hoạch slice ngày 31/10/2026. Chưa triển khai code; design và chỉ thị implement còn chờ. UI 0/7, API 0/7.
 
 Phạm vi công việc: `P1-S1 — mentor-schedule`; `P1-S2 — mentor-classes`; `P1-S3 — mentor-class-detail`; `P1-S4 — session-context`; `P1-S5 — mentor-students`; `P1-S6 — manager-classes`; `P1-S7 — manager-class-detail`.
 

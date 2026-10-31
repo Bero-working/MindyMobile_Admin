@@ -1,0 +1,209 @@
+appId: com.mindymobile_admin
+name: 'P1 UI mock - all seven screens (real P0 login, fixture P1 data)'
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-email-input
+    timeout: 120000
+- tapOn:
+    id: login-email-input
+- inputText:
+    text: ${MAESTRO_MENTOR_EMAIL}
+    label: Enter mentor test email
+- tapOn:
+    id: login-password-input
+- inputText:
+    text: ${MAESTRO_MENTOR_PASSWORD}
+    label: Enter mentor test password
+- scrollUntilVisible:
+    element:
+      id: login-submit-button
+    direction: DOWN
+- tapOn:
+    id: login-submit-button
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-schedule
+    timeout: 30000
+- assertVisible: Tiện ích yêu thích
+- assertNotVisible:
+    id: workspace-open-manager-classes
+- takeScreenshot: build-logs/phase-1/ui/home-mentor-vi-light
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-schedule
+    timeout: 30000
+- tapOn:
+    id: workspace-account-button
+- assertVisible:
+    id: profile-screen
+- pressKey: Back
+- tapOn:
+    id: workspace-open-schedule
+- assertVisible:
+    id: schedule-session-today-primary
+- takeScreenshot: build-logs/phase-1/ui/schedule
+- tapOn:
+    id: schedule-session-today-primary
+- assertVisible:
+    id: session-title
+- takeScreenshot: build-logs/phase-1/ui/session
+- tapOn:
+    id: session-tab-students
+- scrollUntilVisible:
+    element:
+      id: session-student-enrollment-1
+    direction: DOWN
+- takeScreenshot: build-logs/phase-1/ui/session-students
+- pressKey: Back
+- pressKey: Back
+- tapOn:
+    id: workspace-open-classes
+- assertVisible:
+    id: classes-card-primary
+- takeScreenshot: build-logs/phase-1/ui/mentor-classes
+- tapOn:
+    id: classes-card-primary
+- assertVisible:
+    id: class-detail-students-button
+- takeScreenshot: build-logs/phase-1/ui/mentor-class-detail
+- tapOn:
+    id: class-detail-students-button
+- assertVisible:
+    id: students-row-enrollment-2
+- takeScreenshot: build-logs/phase-1/ui/mentor-students
+- pressKey: Back
+- pressKey: Back
+- scrollUntilVisible:
+    element:
+      id: classes-card-substitute
+    direction: DOWN
+- tapOn:
+    id: classes-card-substitute
+- assertVisible:
+    id: class-detail-scope-alert
+- assertNotVisible:
+    id: class-detail-students-button
+- scrollUntilVisible:
+    element:
+      id: class-detail-session-today-substitute
+    direction: DOWN
+- tapOn:
+    id: class-detail-session-today-substitute
+- assertVisible:
+    id: session-starts-note
+- tapOn:
+    id: session-tab-students
+- assertVisible:
+    id: session-students-provisional
+- scrollUntilVisible:
+    element:
+      id: session-student-enrollment-1
+    direction: DOWN
+- takeScreenshot: build-logs/phase-1/ui/substitute-session
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-email-input
+    timeout: 120000
+- tapOn:
+    id: login-email-input
+- inputText:
+    text: ${MAESTRO_MANAGER_EMAIL}
+    label: Enter manager test email
+- tapOn:
+    id: login-password-input
+- inputText:
+    text: ${MAESTRO_MANAGER_PASSWORD}
+    label: Enter manager test password
+- scrollUntilVisible:
+    element:
+      id: login-submit-button
+    direction: DOWN
+- tapOn:
+    id: login-submit-button
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-manager-classes
+    timeout: 30000
+- assertVisible: Điều phối giảng dạy
+- assertNotVisible:
+    id: workspace-open-schedule
+- assertNotVisible:
+    id: workspace-open-classes
+- takeScreenshot: build-logs/phase-1/ui/home-manager-vi-light
+- tapOn:
+    id: workspace-open-manager-classes
+- assertVisible:
+    id: manager-classes-card-primary
+- takeScreenshot: build-logs/phase-1/ui/manager-classes
+- tapOn:
+    id: manager-classes-card-primary
+- assertVisible:
+    id: manager-detail-tab-schedule
+- takeScreenshot: build-logs/phase-1/ui/manager-class-detail
+- scrollUntilVisible:
+    element:
+      id: manager-detail-tab-students
+    direction: DOWN
+- tapOn:
+    id: manager-detail-tab-students
+- scrollUntilVisible:
+    element:
+      id: manager-detail-student-enrollment-1
+    direction: DOWN
+- takeScreenshot: build-logs/phase-1/ui/manager-students
+- pressKey: Back
+- pressKey: Back
+- tapOn:
+    id: workspace-settings-button
+- tapOn:
+    id: settings-language-en
+- tapOn:
+    id: settings-theme-dark
+- tapOn:
+    id: settings-back-button
+- assertVisible: Teaching coordination
+- takeScreenshot: build-logs/phase-1/ui/home-manager-en-dark
+- tapOn:
+    id: workspace-open-manager-classes
+- assertVisible:
+    id: manager-classes-card-primary
+- takeScreenshot: build-logs/phase-1/ui/manager-dark-en
+- tapOn:
+    id: manager-classes-search
+- inputText: missing
+- extendedWaitUntil:
+    visible:
+      id: manager-classes-no-results
+    timeout: 10000
+- tapOn:
+    id: manager-classes-clear-all
+- assertVisible:
+    id: manager-classes-card-primary
+- tapOn:
+    id: manager-classes-card-primary
+- tapOn:
+    id: teaching-mock-badge
+- scrollUntilVisible:
+    element:
+      id: teaching-scenario-studentsError
+    direction: DOWN
+- tapOn:
+    id: teaching-scenario-studentsError
+- scrollUntilVisible:
+    element:
+      id: manager-detail-tab-students
+    direction: DOWN
+- tapOn:
+    id: manager-detail-tab-students
+- scrollUntilVisible:
+    element:
+      id: manager-detail-students-error
+    direction: DOWN
+- takeScreenshot: build-logs/phase-1/ui/manager-students-error-dark-en

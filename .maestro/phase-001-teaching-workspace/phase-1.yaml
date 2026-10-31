@@ -1,0 +1,114 @@
+appId: com.mindymobile_admin
+name: 'P1 API - seven screens with authenticated backend data'
+---
+- runFlow:
+    file: api/login.yaml
+    env:
+      TEST_EMAIL: ${MAESTRO_MENTOR_EMAIL}
+      TEST_PASSWORD: ${MAESTRO_MENTOR_PASSWORD}
+      WORKSPACE: workspace-mentor-root
+- assertNotVisible:
+    id: workspace-open-manager-classes
+- tapOn:
+    id: workspace-open-schedule
+- extendedWaitUntil:
+    visible:
+      id: schedule-day-title
+    timeout: 30000
+- assertNotVisible:
+    id: teaching-mock-badge
+- takeScreenshot: build-logs/phase-1/api/schedule
+- pressKey: Back
+- tapOn:
+    id: workspace-open-classes
+- extendedWaitUntil:
+    visible:
+      id: classes-card-${MAESTRO_MENTOR_CLASS_ID}
+    timeout: 30000
+- tapOn:
+    id: classes-card-${MAESTRO_MENTOR_CLASS_ID}
+- extendedWaitUntil:
+    visible:
+      id: class-detail-students-button
+    timeout: 30000
+- takeScreenshot: build-logs/phase-1/api/mentor-class
+- tapOn:
+    id: class-detail-students-button
+- extendedWaitUntil:
+    visible:
+      id: students-row-.*
+    timeout: 30000
+- takeScreenshot: build-logs/phase-1/api/mentor-roster
+- pressKey: Back
+- scrollUntilVisible:
+    element:
+      id: class-detail-session-${MAESTRO_MENTOR_SESSION_ID}
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: class-detail-session-${MAESTRO_MENTOR_SESSION_ID}
+- extendedWaitUntil:
+    visible:
+      id: session-title
+    timeout: 30000
+- tapOn:
+    id: session-tab-students
+- extendedWaitUntil:
+    visible:
+      id: session-student-.*
+    timeout: 30000
+- takeScreenshot: build-logs/phase-1/api/session-roster
+- runFlow:
+    when:
+      true: ${!!MAESTRO_MENTOR_SUBSTITUTE_CLASS_ID}
+    commands:
+      - pressKey: Back
+      - pressKey: Back
+      - scrollUntilVisible:
+          element:
+            id: classes-card-${MAESTRO_MENTOR_SUBSTITUTE_CLASS_ID}
+          direction: DOWN
+      - tapOn:
+          id: classes-card-${MAESTRO_MENTOR_SUBSTITUTE_CLASS_ID}
+      - extendedWaitUntil:
+          visible:
+            id: class-detail-scope-alert
+          timeout: 30000
+      - assertNotVisible:
+          id: class-detail-students-button
+- runFlow:
+    file: api/login.yaml
+    env:
+      TEST_EMAIL: ${MAESTRO_MANAGER_EMAIL}
+      TEST_PASSWORD: ${MAESTRO_MANAGER_PASSWORD}
+      WORKSPACE: workspace-manager-root
+- assertNotVisible:
+    id: workspace-open-schedule
+- tapOn:
+    id: workspace-open-manager-classes
+- extendedWaitUntil:
+    visible:
+      id: manager-classes-card-${MAESTRO_MANAGER_CLASS_ID}
+    timeout: 30000
+- tapOn:
+    id: manager-classes-card-${MAESTRO_MANAGER_CLASS_ID}
+- extendedWaitUntil:
+    visible:
+      id: manager-detail-course
+    timeout: 30000
+- takeScreenshot: build-logs/phase-1/api/manager-class
+- tapOn:
+    id: manager-detail-tab-schedule
+- extendedWaitUntil:
+    visible:
+      id: manager-detail-session-.*
+    timeout: 30000
+- tapOn:
+    id: manager-detail-tab-students
+- extendedWaitUntil:
+    visible:
+      id: manager-detail-student-.*
+    timeout: 30000
+- takeScreenshot: build-logs/phase-1/api/manager-roster
+- assertNotVisible:
+    id: teaching-mock-badge

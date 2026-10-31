@@ -33,6 +33,7 @@ type AuthContextValue = {
   login: (email: string, password: string) => Promise<AuthError | undefined>;
   logout: (all: boolean) => Promise<AuthError | undefined>;
   notify: (text: string) => void;
+  expireSession: () => void;
 };
 const AuthContext = createContext<AuthContextValue | null>(null);
 export const useAuth = () => {
@@ -58,7 +59,12 @@ export function AuthProvider({
         setState({ screen: 'bootstrap', error: result.error });
       else if (result.kind === 'signedOut') {
         cache.clear();
-        setState({ screen: 'login', notice: result.notice });
+        // A rejected restore also means "no saved session" on a fresh launch.
+        // Show session notices only when an admitted user loses their session.
+        setState((previous) => ({
+          screen: 'login',
+          notice: previous.user ? result.notice : undefined,
+        }));
       } else
         setState({
           screen:
@@ -70,6 +76,11 @@ export function AuthProvider({
     },
     [cache]
   );
+  const expireSession = useCallback(() => {
+    cache.clear();
+    notify(undefined);
+    setState({ screen: 'login', notice: 'sessionExpired' });
+  }, [cache]);
   const retry = useCallback(async () => {
     if (locked.current) return;
     locked.current = true;
@@ -151,7 +162,16 @@ export function AuthProvider({
   };
   return (
     <AuthContext.Provider
-      value={{ state, busy, toast, retry, login, logout, notify }}
+      value={{
+        state,
+        busy,
+        toast,
+        retry,
+        login,
+        logout,
+        notify,
+        expireSession,
+      }}
     >
       {children}
     </AuthContext.Provider>

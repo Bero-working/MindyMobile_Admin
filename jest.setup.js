@@ -67,3 +67,9 @@ jest.mock('react-native-config', () => ({
 jest.mock('react-native-keyboard-controller', () =>
   jest.requireActual('react-native-keyboard-controller/jest')
 );
+
+jest.mock('@react-native-community/blur', () => {
+  const { View } = jest.requireActual('react-native');
+
+  return { BlurView: View };
+});

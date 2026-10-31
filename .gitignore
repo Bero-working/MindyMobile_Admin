@@ -54,6 +54,7 @@ local.properties
 
 # testing
 /coverage
+.maestro/accounts.local.json
 
 # Yarn
 .yarn/*
@@ -96,3 +97,5 @@ build-logs/
 !.env.example
 !.env.development.example
 !.env.production.example
+
+.maestro/phase-1-dataset.local.json

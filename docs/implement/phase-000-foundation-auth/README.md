@@ -1,5 +1,7 @@
 # Phase 0 — Hồ sơ triển khai Foundation & Auth
 
+**Cập nhật mới nhất 31/10/2026:** đợt sửa skeleton khởi động giữ nguyên layout và cảnh báo phiên đã được người dùng duyệt bằng “Duyệt phase 0”; đã đóng đợt sửa. Xem [hồ sơ cập nhật](startup-ui-update.md) cho kết quả 86 tests và giới hạn kiểm chứng native.
+
 **Hiện hành 31/10/2026:** UI và kế hoạch đã duyệt; API thật đã tích hợp cả 4 slice. Người dùng xác nhận duyệt phase 0 và yêu cầu kiểm tra/dọn dẹp. Tra [hồ sơ rà soát](review-cleanup.md), [cập nhật S4](settings-profile-update.md) và [API](api-integration.md). Các mục chờ triển khai/duyệt ở dưới là lịch sử.
 
 **Hiện tại: người dùng đã yêu cầu “duyệt và triển khai”; đã triển khai UI mock 4/4 slice và bàn giao review. API vẫn chờ approve UI.** Theo [ADR-016](../../adr/ADR-016-plan-before-implementation.md): kế hoạch → người dùng yêu cầu implement → UI mock toàn phase → người dùng approve UI → API → kiểm chứng/E2E → nghiệm thu.

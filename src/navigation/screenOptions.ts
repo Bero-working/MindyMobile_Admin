@@ -1,6 +1,9 @@
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
-// Keep platform transitions until phase designs define motion.
+// Screen navigation is immediate in both directions.
 export const screenOptions: NativeStackNavigationOptions = {
   headerShown: false,
+  animation: 'none',
+  gestureEnabled: false,
+  fullScreenGestureEnabled: false,
 };

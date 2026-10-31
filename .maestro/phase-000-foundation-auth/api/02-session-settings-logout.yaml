@@ -3,6 +3,18 @@ name: 'P0 API - role workspace, persisted session, settings and logout'
 tags:
   - api-authenticated
 ---
+- assertTrue:
+    condition: ${typeof MAESTRO_TEST_EMAIL === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(MAESTRO_TEST_EMAIL)}
+    label: Provide MAESTRO_TEST_EMAIL with a valid test account email
+- assertTrue:
+    condition: ${typeof MAESTRO_TEST_PASSWORD === 'string' && MAESTRO_TEST_PASSWORD.trim().length > 0 && MAESTRO_TEST_PASSWORD !== 'undefined'}
+    label: Provide MAESTRO_TEST_PASSWORD
+- assertTrue:
+    condition: ${typeof EXPECTED_WORKSPACE === 'string' && (EXPECTED_WORKSPACE === 'workspace-mentor-root' || EXPECTED_WORKSPACE === 'workspace-manager-root')}
+    label: Provide EXPECTED_WORKSPACE for the test account role
+- assertTrue:
+    condition: ${typeof LOGOUT_ROW === 'string' && (LOGOUT_ROW === 'settings-logout-row' || LOGOUT_ROW === 'settings-logout-all-row')}
+    label: Provide LOGOUT_ROW for the logout action under test
 - launchApp:
     clearState: true
 - extendedWaitUntil:
@@ -60,6 +72,12 @@ tags:
     id: profile-screen
 - assertVisible: ${MAESTRO_TEST_EMAIL}
 - takeScreenshot: build-logs/auth-api-profile
+- tapOn:
+    id: profile-back-button
+- tapOn:
+    id: workspace-settings-button
+- assertVisible:
+    id: settings-screen
 - scrollUntilVisible:
     element:
       id: ${LOGOUT_ROW}

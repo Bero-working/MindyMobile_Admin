@@ -1,5 +1,7 @@
 # P0 — Nền tảng → đăng nhập → đúng workspace
 
+**Cập nhật mới nhất 31/10/2026:** người dùng xác nhận “Duyệt phase 0” sau đợt sửa skeleton khởi động giữ layout và cảnh báo phiên lúc mở app. **Đã duyệt, đã đóng đợt sửa phase 0**; Jest auth 2 suites/86 tests, typecheck, ESLint và Prettier pass. Chưa chạy lại native/Maestro cho đợt sửa này. Xem [hồ sơ cập nhật](../../implement/phase-000-foundation-auth/startup-ui-update.md).
+
 Ngày khởi tạo: 30/10/2026. Người ghi: Codex.
 **Hiện hành 31/10/2026: người dùng xác nhận “Duyệt phase 0”, yêu cầu kiểm tra và dọn dẹp. UI đã duyệt, API thật 4/4 đã tích hợp; lint/format/typecheck và 102/102 Jest tests pass trong lượt rà soát. Xem [hồ sơ rà soát](../../implement/phase-000-foundation-auth/review-cleanup.md). Giới hạn native access expiry/iOS giữ nguyên; không suy thành đã kiểm chứng mọi nhánh.**
 [Phạm vi/kế hoạch](../../implementation-plan.md#p0-foundation-auth). Ưu tiên P0.
@@ -127,3 +129,10 @@ Người dùng xác nhận duyệt phase 0 và yêu cầu kiểm tra/dọn dẹp
 Bằng chứng và kết quả chạy lại: [review-cleanup.md](../../implement/phase-000-foundation-auth/review-cleanup.md).
 
 Rà soát kết thúc: Maestro signed-out/invalid-login/relaunch PASS 1/1, exit 0 sau reset driver; log `build-logs/phase-0-review-maestro-driver-reset.log`. Hai lượt harness bị dừng giữ riêng, không tính pass. Liên kết 8 tài liệu đã sửa và lint sau dọn dẹp đều pass.
+
+## Duyệt và đóng đợt sửa bootstrap/login — 31/10/2026
+
+Người dùng phản hồi “Duyệt phase 0” sau khi sửa skeleton giữ kích thước card và bỏ cảnh báo phiên lúc cold start. Đã ghi nhận duyệt, cập nhật hồ sơ implement và đóng đợt sửa theo chỉ thị trước đó. Kiểm chứng: auth UI/API 86/86 tests, TypeScript, ESLint và Prettier pass; chưa rerun native/Maestro. [Chi tiết phạm vi và giới hạn](../../implement/phase-000-foundation-auth/startup-ui-update.md). Các yêu cầu phase 1 còn lại vẫn chưa triển khai trong đợt này.
+
+
+31/10/2026 (Asia/Bangkok) — Người dùng “Duyệt tất cả adr”: xác nhận ADR-001–ADR-022; ADR-021 (chiều điều hướng) và ADR-022 (blur native) chuyển Accepted, ghi nguồn/ngày duyệt và đóng băng theo ADR-012. Sổ ADR đã đồng bộ; các ghi nhận Proposed trước đây là lịch sử. Không thay đổi tiến độ UI/API hoặc trạng thái nghiệm thu phase.

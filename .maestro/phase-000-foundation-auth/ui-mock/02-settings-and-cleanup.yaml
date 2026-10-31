@@ -21,7 +21,7 @@ tags:
 - assertVisible:
     id: workspace-mentor-root
 - tapOn:
-    id: workspace-account-button
+    id: workspace-settings-button
 - assertVisible:
     id: settings-screen
 - takeScreenshot: build-logs/phase-0/settings-light
@@ -36,7 +36,7 @@ tags:
 - assertVisible:
     id: workspace-mentor-root
 - tapOn:
-    id: workspace-account-button
+    id: workspace-settings-button
 - scrollUntilVisible:
     element:
       id: settings-logout-row
@@ -80,7 +80,7 @@ tags:
 - assertVisible:
     id: workspace-manager-root
 - tapOn:
-    id: workspace-account-button
+    id: workspace-settings-button
 - assertVisible: Manager
 - assertNotVisible: mentor@mindy.vn
 - takeScreenshot: build-logs/phase-0/manager-settings-dark
