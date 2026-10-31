@@ -19,15 +19,7 @@ class LocalStoreService {
     return LocalStoreService.instance;
   }
 
-  // API Token methods
-  public setApiToken(token: string): void {
-    this.store.set(this.KEY_API_TOKEN, token);
-  }
-
-  public getApiToken(): string | null {
-    return this.store.getString(this.KEY_API_TOKEN) ?? null;
-  }
-
+  // Remove legacy boilerplate tokens; new credentials must never be persisted here.
   public clearApiToken(): void {
     this.store.delete(this.KEY_API_TOKEN);
   }
@@ -41,7 +33,7 @@ class LocalStoreService {
   }
 
   public getSystemLanguage(): string {
-    return this.store.getString(this.KEY_SYSTEM_LANGUAGE) ?? 'en';
+    return this.store.getString(this.KEY_SYSTEM_LANGUAGE) ?? 'vi';
   }
 
   public setSystemLanguage(language: string): void {

@@ -1,11 +1,11 @@
-import { createStackNavigator } from '@react-navigation/stack';
+/* eslint-disable @typescript-eslint/no-require-imports -- Native Stack getComponent defers module evaluation. */
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { useTheme } from '@sohantalukder/rn-kit';
 import type { RootStackParamList } from './types';
 import routes from './routes';
 import { screenOptions } from './screenOptions';
-import { Example, Splash } from '@/modules';
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const Navigation = () => {
   const { navigationTheme, variant } = useTheme();
@@ -18,11 +18,19 @@ const Navigation = () => {
         screenOptions={screenOptions}
       >
         <Stack.Screen
-          component={Splash}
+          getComponent={() =>
+            (
+              require('@/modules/splash/SplashIndex') as typeof import('@/modules/splash/SplashIndex')
+            ).default
+          }
           name={routes.splash}
         />
         <Stack.Screen
-          component={Example}
+          getComponent={() =>
+            (
+              require('@/modules/example/Example') as typeof import('@/modules/example/Example')
+            ).default
+          }
           name={routes.example}
         />
       </Stack.Navigator>

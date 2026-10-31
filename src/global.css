@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Approved P0 values live in components/ui/tokens.json.
+ * Tailwind maps dimensions/type; MindyThemeProvider supplies CSS color variables.
+ * Native-only props (SVG, keyboard/safe-area geometry, shadows) consume the same tokens.
+ */

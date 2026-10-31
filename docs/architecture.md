@@ -1,5 +1,7 @@
 # Kiến trúc Mindy Mobile
 
+**Cập nhật cấu hình nền 30/10/2026:** Theo yêu cầu cấu hình dự án sau duyệt ADR, đã triển khai env/alias/NativeWind/strict lint/vi-en và npm tooling. Xem [hồ sơ kiểm chứng](implement/phase-000-foundation-auth/README.md). Bảng hiện trạng bên dưới là snapshot trước cấu hình, không mô tả trạng thái code mới; kiến trúc nghiệp vụ/design/auth còn theo các cổng hiện có.
+
 **Bản nháp 30/10/2026.** Tất cả kiến trúc đích là đề xuất chờ [ADR](adr/README.md); chưa đổi code, dependencies hoặc native config. [BR](business-rules.md) xác định hành vi, [nguồn](README.md#nguồn-và-thứ-tự-đối-chiếu) xác định căn cứ. Không dùng bản nháp để vượt cổng phê duyệt.
 
 ## Hiện trạng checkout
@@ -172,3 +174,7 @@ TDD theo phase và test case Claude, không viết test placeholder để tăng 
 - iOS: kiểm tương thích từ đầu; nghiệm thu cookie/file/permission riêng tại mốc được chốt.
 
 Cổng cleanup: ESLint 0 error/0 warning, tsc --noEmit gồm source/test/config, Jest toàn bộ; rà AST/type policy mã do mobile quản lý. Quét chữ đơn thuần không được coi comment tiếng Anh chứa “any” là type violation; không quét node_modules/lockfile/generated như mã tự viết. Không sửa generated để vượt quy tắc. Kết quả phải ghi command, ngày, môi trường và giới hạn vào phase. Không chạy lại suite không liên quan chỉ để tuyên bố chất lượng tài liệu.
+
+## Hạ tầng security và tải theo nhu cầu — ADR-018
+
+Secure storage đi qua Keychain/Keystore, tách khỏi MMKV preferences; chưa nối auth persistence. Android release chặn cleartext và chỉ tin system CA, debug có resource override cho Metro/local HTTP. Native Stack dùng getComponent và Metro inlineRequires; panel review dùng React.lazy/Suspense/error boundary. Native list viewability qua useIntersectionObserver thay cho DOM API và chỉ mount nội dung item đã vào viewport. Không cam kết code splitting release hoặc giữ state item ngoài cửa sổ virtualization. Xem [ADR-018](adr/ADR-018-secure-storage-network-and-lazy-loading.md) và [kiểm chứng](implement/phase-000-foundation-auth/security-lazy-loading.md).

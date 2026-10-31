@@ -2,7 +2,7 @@
 
 ## Status
 
-**Proposed** — chưa được người dùng duyệt; chưa được dùng để implement.
+**Accepted** — người dùng duyệt ngày 30/10/2026 (Asia/Bangkok) qua phản hồi: “Chốt tất cả adr 1->9”. Chấp nhận nội dung Decision của ADR này; các câu hỏi còn mở và cổng duyệt riêng tiếp tục giữ nguyên, phần phụ thuộc chưa được triển khai khi chưa đủ điều kiện.
 
 ## Ngày
 
@@ -24,7 +24,7 @@ Last-write-wins; tự rebase queue; cho start/finalize offline; bỏ toàn bộ 
 
 ## Consequences
 
-Cần chốt tải đủ roster hay chỉ phần đã tải, batch nhiều thay đổi, app-kill/mất response và account isolation. Mọi thay đổi assignment/trạng thái/hạn phải backend kiểm lúc nhận. Không mở rộng offline sang note/CASH/approval. ADR còn Proposed không cho triển khai queue/persist.
+Cần chốt tải đủ roster hay chỉ phần đã tải, batch nhiều thay đổi, app-kill/mất response và account isolation. Mọi thay đổi assignment/trạng thái/hạn phải backend kiểm lúc nhận. Không mở rộng offline sang note/CASH/approval. ADR đã Accepted; triển khai queue/persist vẫn chờ chốt Q-DATA-01 và Q-OFF-01 cho phần phụ thuộc.
 
 ## BR-slice bị ảnh hưởng
 

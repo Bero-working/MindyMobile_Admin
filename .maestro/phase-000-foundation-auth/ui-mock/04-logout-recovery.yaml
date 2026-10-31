@@ -1,0 +1,73 @@
+appId: com.mindymobile_admin
+name: 'P0 UI MOCK - logout errors and expired session'
+tags:
+  - ui-mock
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 30000
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: accessDenied
+- assertVisible:
+    id: denied-screen
+- tapOn:
+    id: mock-review-button
+- tapOn:
+    id: mock-logout-server
+- tapOn: Đóng
+- tapOn:
+    id: denied-logout-button
+- assertVisible:
+    id: denied-error
+- takeScreenshot: build-logs/phase-0/denied-server
+- tapOn:
+    id: mock-review-button
+- tapOn:
+    id: mock-logout-expired
+- tapOn: Đóng
+- tapOn:
+    id: denied-logout-button
+- assertVisible:
+    id: login-screen
+- tapOn:
+    id: login-email-input
+- inputText: mentor@mindy.vn
+- tapOn:
+    id: login-password-input
+- inputText: demo-only
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: workspace-mentor-root
+- tapOn:
+    id: mock-review-button
+- tapOn:
+    id: mock-logout-offline
+- tapOn: Đóng
+- tapOn:
+    id: workspace-account-button
+- scrollUntilVisible:
+    element:
+      id: settings-logout-row
+    direction: DOWN
+- tapOn:
+    id: settings-logout-row
+- tapOn:
+    id: logout-sheet-confirm
+- assertVisible:
+    id: logout-sheet-error
+- takeScreenshot: build-logs/phase-0/logout-offline
+- tapOn:
+    id: logout-sheet-cancel
+- assertVisible:
+    id: settings-screen
+- tapOn:
+    id: settings-back-button
+- assertVisible:
+    id: workspace-mentor-root

@@ -1,16 +1,16 @@
 import type routes from '@/navigation/routes';
 import type {
-  StackScreenProps,
-  StackNavigationProp,
-} from '@react-navigation/stack';
+  NativeStackScreenProps,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 
 export type RootScreenProps<
   S extends keyof RootStackParamList = keyof RootStackParamList,
-> = StackScreenProps<RootStackParamList, S>;
+> = NativeStackScreenProps<RootStackParamList, S>;
 
 export type RootStackParamList = {
   [routes.splash]: undefined;
   [routes.example]: undefined;
 };
 
-export type NavigationProp = StackNavigationProp<RootStackParamList>;
+export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;

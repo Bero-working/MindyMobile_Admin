@@ -1,0 +1,8 @@
+node_modules/
+android/
+ios/
+coverage/
+package-lock.json
+docs/
+.git/
+build-logs/

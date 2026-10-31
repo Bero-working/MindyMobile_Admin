@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
- 
 const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config');
-const path = require('path');
+const { withNativeWind } = require('nativewind/metro');
 
 const defaultConfig = getDefaultConfig(__dirname);
 const { assetExts, sourceExts } = defaultConfig.resolver;
@@ -16,22 +14,17 @@ const config = {
   resolver: {
     assetExts: assetExts.filter((extension) => extension !== 'svg'),
     sourceExts: [...sourceExts, 'svg'],
-    // Fix for duplicate dependency resolution
-    unstable_enablePackageExports: true,
-    // Resolve node_modules dependencies properly
-    nodeModulesPaths: [path.resolve(__dirname, 'node_modules')],
-    // Block problematic nested node_modules
-    blockList: [
-      // Block nested @react-native packages that cause conflicts
-      /node_modules\/@react-native\/metro-config\/node_modules\/@react-native\/.*/,
-    ],
   },
   transformer: {
-    babelTransformerPath: require.resolve('react-native-svg-transformer'),
+    getTransformOptions: async () => ({
+      transform: { experimentalImportSupport: false, inlineRequires: true },
+    }),
+    babelTransformerPath:
+      require.resolve('react-native-svg-transformer/react-native'),
     unstable_allowRequireContext: true,
   },
-  // Ensure proper watching of node_modules
-  watchFolders: [path.resolve(__dirname, 'node_modules')],
 };
 
-module.exports = mergeConfig(defaultConfig, config);
+module.exports = withNativeWind(mergeConfig(defaultConfig, config), {
+  input: './src/global.css',
+});

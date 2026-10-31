@@ -2,6 +2,9 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 
+project.ext.envConfigFiles = [debug: ".env.development", release: ".env.production"]
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
@@ -81,6 +84,14 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
+    // Keep generated native object paths below Ninja's Windows MAX_PATH limit.
+    if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+        externalNativeBuild {
+            cmake {
+                buildStagingDirectory new File(System.getProperty("java.io.tmpdir"), "mdy")
+            }
+        }
+    }
     namespace "com.mindymobile_admin"
     defaultConfig {
         applicationId "com.mindymobile_admin"
@@ -88,6 +99,14 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        externalNativeBuild {
+            cmake {
+                // Leave room for CMake's hashed object name on every ABI (arm64 is
+                // longer than x86_64), while staying below Windows' 260-char limit.
+                // A smaller limit can make hashing impossible and retain the full path.
+                arguments "-DCMAKE_OBJECT_PATH_MAX=259"
+            }
+        }
     }
     signingConfigs {
         debug {

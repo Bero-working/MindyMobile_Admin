@@ -1,5 +1,9 @@
 # Kế hoạch triển khai
 
+**Hiện hành 31/10/2026:** Phase 0 đã được duyệt kế hoạch/UI và tích hợp API thật 4/4; người dùng xác nhận duyệt phase 0, yêu cầu kiểm tra và dọn dẹp. Tra [tiến độ P0](progress/phase/phase-000-foundation-auth.md) và [hồ sơ rà soát](implement/phase-000-foundation-auth/review-cleanup.md). Trạng thái Todo/chờ duyệt trong bản kế hoạch ban đầu bên dưới là lịch sử.
+
+**Cập nhật 30/10/2026:** [ADR-016](adr/ADR-016-plan-before-implementation.md) bổ sung cổng: kế hoạch trong folder phase → người dùng đọc và yêu cầu implement → UI mock → người dùng approve UI → API. [Kế hoạch phase 0](implement/phase-000-foundation-auth/phase-000-foundation-auth.md) đang chờ đọc/implement; đã có [design Claude P0](design/foundation-auth/design.md). Tên hồ sơ phase-000–008 theo ADR-015. Những ghi nhận thiếu design/ADR trong bản nháp ban đầu bên dưới là lịch sử, tra progress hiện tại trước thực hiện.
+
 **Bản nháp 30/10/2026.** Chưa duyệt ADR, chưa có design Claude, chưa implement. Phân rã màn/slice và thứ tự dưới đây là **đề xuất**, không phải tiến độ hoặc scope đã phê duyệt. [BR/UC và câu hỏi](business-rules.md), [kiến trúc](architecture.md), [ADR](adr/README.md), [tiến độ](progress/README.md).
 
 ## Quy tắc phase và slice
@@ -11,6 +15,8 @@ Mỗi slice có hai phần độc lập về tiến độ: **UI** với mock và
 Cổng đầu vào: giải quyết câu hỏi ảnh hưởng trực tiếp, ADR liên quan Accepted, Claude hoàn tất **mọi design của phase** và test case. Design không có test case hoặc thiếu trạng thái thì trả Claude/người dùng bổ sung; Codex không tự sửa design.
 
 Tiêu chí chung mỗi slice: đúng design, BR/UC/quyền, loading/empty/error/offline/success/không quyền, vi/en/dark mode theo design; UI test fail → pass; API service/schema/hook fail → pass, contract kiểm chứng, lint 0 error/0 warning, tsc --noEmit và Jest pass. Khi trạng thái không áp dụng phải ghi lý do trong design/test; không bỏ qua âm thầm.
+
+Cổng trước nghiệm thu mỗi phase: cleanup/lint/typecheck/Jest pass → **E2E Maestro toàn phase và hồi quy liên quan pass** → người dùng nghiệm thu. Android emulator/thiết bị có bằng chứng chạy; iOS theo Q-PLAT-01. Fail/blocked/skipped ảnh hưởng tiêu chí thì chưa trình nghiệm thu. Theo bổ sung ADR-009 ngày 30/10/2026; xem [quy ước Maestro](implement/e2e-maestro.md).
 
 ## Thứ tự và phạm vi
 
@@ -32,20 +38,24 @@ P0–P5 là MVP dự kiến. P6–P8 chỉ discovery/roadmap cho đến khi ch�
 
 Chưa tạo bất kỳ `design.md`, contract từng UI hoặc legacy snapshot nào. Các path trong từng slice dưới đây là **đích dự kiến, chưa phải file tồn tại**. Không tạo link hỏng để giả rằng tài liệu đã có. Link API trỏ về [mapping hiện hữu](api-contract/README.md#mapping-ui--endpoint-khảo-sát), nơi ghi endpoint có căn cứ và khoảng thiếu. Sau khi Claude cung cấp và nhập legacy, cập nhật sang link file thật trước thực hiện.
 
+## Hồ sơ triển khai theo phase
+
+Tra cứu [danh mục triển khai](implement/README.md) để lấy tên folder `phase-NNN-<slug>`. Khi bắt đầu phase, tạo folder tương ứng trong `docs/implement/` và ghi hồ sơ triển khai; trạng thái, nhật ký và bằng chứng hoàn tất vẫn được theo dõi tại file tiến độ phase.
+
 <a id="p0-foundation-auth"></a>
 
 ## P0 — Nền tảng → đăng nhập → đúng workspace
 
 Ưu tiên: P0. Phụ thuộc phase: Không. Cổng còn chờ: Q-ENV-01, Q-PLAT-01, Q-DESIGN-01, Q-THEME-01; ADR Auth chưa tạo.
 ADR liên quan: [ADR-001](adr/ADR-001-boilerplate-feature-modules.md), [ADR-002](adr/ADR-002-strict-types-no-any-unknown.md), [ADR-003](adr/ADR-003-reusables-nativewind-theme.md), [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
-[Nhật ký phase](progress/phase-foundation-auth.md).
+[Nhật ký phase](progress/phase/phase-000-foundation-auth.md).
 
-| Slice / mục tiêu (1 UI)                  | BR / UC                                            | Phụ thuộc | UI               | API                  |
-| ---------------------------------------- | -------------------------------------------------- | --------- | ---------------- | -------------------- |
-| P0-S1 — Khôi phục phiên và mở workspace  | BR-AUTH-01 BR-AUTH-03 BR-AUTH-04; UC-M-01 UC-MG-01 | Không     | Todo — mock, TDD | Todo — contract, TDD |
-| P0-S2 — Đăng nhập email/mật khẩu         | BR-AUTH-01 BR-AUTH-02 BR-AUTH-03; UC-M-01 UC-MG-01 | P0-S1     | Todo — mock, TDD | Todo — contract, TDD |
-| P0-S3 — Thông báo không đủ quyền vào app | BR-AUTH-01 BR-SCOPE-03; UC-M-01 UC-MG-01           | P0-S1     | Todo — mock, TDD | Todo — contract, TDD |
-| P0-S4 — Ngôn ngữ, theme và đăng xuất     | BR-AUTH-03 BR-DATA-01 BR-DATA-02; UC-M-01 UC-MG-01 | P0-S1     | Todo — mock, TDD | Todo — contract, TDD |
+| Slice / mục tiêu (1 UI)                  | BR / UC                                            | Phụ thuộc | UI                  | API                  |
+| ---------------------------------------- | -------------------------------------------------- | --------- | ------------------- | -------------------- |
+| P0-S1 — Khôi phục phiên và mở workspace  | BR-AUTH-01 BR-AUTH-03 BR-AUTH-04; UC-M-01 UC-MG-01 | Không     | UI mock — chờ duyệt | Todo — contract, TDD |
+| P0-S2 — Đăng nhập email/mật khẩu         | BR-AUTH-01 BR-AUTH-02 BR-AUTH-03; UC-M-01 UC-MG-01 | P0-S1     | UI mock — chờ duyệt | Todo — contract, TDD |
+| P0-S3 — Thông báo không đủ quyền vào app | BR-AUTH-01 BR-SCOPE-03; UC-M-01 UC-MG-01           | P0-S1     | UI mock — chờ duyệt | Todo — contract, TDD |
+| P0-S4 — Ngôn ngữ, theme và đăng xuất     | BR-AUTH-03 BR-DATA-01 BR-DATA-02; UC-M-01 UC-MG-01 | P0-S1     | UI mock — chờ duyệt | Todo — contract, TDD |
 
 ### P0-S1 — bootstrap
 
@@ -83,7 +93,7 @@ ADR liên quan: [ADR-001](adr/ADR-001-boilerplate-feature-modules.md), [ADR-002]
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-AUTH → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
 
-Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
+Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup, E2E Maestro pass và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
 
 <a id="p1-teaching-workspace"></a>
 
@@ -91,7 +101,7 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 Ưu tiên: P0. Phụ thuộc phase: P0. Cổng còn chờ: Q-CLASS-01, Q-CLASS-02, Q-DESIGN-01.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
-[Nhật ký phase](progress/phase-teaching-workspace.md).
+[Nhật ký phase](progress/phase/phase-001-teaching-workspace.md).
 
 | Slice / mục tiêu (1 UI)                  | BR / UC                                             | Phụ thuộc   | UI               | API                  |
 | ---------------------------------------- | --------------------------------------------------- | ----------- | ---------------- | -------------------- |
@@ -166,7 +176,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-OPS SRC-MANAGER → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
 
-Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
+Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup, E2E Maestro pass và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
 
 <a id="p2-attendance-and-notes"></a>
 
@@ -174,7 +184,7 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 Ưu tiên: P0. Phụ thuộc phase: P0, P1. Cổng còn chờ: Q-DATA-01, Q-OFF-01, Q-ATT-01, Q-PLAT-01.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-attendance-offline-queue.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
-[Nhật ký phase](progress/phase-attendance-and-notes.md).
+[Nhật ký phase](progress/phase/phase-002-attendance-and-notes.md).
 
 | Slice / mục tiêu (1 UI)                           | BR / UC                                                                                                                                          | Phụ thuộc | UI               | API                  |
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---------------- | -------------------- |
@@ -249,7 +259,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-CORRECTION → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
 
-Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
+Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup, E2E Maestro pass và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
 
 <a id="p3-material-review"></a>
 
@@ -257,7 +267,7 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 Ưu tiên: P0. Phụ thuộc phase: P0, P1. Cổng còn chờ: Q-MAT-01, Q-ENV-01.
 ADR liên quan: [ADR-003](adr/ADR-003-reusables-nativewind-theme.md), [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
-[Nhật ký phase](progress/phase-material-review.md).
+[Nhật ký phase](progress/phase/phase-003-material-review.md).
 
 | Slice / mục tiêu (1 UI)                         | BR / UC                                                      | Phụ thuộc   | UI               | API                  |
 | ----------------------------------------------- | ------------------------------------------------------------ | ----------- | ---------------- | -------------------- |
@@ -322,7 +332,7 @@ ADR liên quan: [ADR-003](adr/ADR-003-reusables-nativewind-theme.md), [ADR-004](
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-MAT SRC-FILE → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
 
-Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
+Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup, E2E Maestro pass và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
 
 <a id="p4-leave-and-makeup"></a>
 
@@ -330,7 +340,7 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 Ưu tiên: P0. Phụ thuộc phase: P0, P1, P2. Cổng còn chờ: Q-LEAVE-01, Q-MAKEUP-01; hai slice placement chưa chốt P0.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
-[Nhật ký phase](progress/phase-leave-and-makeup.md).
+[Nhật ký phase](progress/phase/phase-004-leave-and-makeup.md).
 
 | Slice / mục tiêu (1 UI)                              | BR / UC                                                  | Phụ thuộc   | UI               | API                  |
 | ---------------------------------------------------- | -------------------------------------------------------- | ----------- | ---------------- | -------------------- |
@@ -405,7 +415,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-OPS → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
 
-Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
+Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup, E2E Maestro pass và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
 
 <a id="p5-manager-operations-cash"></a>
 
@@ -413,7 +423,7 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 Ưu tiên: P0. Phụ thuộc phase: P0, P1, P2, P4. Cổng còn chờ: Q-CLASS-02, Q-PAY-01; không thêm tạo enrollment/invoice.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
-[Nhật ký phase](progress/phase-manager-operations-cash.md).
+[Nhật ký phase](progress/phase/phase-005-manager-operations-cash.md).
 
 | Slice / mục tiêu (1 UI)                   | BR / UC                                                     | Phụ thuộc   | UI               | API                  |
 | ----------------------------------------- | ----------------------------------------------------------- | ----------- | ---------------- | -------------------- |
@@ -468,7 +478,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-CASH SRC-MANAGER → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
 
-Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
+Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup, E2E Maestro pass và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
 
 <a id="p6-mentor-quiz"></a>
 
@@ -476,7 +486,7 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 Ưu tiên: P1. Phụ thuộc phase: P0, P1, P2; P0 sản phẩm được nghiệm thu trước P1. Cổng còn chờ: Q-P1-01; chưa cam kết results queue hay ZIP grading.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
-[Nhật ký phase](progress/phase-mentor-quiz.md).
+[Nhật ký phase](progress/phase/phase-006-mentor-quiz.md).
 
 | Slice / mục tiêu (1 UI)                 | BR / UC                                              | Phụ thuộc   | UI               | API                  |
 | --------------------------------------- | ---------------------------------------------------- | ----------- | ---------------- | -------------------- |
@@ -511,7 +521,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-QUIZ → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
 
-Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
+Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup, E2E Maestro pass và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
 
 <a id="p7-attendance-progress-reports"></a>
 
@@ -519,7 +529,7 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 Ưu tiên: P1. Phụ thuộc phase: P1, P2, P4; KPI được chốt. Cổng còn chờ: Q-P1-01; dashboard doanh thu/tổng hợp mới cần contract và ADR riêng.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
-[Nhật ký phase](progress/phase-attendance-progress-reports.md).
+[Nhật ký phase](progress/phase/phase-007-attendance-progress-reports.md).
 
 | Slice / mục tiêu (1 UI)                          | BR / UC                                          | Phụ thuộc   | UI               | API                  |
 | ------------------------------------------------ | ------------------------------------------------ | ----------- | ---------------- | -------------------- |
@@ -544,7 +554,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-CORRECTION → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
 
-Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
+Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup, E2E Maestro pass và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
 
 <a id="p8-chat-notifications"></a>
 
@@ -552,7 +562,7 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 Ưu tiên: P1. Phụ thuộc phase: P0, P1; discovery P1 và UC chi tiết trước design. Cổng còn chờ: Q-P1-01; API chat/notifications/push hiện không cho MANAGER.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
-[Nhật ký phase](progress/phase-chat-notifications.md).
+[Nhật ký phase](progress/phase/phase-008-chat-notifications.md).
 
 | Slice / mục tiêu (1 UI)                             | BR / UC                                              | Phụ thuộc   | UI               | API                  |
 | --------------------------------------------------- | ---------------------------------------------------- | ----------- | ---------------- | -------------------- |
@@ -587,7 +597,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-P1 → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
 
-Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
+Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương tác; người dùng duyệt UI trước API, kiểm tra cleanup, E2E Maestro pass và nghiệm thu trước Done. Phần chờ quyết định không được tính là tích hợp xong.
 
 ## Cổng bàn giao và cách tính tiến độ
 
@@ -596,3 +606,7 @@ Chạy lint với max-warnings=0, tsc --noEmit (bao gồm test) và Jest toàn b
 Tiến độ hiển thị UI x/N, API y/N và % slice hoàn chỉnh = số slice có cả UI/API hoàn tất / N ×100; phase vẫn chờ nghiệm thu, chỉ Done khi người dùng nghiệm thu. Trạng thái P1 dự kiến không đóng góp vào % MVP. Khi thêm/bớt slice sau duyệt phải ghi ADR và cập nhật mẫu số cùng lịch sử.
 
 Sau lần tạo tài liệu này dừng ở cổng rà soát ADR/câu hỏi; không tự cài dependency, viết code, tạo design, nhập/sửa legacy hoặc tích hợp API.
+
+## Cập nhật triển khai P0 — 30/10/2026
+
+Theo yêu cầu “duyệt và triển khai”, UI mock 4/4 đã bàn giao review; [hướng dẫn/ảnh](implement/phase-000-foundation-auth/ui-review.md), [mapping/bằng chứng](implement/phase-000-foundation-auth/ui-verification.md). Người dùng chưa approve UI; API và nghiệm thu giữ nguyên cổng. Các ghi nhận Todo hoặc chưa implement trong baseline lịch sử không thay thế trạng thái tại file progress hiện tại.

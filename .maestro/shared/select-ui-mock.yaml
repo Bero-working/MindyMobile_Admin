@@ -1,0 +1,21 @@
+appId: com.mindymobile_admin
+---
+- tapOn:
+    id: mock-review-button
+# The scenario list is a small scrollable fragment inside a sheet, not the full screen.
+- repeat:
+    times: 20
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: 'mock-scenario-${SCENARIO}'
+          commands:
+            - swipe:
+                start: 50%, 65%
+                end: 50%, 55%
+                duration: 600
+- assertVisible:
+    id: 'mock-scenario-${SCENARIO}'
+- tapOn:
+    id: 'mock-scenario-${SCENARIO}'

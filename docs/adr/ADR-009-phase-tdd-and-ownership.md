@@ -2,7 +2,7 @@
 
 ## Status
 
-**Proposed** — chưa được người dùng duyệt; chưa được dùng để implement.
+**Accepted** — người dùng duyệt ngày 30/10/2026 (Asia/Bangkok) qua phản hồi: “Chốt tất cả adr 1->9”. Chấp nhận nội dung Decision của ADR này; các câu hỏi còn mở và cổng duyệt riêng tiếp tục giữ nguyên, phần phụ thuộc chưa được triển khai khi chưa đủ điều kiện.
 
 ## Ngày
 
@@ -16,7 +16,15 @@ Nguồn: [danh mục căn cứ](../README.md#nguồn-và-thứ-tự-đối-chi�
 
 ## Decision
 
-Đề xuất áp dụng nguyên quy trình: tất cả design phase → UI TDD toàn phase → người dùng duyệt UI → contract/API TDD toàn phase → cleanup/lint/tsc/test → người dùng nghiệm thu. Trước mỗi luồng chốt câu hỏi trực tiếp và ADR liên quan. Chỉ người dùng chuyển quyết định sang Accepted hoặc phase Done qua phản hồi rõ ràng.
+Quy trình: tất cả design phase → UI TDD toàn phase → người dùng duyệt UI → contract/API TDD toàn phase → cleanup/lint/tsc/Jest → E2E Maestro toàn phase → người dùng nghiệm thu. Trước mỗi luồng chốt câu hỏi trực tiếp và ADR liên quan. Chỉ người dùng chuyển quyết định sang Accepted hoặc phase Done qua phản hồi rõ ràng.
+
+### Bổ sung đã duyệt — 30/10/2026
+
+Nguồn: người dùng yêu cầu “Thêm test e2e sau mỗi phase trước khi tôi nghiệm thu” và chỉ định “sử dụng maestro”. Đây là chỉ thị trực tiếp bổ sung ADR-009 Accepted, áp dụng tất cả phase P0–P8 khi được triển khai; không mở rộng phạm vi roadmap hoặc tự duyệt UI.
+
+Codex phải viết và chạy E2E bằng **Maestro** trên bản app native đã tích hợp của phase, qua emulator hoặc thiết bị. Kiểm tra luồng chính, quyền và các nhánh lỗi quan trọng theo BR/design/contract, cùng hồi quy các luồng cũ bị ảnh hưởng. Android là cổng trước mắt; mốc iOS tiếp tục theo Q-PLAT-01, không suy kết quả Android thành iOS pass.
+
+Sau cleanup/lint/tsc/Jest, E2E bắt buộc pass trước khi trình người dùng nghiệm thu. Nếu fail, blocked hoặc thiếu bằng chứng, sửa/giải quyết rồi chạy lại; không coi build, unit test hay test dùng mock là E2E tích hợp pass. Không tính test skipped là pass. Lưu lệnh chạy, build, thiết bị/OS, dữ liệu thử, kết quả từng flow và report/log/screenshot khi cần trong hồ sơ phase. E2E pass không tự chuyển phase Done. Xem [quy ước Maestro](../implement/e2e-maestro.md).
 
 ## Alternatives
 

@@ -1,0 +1,86 @@
+appId: com.mindymobile_admin
+name: 'P0 UI MOCK - settings preferences and logout'
+tags:
+  - ui-mock
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 30000
+- tapOn:
+    id: login-email-input
+- inputText: mentor@mindy.vn
+- tapOn:
+    id: login-password-input
+- inputText: demo-only
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: workspace-mentor-root
+- tapOn:
+    id: workspace-account-button
+- assertVisible:
+    id: settings-screen
+- takeScreenshot: build-logs/phase-0/settings-light
+- tapOn:
+    id: settings-language-en
+- assertVisible: LANGUAGE
+- tapOn:
+    id: settings-theme-dark
+- takeScreenshot: build-logs/phase-0/settings-dark
+- tapOn:
+    id: settings-back-button
+- assertVisible:
+    id: workspace-mentor-root
+- tapOn:
+    id: workspace-account-button
+- scrollUntilVisible:
+    element:
+      id: settings-logout-row
+    direction: DOWN
+- tapOn:
+    id: settings-logout-row
+- assertVisible:
+    id: logout-sheet
+- tapOn:
+    id: logout-sheet-cancel
+- assertNotVisible:
+    id: logout-sheet
+- tapOn:
+    id: settings-logout-all-row
+- assertVisible: Sign out of all devices?
+- takeScreenshot: build-logs/phase-0/logout-all-dark
+- tapOn:
+    id: logout-sheet-confirm
+- assertVisible:
+    id: login-screen
+- assertNotVisible:
+    id: settings-screen
+- assertVisible: Sign in
+- takeScreenshot: build-logs/phase-0/login-dark-after-logout
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 30000
+- assertVisible: Sign in
+- tapOn:
+    id: login-email-input
+- inputText: manager@mindy.vn
+- tapOn:
+    id: login-password-input
+- inputText: demo-only
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: workspace-manager-root
+- tapOn:
+    id: workspace-account-button
+- assertVisible: Manager
+- assertNotVisible: mentor@mindy.vn
+- takeScreenshot: build-logs/phase-0/manager-settings-dark

@@ -10,6 +10,7 @@
     "noUncheckedIndexedAccess": true,
     "lib": ["es2017", "es2018", "es2019", "es2020", "dom"],
     "target": "es2017",
+    "module": "esnext",
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
@@ -17,19 +18,19 @@
     "skipLibCheck": true,
     "types": ["react", "react-native", "jest", "node"],
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+      "@components/*": ["./src/components/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@services/*": ["./src/services/*"],
+      "@utils/*": ["./src/utils/*"]
+    },
+    "resolveJsonModule": true
   },
   "include": [
-    "tests/**/*",
-    "./src/**/*",
-    "index.d.ts",
-    "*.mjs",
-    ".*.mjs",
-    "*.js",
-    ".*.js",
-    "*.ts",
-    ".prettierrc.mjs"
+    "src/**/*",
+    "__tests__/**/*",
+    "__mocks__/**/*",
+    "nativewind-env.d.ts"
   ],
   "exclude": ["node_modules", "_", "android", "ios"]
 }

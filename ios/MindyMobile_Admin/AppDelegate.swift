@@ -6,9 +6,25 @@ import ReactAppDependencyProvider
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
+  private var privacyCover: UIView?
 
   var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
+
+  // Keep private workspace contents out of the app-switcher snapshot.
+  func applicationWillResignActive(_ application: UIApplication) {
+    guard let window = window, privacyCover == nil else { return }
+    let cover = UIView(frame: window.bounds)
+    cover.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    cover.backgroundColor = UIColor(red: 18.0/255, green: 50.0/255, blue: 54.0/255, alpha: 1)
+    window.addSubview(cover)
+    privacyCover = cover
+  }
+
+  func applicationDidBecomeActive(_ application: UIApplication) {
+    privacyCover?.removeFromSuperview()
+    privacyCover = nil
+  }
 
   func application(
     _ application: UIApplication,

@@ -3,18 +3,12 @@
  * Supports multiple instances with shared interceptors for microservices architecture
  */
 
-import type {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-  AxiosError,
-} from 'axios';
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
-import localStore from '@/services/storage/localStore.service';
+import { appConfig } from '@/config/app';
+import { requireApiUrl } from '@/config/env';
 import NetInfo from '@react-native-community/netinfo';
 import { NETWORK_ERROR } from '@/assets/constants/network.constant';
-import { logger } from '@/ignoreWarnings';
 
 export const CONTENT_TYPE = {
   formUrlEncoded: 'application/x-www-form-urlencoded',
@@ -24,9 +18,12 @@ export const CONTENT_TYPE = {
  * Extended request configuration interface that modifies Axios's default config
  * to better suit our application's needs
  */
+type QueryValue = string | number | boolean | null | undefined;
+type QueryParams = Record<string, QueryValue | QueryValue[]>;
+
 interface ExtendedRequestConfig extends Omit<AxiosRequestConfig, 'headers'> {
   headers?: Record<string, string>;
-  params?: Record<string, unknown>;
+  params?: QueryParams;
 }
 
 /**
@@ -36,21 +33,16 @@ interface ExtendedRequestConfig extends Omit<AxiosRequestConfig, 'headers'> {
 export class Http {
   protected readonly axiosInstance: AxiosInstance;
   private static globalAxios = axios;
-  private static readonly RETRY_LIMIT = 1;
   /**
    * Creates a new HTTP client instance with specific base URL and shared interceptors
    * @param baseURL - The base URL for all requests made through this instance
    */
-  constructor(baseURL: string) {
+  constructor(baseURL?: string) {
     this.axiosInstance = axios.create({
-      baseURL,
+      ...(baseURL ? { baseURL } : {}),
+      timeout: appConfig.api.timeout,
       withCredentials: true,
     });
-
-    // Apply timeout only in production environment
-    if (__DEV__ === false) {
-      this.axiosInstance.defaults.timeout = 60000; // 60 seconds timeout
-    }
 
     this.setupInterceptors();
   }
@@ -59,90 +51,14 @@ export class Http {
    * Sets up request and response interceptors for the axios instance
    */
   private setupInterceptors(): void {
-    // Add request interceptors
-    this.axiosInstance.interceptors.request.use(
-     async (config: InternalAxiosRequestConfig) => {
-        // Log request
-        if (__DEV__) {
-          console.warn('🚀 Request:', {
-            method: config.method?.toUpperCase(),
-            url: this.axiosInstance.defaults.baseURL + '/' + (config.url || ''),
-            headers: config.headers,
-            data: config.data,
-            params: config.params,
-          });
-        }
-
-
-        const isNetwork = await NetInfo.fetch();
-        if (!isNetwork.isConnected) {
-          return Promise.reject(new Error(NETWORK_ERROR.noInternet));
-        }
-        // Add authentication token
-        const token = localStore.getApiToken();
-
-        if (token) {
-          config.headers.set('Authorization', `Bearer ${token}`);
-        }
-
-        return config;
-      },
-      (error: unknown) => Promise.reject(error)
-    );
-
-    // Add response interceptors
-    this.axiosInstance.interceptors.response.use(
-      (response: AxiosResponse) => {
-        // Log response
-       logger.warn('✅ Response:', {
-            status: response.status,
-            statusText: response.statusText,
-            url:
-              this.axiosInstance.defaults.baseURL +
-              '/' +
-              (response.config?.url || ''),
-            headers: response.headers,
-            data: response.data,
-          });
-        
-        return response;
-      },
-      async (error: AxiosError) => {
-        // Log error
-      
-          if (axios.isAxiosError(error)) {
-            logger.warn('❌ Error:', {
-              status: error.response?.status,
-              statusText: error.response?.statusText,
-              url:
-                this.axiosInstance.defaults.baseURL +
-                '/' +
-                (error.config?.url || ''),
-              headers: error.response?.headers,
-              data: error.response?.data,
-              message: error.message,
-            });
-          } else {
-            logger.warn('❌ Error:', error);
-          }
-        
-
-        const originalRequest = error.config as InternalAxiosRequestConfig & {
-          _retryCount?: number;
-        };
-
-        // Handle timeout errors with retry mechanism (production only)
-          if (!__DEV__ && error.code === 'ECONNABORTED') {
-          originalRequest._retryCount = originalRequest._retryCount || 0;
-          if (originalRequest._retryCount < Http.RETRY_LIMIT) {
-            originalRequest._retryCount += 1;
-            return this.axiosInstance(originalRequest);
-          }
-        }
-
-        return Promise.reject(error);
+    this.axiosInstance.interceptors.request.use(async (config) => {
+      requireApiUrl();
+      const network = await NetInfo.fetch();
+      if (network.isConnected === false) {
+        throw new Error(NETWORK_ERROR.noInternet);
       }
-    );
+      return config;
+    });
   }
 
   /**
@@ -173,7 +89,7 @@ export class Http {
       },
       params: config?.params || {},
       paramsSerializer: {
-        serialize: (params: Record<string, unknown>) => {
+        serialize: (params: QueryParams) => {
           const searchParams = new URLSearchParams();
           Object.entries(params).forEach(([key, value]) => {
             if (Array.isArray(value)) {
@@ -226,7 +142,7 @@ export class Http {
    *
    * @remarks
    * - Automatically handles FormData vs JSON payloads
-   * - Inherits global interceptors for authentication and retries
+   * - Requires explicit API configuration; authentication is implemented in a later phase
    * - All methods return unwrapped response data
    */
   async get<T>(
@@ -302,7 +218,7 @@ export class Http {
     return response.data;
   }
 
-  async delete<T, D = unknown>(
+  async delete<T, D = never>(
     endpoint: string,
     data?: D,
     config: ExtendedRequestConfig = {},

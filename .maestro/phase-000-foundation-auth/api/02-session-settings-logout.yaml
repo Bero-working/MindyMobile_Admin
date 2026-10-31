@@ -1,0 +1,96 @@
+appId: com.mindymobile_admin
+name: 'P0 API - role workspace, persisted session, settings and logout'
+tags:
+  - api-authenticated
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 120000
+- tapOn:
+    id: login-email-input
+- inputText:
+    text: ${MAESTRO_TEST_EMAIL}
+    label: Enter test account email
+- tapOn:
+    id: login-password-input
+- inputText:
+    text: ${MAESTRO_TEST_PASSWORD}
+    label: Enter test account password
+- scrollUntilVisible:
+    element:
+      id: login-submit-button
+    direction: DOWN
+- tapOn:
+    id: login-submit-button
+- extendedWaitUntil:
+    visible:
+      id: ${EXPECTED_WORKSPACE}
+    timeout: 30000
+- assertNotVisible:
+    id: mock-review-button
+- takeScreenshot: build-logs/auth-api-workspace
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: ${EXPECTED_WORKSPACE}
+    timeout: 120000
+- tapOn:
+    id: workspace-settings-button
+- assertVisible:
+    id: settings-screen
+- tapOn:
+    id: settings-language-en
+- assertVisible: LANGUAGE
+- tapOn:
+    id: settings-theme-dark
+- takeScreenshot: build-logs/auth-api-settings-dark
+- tapOn:
+    id: settings-language-vi
+- tapOn:
+    id: settings-theme-system
+- tapOn:
+    id: settings-back-button
+- tapOn:
+    id: workspace-account-button
+- assertVisible:
+    id: profile-screen
+- assertVisible: ${MAESTRO_TEST_EMAIL}
+- takeScreenshot: build-logs/auth-api-profile
+- scrollUntilVisible:
+    element:
+      id: ${LOGOUT_ROW}
+    direction: DOWN
+- tapOn:
+    id: ${LOGOUT_ROW}
+- assertVisible:
+    id: logout-sheet
+- takeScreenshot: build-logs/logout-confirm-dialog
+- tapOn:
+    id: logout-sheet-cancel
+- assertNotVisible:
+    id: logout-sheet
+- tapOn:
+    id: ${LOGOUT_ROW}
+- tapOn:
+    id: logout-sheet-confirm
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 30000
+- assertNotVisible:
+    id: profile-screen
+- assertNotVisible:
+    id: ${EXPECTED_WORKSPACE}
+- pressKey: Back
+- assertNotVisible:
+    id: profile-screen
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 120000

@@ -3,11 +3,5 @@
 
     <item android:drawable="@color/splashscreen_bg"/>
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/splash_icon"
-        />
-    </item>
-
+    <item android:drawable="@drawable/splash_wordmark" android:gravity="center" />
 </layer-list>

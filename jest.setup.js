@@ -6,8 +6,13 @@ jest.mock('react-native-reanimated', () => {
 
   Reanimated.default.call = () => {};
 
-  return Reanimated;
+  return { ...Reanimated, useReducedMotion: () => false };
 });
+
+jest.mock(
+  'react-native-safe-area-context',
+  () => jest.requireActual('react-native-safe-area-context/jest/mock').default
+);
 
 jest.mock('react-native-mmkv', () => {
   class MMKV {
@@ -52,3 +57,13 @@ jest.mock('@react-native-community/netinfo', () => ({
     })
   ),
 }));
+
+jest.mock('react-native-config', () => ({
+  APP_ENV: 'development',
+  API_URL: '',
+  DEBUG_MODE: 'true',
+}));
+
+jest.mock('react-native-keyboard-controller', () =>
+  jest.requireActual('react-native-keyboard-controller/jest')
+);

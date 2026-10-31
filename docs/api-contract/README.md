@@ -1,6 +1,8 @@
 # API contract — nguồn backend và mapping mobile
 
-**Khảo sát 30/10/2026, chưa tích hợp.** Theo giới hạn lần đầu, hiện chỉ tạo README này. Chưa tạo `legacy/`, chưa tạo contract từng UI, chưa tạo ADR Auth. Không sửa backend hoặc collection nguồn. [Danh mục nguồn và giới hạn](../README.md#nguồn-và-thứ-tự-đối-chiếu), [kế hoạch slice](../implementation-plan.md), [câu hỏi](../business-rules.md#khoảng-thiếu-mâu-thuẫn-và-câu-hỏi-mở).
+**Hiện hành 30/10/2026:** người dùng “Duyệt UI, gắn API vào đi”, mở tích hợp phase 0. Đã có [contract bốn slice](phase-000-foundation-auth/README.md), [legacy snapshot](legacy/README.md) và [ADR Auth](../adr/ADR-019-phase-0-cookie-auth.md). API_URL development hiện có là HTTPS; xem [kết quả và giới hạn](../implement/phase-000-foundation-auth/api-integration.md). Không sửa backend hoặc collection nguồn.
+
+Phần khảo sát bên dưới giữ làm lịch sử trước tích hợp; các câu “chưa tích hợp/chưa chốt API_URL/chưa có legacy” không còn mô tả phase 0 hiện hành. P1–P8 chưa triển khai.
 
 ## Nguồn hiện có và cách dùng legacy
 

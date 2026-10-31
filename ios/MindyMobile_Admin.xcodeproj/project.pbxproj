@@ -12,6 +12,10 @@
 		41938F057911513FF9CDF6FC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		E504BC2AE2B13E9820D7164B /* BeVietnamPro-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8FEB2609835D1BFB5E386141; };
+		04F0604548A232B783DCC868 /* BeVietnamPro-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0EAF47D604EACDBB796FB4DC; };
+		0496783B6E0C5F4F557FF2D3 /* BeVietnamPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CDA3FB0496DE55CE39616910; };
+		320E47DE8FEC5B32CBC39F7C /* BeVietnamPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 62A016083FF175DF6D6FD536; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +29,10 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = MindyMobile_Admin/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = MindyMobile_Admin/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		8FEB2609835D1BFB5E386141 /* BeVietnamPro-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "BeVietnamPro-Bold.ttf"; path = "../assets/fonts/BeVietnamPro-Bold.ttf"; sourceTree = "<group>"; };
+		0EAF47D604EACDBB796FB4DC /* BeVietnamPro-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "BeVietnamPro-Medium.ttf"; path = "../assets/fonts/BeVietnamPro-Medium.ttf"; sourceTree = "<group>"; };
+		CDA3FB0496DE55CE39616910 /* BeVietnamPro-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "BeVietnamPro-Regular.ttf"; path = "../assets/fonts/BeVietnamPro-Regular.ttf"; sourceTree = "<group>"; };
+		62A016083FF175DF6D6FD536 /* BeVietnamPro-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "BeVietnamPro-SemiBold.ttf"; path = "../assets/fonts/BeVietnamPro-SemiBold.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +50,10 @@
 		13B07FAE1A68108700A75B9A /* MindyMobile_Admin */ = {
 			isa = PBXGroup;
 			children = (
+				62A016083FF175DF6D6FD536 /* BeVietnamPro-SemiBold.ttf */,
+				CDA3FB0496DE55CE39616910 /* BeVietnamPro-Regular.ttf */,
+				0EAF47D604EACDBB796FB4DC /* BeVietnamPro-Medium.ttf */,
+				8FEB2609835D1BFB5E386141 /* BeVietnamPro-Bold.ttf */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -158,6 +170,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				320E47DE8FEC5B32CBC39F7C /* BeVietnamPro-SemiBold.ttf in Resources */,
+				0496783B6E0C5F4F557FF2D3 /* BeVietnamPro-Regular.ttf in Resources */,
+				04F0604548A232B783DCC868 /* BeVietnamPro-Medium.ttf in Resources */,
+				E504BC2AE2B13E9820D7164B /* BeVietnamPro-Bold.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				41938F057911513FF9CDF6FC /* PrivacyInfo.xcprivacy in Resources */,

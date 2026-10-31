@@ -1,4 +1,4 @@
-const isEmpty = (value: unknown, omitArray: boolean = false): boolean => {
+const isEmpty = <T>(value: T, omitArray: boolean = false): boolean => {
   // Handle null, undefined
   if (value == null) return true;
 

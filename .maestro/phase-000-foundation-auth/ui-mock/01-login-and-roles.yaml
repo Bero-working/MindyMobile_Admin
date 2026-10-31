@@ -1,0 +1,83 @@
+appId: com.mindymobile_admin
+name: 'P0 UI MOCK - login validation and roles'
+tags:
+  - ui-mock
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 30000
+- takeScreenshot: build-logs/phase-0/login-light
+- tapOn:
+    id: login-submit-button
+- hideKeyboard
+- assertVisible:
+    id: login-email-error
+- assertVisible:
+    id: login-password-error
+- tapOn:
+    id: login-forgot-button
+- assertVisible:
+    id: forgot-sheet
+- swipe:
+    from:
+      id: forgot-sheet-handle
+    direction: DOWN
+- assertNotVisible:
+    id: forgot-sheet
+- tapOn:
+    id: login-forgot-button
+- tapOn:
+    id: forgot-sheet-ok
+- assertNotVisible:
+    id: forgot-sheet
+- tapOn:
+    id: login-email-input
+- inputText: mentor@mindy.vn
+- tapOn:
+    id: login-password-input
+- inputText: demo-only
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: workspace-mentor-root
+- takeScreenshot: build-logs/phase-0/workspace-mentor
+- pressKey: BACK
+- assertNotVisible:
+    id: login-screen
+- assertNotVisible:
+    id: bootstrap-screen
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 30000
+- tapOn:
+    id: login-email-input
+- inputText: manager@mindy.vn
+- tapOn:
+    id: login-password-input
+- inputText: demo-only
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: workspace-manager-root
+- takeScreenshot: build-logs/phase-0/manager
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: accessDenied
+- assertVisible:
+    id: denied-screen
+- assertNotVisible:
+    id: denied-role-chip
+- takeScreenshot: build-logs/phase-0/invalid-session
+- tapOn:
+    id: denied-logout-button
+- assertVisible:
+    id: login-screen

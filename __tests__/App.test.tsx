@@ -2,14 +2,13 @@
  * @format
  */
 
-import React from 'react';
-import ReactTestRenderer from 'react-test-renderer';
+import { render, screen } from '@testing-library/react-native';
 import App from '../src/';
 
 describe('App', () => {
   test('renders correctly', async () => {
-    await ReactTestRenderer.act(() => {
-      ReactTestRenderer.create(<App />);
-    });
+    render(<App />);
+    await screen.findByTestId('bootstrap-error-card');
+    expect(screen.queryByTestId('mock-review-button')).toBeNull();
   });
 });

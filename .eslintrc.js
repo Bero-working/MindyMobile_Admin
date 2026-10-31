@@ -17,12 +17,23 @@ module.exports = {
   /* Ignored Paths */
   ignorePatterns: [
     'dist',
+    'docs',
+    'coverage',
+    'node_modules',
     '.eslintrc.js',
     'libs',
     '**/*.html',
     'android',
     'ios',
     'vendor',
+  ],
+
+  overrides: [
+    {
+      files: ['*.js', '*.cjs', 'scripts/*.cjs'],
+      env: { node: true },
+      rules: { '@typescript-eslint/no-require-imports': 'off' },
+    },
   ],
 
   /* Parser and Plugins */
@@ -97,6 +108,13 @@ module.exports = {
 
     /* TypeScript Rules */
     '@typescript-eslint/no-explicit-any': 'error',
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'TSUnknownKeyword',
+        message: 'Use concrete types (ADR-002).',
+      },
+    ],
     '@typescript-eslint/no-unused-vars': [
       'error',
       {

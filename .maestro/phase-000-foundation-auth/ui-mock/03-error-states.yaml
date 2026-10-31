@@ -1,0 +1,108 @@
+appId: com.mindymobile_admin
+name: 'P0 UI MOCK - login and bootstrap errors'
+tags:
+  - ui-mock
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 30000
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: login-invalidCredentials
+- assertVisible:
+    id: login-screen
+- tapOn:
+    id: login-email-input
+- inputText: mentor@mindy.vn
+- tapOn:
+    id: login-password-input
+- inputText: demo-only
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: login-alert
+- takeScreenshot: build-logs/phase-0/invalid-credentials
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: login-server
+- tapOn:
+    id: login-email-input
+- inputText: mentor@mindy.vn
+- tapOn:
+    id: login-password-input
+- inputText: demo-only
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: login-support-code
+- takeScreenshot: build-logs/phase-0/login-server
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: offline
+- assertVisible:
+    id: bootstrap-error-card
+- assertVisible:
+    id: bootstrap-retry-button
+- takeScreenshot: build-logs/phase-0/bootstrap-offline
+- tapOn:
+    id: bootstrap-retry-button
+- assertVisible:
+    id: bootstrap-error-card
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: timeout
+- assertVisible:
+    id: bootstrap-error-card
+- assertVisible:
+    id: bootstrap-retry-button
+- takeScreenshot: build-logs/phase-0/bootstrap-timeout
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: server
+- assertVisible:
+    id: bootstrap-error-card
+- assertVisible:
+    id: bootstrap-retry-button
+- takeScreenshot: build-logs/phase-0/bootstrap-server
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: invalidResponse
+- assertVisible:
+    id: bootstrap-error-card
+- assertVisible:
+    id: bootstrap-retry-button
+- takeScreenshot: build-logs/phase-0/bootstrap-invalidResponse
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: config
+- assertVisible:
+    id: bootstrap-error-card
+- assertNotVisible:
+    id: bootstrap-retry-button
+- takeScreenshot: build-logs/phase-0/bootstrap-config
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: sessionExpired
+- assertVisible:
+    id: login-alert
+- takeScreenshot: build-logs/phase-0/sessionExpired
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: accountInactive
+- assertVisible:
+    id: login-alert
+- takeScreenshot: build-logs/phase-0/accountInactive

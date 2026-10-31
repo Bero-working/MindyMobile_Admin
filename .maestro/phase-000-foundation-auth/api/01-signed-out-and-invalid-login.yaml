@@ -1,0 +1,50 @@
+appId: com.mindymobile_admin
+name: 'P0 API - signed out bootstrap and invalid credentials'
+tags:
+  - api
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 120000
+- assertNotVisible:
+    id: mock-review-button
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: login-email-error
+- assertVisible:
+    id: login-password-error
+- tapOn:
+    id: login-email-input
+- inputText: codex-nonexistent@example.invalid
+- tapOn:
+    id: login-password-input
+- inputText: deliberately-invalid
+- scrollUntilVisible:
+    element:
+      id: login-submit-button
+    direction: DOWN
+- tapOn:
+    id: login-submit-button
+- extendedWaitUntil:
+    visible:
+      id: login-alert
+    timeout: 20000
+- assertVisible:
+    id: login-screen
+- assertNotVisible:
+    id: workspace-mentor-root
+- assertNotVisible:
+    id: workspace-manager-root
+- assertNotVisible:
+    id: denied-screen
+- takeScreenshot: build-logs/auth-api-invalid-login
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 120000

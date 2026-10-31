@@ -1,6 +1,6 @@
 # Mindy Mobile — tài liệu dự án
 
-Ngày khởi tạo: **30/10/2026** (Asia/Bangkok). Trạng thái: **bản nháp, chưa phê duyệt nghiệp vụ/kiến trúc, chưa triển khai UI hoặc API**.
+Ngày khởi tạo: **30/10/2026** (Asia/Bangkok). Trạng thái hiện hành 31/10/2026: **phase 0 đã triển khai UI/API 4/4; người dùng xác nhận duyệt phase 0 và yêu cầu kiểm tra, dọn dẹp**. Kết quả và giới hạn kiểm chứng tại [tiến độ P0](progress/phase/phase-000-foundation-auth.md); các phase còn lại theo kế hoạch.
 
 ## Mục lục
 
@@ -9,7 +9,8 @@ Ngày khởi tạo: **30/10/2026** (Asia/Bangkok). Trạng thái: **bản nháp,
 | [Quy tắc nghiệp vụ](business-rules.md)                    | Glossary, phạm vi, quyền, BR/UC, trạng thái, tham số và câu hỏi |
 | [Kiến trúc](architecture.md)                              | Hiện trạng và kiến trúc đích đề xuất                            |
 | [Kế hoạch](implementation-plan.md)                        | Phase theo luồng, mỗi slice là một UI với hai bước UI/API       |
-| [ADR](adr/README.md)                                      | Các quyết định Proposed cần người dùng duyệt                    |
+| [Danh mục triển khai](implement/README.md)                | Tên folder và mục triển khai cho từng phase                     |
+| [ADR](adr/README.md)                                      | Sổ quyết định và trạng thái duyệt; câu hỏi còn mở giữ nguyên    |
 | [Tiến độ](progress/README.md)                             | Mốc thực tế của từng phase                                      |
 | [Lịch sử nghiệp vụ](progress/business-rules-changelog.md) | Khởi tạo và thay đổi có kiểm soát                               |
 | [Hợp đồng API](api-contract/README.md)                    | Nguồn backend, mapping dự kiến và khoảng trống                  |
@@ -21,14 +22,14 @@ Mobile dành cho MENTOR và MANAGER. Một tài khoản nhận một role từ b
 P0: xác thực → lịch/lớp → điểm danh, ghi chú → tài liệu có duyệt → nghỉ/lịch bù → vận hành Manager và thu tiền mặt.
 P1: quiz, báo cáo mở rộng, chat và push. Sau MVP: nộp ZIP/chấm thủ công, chứng chỉ và nghiệp vụ chưa có backend. Android được đề xuất làm nền tảng nghiệm thu MVP; iOS phải tương thích và nghiệm thu ở mốc sau, chờ xác nhận trong Q-PLAT-01.
 
-Codex làm BA, kiến trúc, tài liệu và toàn bộ code. Claude chỉ viết `docs/design/<phase-slug>/<slice-slug>/design.md`; Codex chỉ đọc các file này. Chưa có file design nào; không tự tạo hoặc sửa chúng. Người dùng duyệt ADR, UI toàn phase và nghiệm thu phase.
+Codex làm BA, kiến trúc, tài liệu và toàn bộ code. Claude chỉ viết `docs/design/<phase-slug>/<slice-slug>/design.md`; Codex chỉ đọc các file này. Phase 0 đã có design Claude; Codex không tự tạo hoặc sửa design nguồn. Người dùng duyệt ADR, UI toàn phase và nghiệm thu phase.
 
 ## Cách đọc trạng thái
 
 - **Có căn cứ**: đã đối chiếu trao đổi người dùng và/hoặc source backend; chưa đồng nghĩa nghiệp vụ đã được duyệt hoặc server đã deploy.
 - **Đề xuất — cần nghiệp vụ xác nhận**: lựa chọn để thảo luận; chưa được dùng làm quyết định triển khai.
 - **Chờ xác nhận**: thiếu thông tin hoặc có mâu thuẫn cần người dùng giải quyết.
-- ADR chỉ có hiệu lực khi người dùng duyệt và chuyển sang Accepted. Chưa có ADR Accepted.
+- ADR chỉ có hiệu lực khi người dùng duyệt và chuyển sang Accepted; trạng thái hiện hành tra tại sổ ADR.
 
 Người dùng cho phép tạo bộ tài liệu nháp ngay và hỏi bổ sung theo domain. Quy tắc có căn cứ được ghi đầy đủ trong bản nháp; trước khi làm mỗi luồng, phải giải quyết các câu hỏi ảnh hưởng trực tiếp và các ADR liên quan. Không coi thời gian chờ hoặc lựa chọn được đề xuất là câu trả lời.
 

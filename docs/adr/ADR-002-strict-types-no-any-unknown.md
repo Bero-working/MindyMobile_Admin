@@ -2,7 +2,7 @@
 
 ## Status
 
-**Proposed** — chưa được người dùng duyệt; chưa được dùng để implement.
+**Accepted** — người dùng duyệt ngày 30/10/2026 (Asia/Bangkok) qua phản hồi: “Chốt tất cả adr 1->9”. Chấp nhận nội dung Decision của ADR này; các câu hỏi còn mở và cổng duyệt riêng tiếp tục giữ nguyên, phần phụ thuộc chưa được triển khai khi chưa đủ điều kiện.
 
 ## Ngày
 
@@ -30,7 +30,7 @@ Bổ sung no-explicit-any:error và no-restricted-syntax cho TSUnknownKeyword, r
 
 BR: `BR-DATA-01` — xem [business-rules](../business-rules.md).
 Slice: P0-S1; mọi source/test/mock sau đó — xem [kế hoạch](../implementation-plan.md).
-Điểm còn thiếu: Phạm vi được người dùng mô tả là đề xuất; cần chấp nhận ADR trước bật luật.
+Phạm vi áp dụng đã được người dùng chấp nhận ngày 30/10/2026; có thể bật luật theo ADR và quy trình triển khai đã duyệt.
 
 ## Điều kiện chuyển trạng thái
 

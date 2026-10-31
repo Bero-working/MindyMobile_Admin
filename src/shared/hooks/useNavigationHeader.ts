@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useLayoutEffect, useRef, useCallback, useMemo } from 'react';
-import { Animated, Platform, Text } from 'react-native';
-import type { StackNavigationOptions } from '@react-navigation/stack';
+import React, { useLayoutEffect, useCallback, useMemo } from 'react';
+import { Text } from 'react-native';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { IconButton, useTheme } from '@sohantalukder/rn-kit';
+import type { NavigationProp } from '@/navigation/types';
 
 const fontWeight = {
   medium: '500',
@@ -44,9 +45,7 @@ const useNavigationHeader = ({
   onTitlePress,
   leftIconColor,
 }: NavigationHeaderProps) => {
-  const navigation = useNavigation();
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const animationRef = useRef<Animated.CompositeAnimation | null>(null);
+  const navigation = useNavigation<NavigationProp>();
   const { colors, typographies } = useTheme();
 
   // Memoize handlers to prevent recreation
@@ -98,7 +97,6 @@ const useNavigationHeader = ({
             fontWeight: fontWeight.semibold,
             textAlign: headerTitleAlign === 'center' ? 'center' : 'left',
             fontFamily: 'Onest-SemiBold',
-            maxWidth: '80%',
           },
         },
         sanitizedTitle
@@ -116,7 +114,6 @@ const useNavigationHeader = ({
             fontWeight: fontWeight.semibold,
             textAlign: headerTitleAlign === 'center' ? 'center' : 'left',
             fontFamily: 'Onest-SemiBold',
-            maxWidth: '80%',
           },
         },
         sanitizedTitle
@@ -135,35 +132,19 @@ const useNavigationHeader = ({
 
   // Memoize navigation options to prevent recreation
   const navigationOptions = useMemo(
-    (): StackNavigationOptions => ({
+    (): NativeStackNavigationOptions => ({
       headerShown: true,
-      headerBackTitle: '',
       headerShadowVisible: false,
       headerTitleStyle: {
         fontFamily: 'Onest-SemiBold',
         fontWeight: fontWeight.semibold,
         fontSize: typographies.heading3.fontSize,
         color: typographies.heading3.color,
-        maxWidth: '80%',
       },
       headerBackButtonDisplayMode: 'minimal',
       headerTitleAlign: headerTitleAlign || (title ? 'center' : 'left'),
       headerStyle: {
-        height: Platform.OS === 'ios' ? 110 : 80,
         backgroundColor: headerBackgroundColor,
-      },
-      headerLeftContainerStyle: {
-        paddingLeft: 10,
-        paddingBottom: 16,
-      },
-      headerRightContainerStyle: {
-        paddingRight: 16,
-        paddingBottom: 16,
-      },
-      headerTitleContainerStyle: {
-        paddingBottom: 16,
-        maxWidth: '80%',
-        flex: 1,
       },
       headerLeft,
       headerTitle: headerTitleComponent,
@@ -180,32 +161,9 @@ const useNavigationHeader = ({
     ]
   );
 
-  // Single useLayoutEffect for both animation and navigation setup
   useLayoutEffect(() => {
-    // Cancel previous animation if running
-    if (animationRef.current) {
-      animationRef.current.stop();
-    }
-
-    // Start animation
-    animationRef.current = Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    });
-    animationRef.current.start();
-
-    // Set navigation options
     navigation.setOptions(navigationOptions);
-
-    // Cleanup function
-    return () => {
-      if (animationRef.current) {
-        animationRef.current.stop();
-        animationRef.current = null;
-      }
-    };
-  }, [navigation, navigationOptions, fadeAnim]);
+  }, [navigation, navigationOptions]);
 };
 
 export { useNavigationHeader };

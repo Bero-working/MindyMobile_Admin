@@ -2,7 +2,7 @@
 
 ## Status
 
-**Proposed** — chưa được người dùng duyệt; chưa được dùng để implement.
+**Accepted** — người dùng duyệt ngày 30/10/2026 (Asia/Bangkok) qua phản hồi: “Chốt tất cả adr 1->9”. Chấp nhận nội dung Decision của ADR này; các câu hỏi còn mở và cổng duyệt riêng tiếp tục giữ nguyên, phần phụ thuộc chưa được triển khai khi chưa đủ điều kiện.
 
 ## Ngày
 

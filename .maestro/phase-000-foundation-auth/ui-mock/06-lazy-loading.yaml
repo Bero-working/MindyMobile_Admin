@@ -1,0 +1,33 @@
+appId: com.mindymobile_admin
+name: 'P0 infrastructure - lazy panel, viewport and routes'
+tags:
+  - ui-mock
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 30000
+# Last scenario starts outside the viewport and must become interactive on scroll.
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: login-config
+- assertVisible:
+    id: login-screen
+# Reopen the cached lazy panel, then load the workspace and settings routes.
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: MANAGER
+- assertVisible:
+    id: workspace-manager-root
+- tapOn:
+    id: workspace-account-button
+- assertVisible:
+    id: settings-screen
+- tapOn:
+    id: settings-back-button
+- assertVisible:
+    id: workspace-manager-root

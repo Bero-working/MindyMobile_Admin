@@ -24,6 +24,12 @@ target 'MindyMobile_Admin' do
   )
 
   post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      next unless target.name == 'react-native-config'
+      target.build_configurations.each do |build_config|
+        build_config.build_settings['ENVFILE'] = build_config.name == 'Debug' ? '.env.development' : '.env.production'
+      end
+    end
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,

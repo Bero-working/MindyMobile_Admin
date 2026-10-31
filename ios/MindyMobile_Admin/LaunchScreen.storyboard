@@ -16,13 +16,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="SplashIcon" translatesAutoresizingMaskIntoConstraints="NO" id="35Y-XB-oFu">
-                                <rect key="frame" x="94" y="402" width="242" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Mindy" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="wordmark">
+                                <fontDescription key="fontDescription" name="BeVietnamPro-Bold" family="Be Vietnam Pro" pointSize="30"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </label>
                         </subviews>
+                        <constraints><constraint firstItem="wordmark" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="wordmark-x"/><constraint firstItem="wordmark" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="wordmark-y"/></constraints>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
-                        <color key="backgroundColor" red="0.031372550870000002" green="0.015686275440000001" blue="0.0078431377190000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <color key="backgroundColor" red="0.0705882353" green="0.1960784314" blue="0.2117647059" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <accessibility key="accessibilityConfiguration">
                             <accessibilityTraits key="traits" image="YES"/>
                         </accessibility>

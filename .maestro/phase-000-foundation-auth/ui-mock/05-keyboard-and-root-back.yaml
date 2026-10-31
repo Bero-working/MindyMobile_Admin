@@ -1,0 +1,61 @@
+appId: com.mindymobile_admin
+name: 'P0 UI MOCK - keyboard focus and denied back'
+tags:
+  - ui-mock
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: login-screen
+    timeout: 30000
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: login-email-input
+    focused: true
+- inputText: mentor@mindy.vn
+- pressKey: ENTER
+- assertVisible:
+    id: login-password-input
+    focused: true
+- inputText: demo-only
+- takeScreenshot: build-logs/phase-0/keyboard-login
+- pressKey: ENTER
+- assertVisible:
+    id: workspace-mentor-root
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: login-invalidCredentials
+- assertVisible:
+    id: login-screen
+- tapOn:
+    id: login-email-input
+- inputText: mentor@mindy.vn
+- tapOn:
+    id: login-password-input
+- inputText: demo-only
+- hideKeyboard
+- tapOn:
+    id: login-submit-button
+- assertVisible:
+    id: login-alert
+- assertVisible:
+    id: login-password-input
+    focused: true
+- takeScreenshot: build-logs/phase-0/invalid-credentials-focused
+- hideKeyboard
+- runFlow:
+    file: ../../shared/select-ui-mock.yaml
+    env:
+      SCENARIO: accessDenied
+- assertVisible:
+    id: denied-screen
+- pressKey: BACK
+- assertNotVisible:
+    id: denied-screen
+- assertNotVisible:
+    id: login-screen
+- assertNotVisible:
+    id: workspace-mentor-root
