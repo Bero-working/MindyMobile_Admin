@@ -66,7 +66,7 @@ Phạm vi công việc: `P1-S1 — mentor-schedule`; `P1-S2 — mentor-classes`;
 
 P2 — Mentor điểm danh/ghi chú → Manager theo dõi và correction.
 
-Folder khi triển khai: `docs/implement/phase-002-attendance-and-notes/`.
+**01/11/2026 — đã lập kế hoạch tổng, chờ duyệt trước khi tách slice.** [Hồ sơ phase 2](phase-002-attendance-and-notes/README.md) · [Kế hoạch tổng](phase-002-attendance-and-notes/phase-002-attendance-and-notes.md). UI/API giữ 0/7; chưa triển khai.
 
 Phạm vi công việc: `P2-S1 — attendance-editor`; `P2-S2 — teaching-note-editor`; `P2-S3 — incomplete-sessions`; `P2-S4 — manager-attendance`; `P2-S5 — attendance-correction`; `P2-S6 — attendance-recovery`; `P2-S7 — attendance-audits`.
 

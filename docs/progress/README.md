@@ -6,7 +6,7 @@ Ngày khởi tạo: **30/10/2026**. P0 đã triển khai **UI/API 4/4 và đư�
 | ----------------------------------------------------------------------------------------------------------- | ------- | -------------------- | --: | --: | ---------------: | ------: | ------------- |
 | [P0 — Nền tảng → đăng nhập → đúng workspace](phase/phase-000-foundation-auth.md)                            | P0      | Đã duyệt; đã rà soát | 4/4 | 4/4 |              0/4 |      0% | 31/10/2026    |
 | [P1 — Mentor xem lịch/lớp → Manager theo dõi lớp](phase/phase-001-teaching-workspace.md)                    | P0      | Todo                 | 0/7 | 0/7 |              0/7 |      0% | 30/10/2026    |
-| [P2 — Mentor điểm danh/ghi chú → Manager theo dõi và correction](phase/phase-002-attendance-and-notes.md)   | P0      | Todo                 | 0/7 | 0/7 |              0/7 |      0% | 30/10/2026    |
+| [P2 — Mentor điểm danh/ghi chú → Manager theo dõi và correction](phase/phase-002-attendance-and-notes.md)   | P0      | Chờ duyệt kế hoạch tổng | 0/7 | 0/7 |              0/7 |      0% | 01/11/2026    |
 | [P3 — Mentor tải tài liệu → Manager duyệt/công bố](phase/phase-003-material-review.md)                      | P0      | Todo                 | 0/6 | 0/6 |              0/6 |      0% | 30/10/2026    |
 | [P4 — Mentor xin nghỉ → Manager duyệt → lịch bù cập nhật](phase/phase-004-leave-and-makeup.md)              | P0      | Todo                 | 0/7 | 0/7 |              0/7 |      0% | 30/10/2026    |
 | [P5 — Manager phân công/xử lý lịch → xác nhận CASH](phase/phase-005-manager-operations-cash.md)             | P0      | Todo                 | 0/5 | 0/5 |              0/5 |      0% | 30/10/2026    |

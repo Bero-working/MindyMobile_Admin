@@ -184,6 +184,8 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 ## P2 — Mentor điểm danh/ghi chú → Manager theo dõi và correction
 
+**01/11/2026 — đã lập [kế hoạch tổng P2](implement/phase-002-attendance-and-notes/phase-002-attendance-and-notes.md), chờ người dùng duyệt theo ADR-017 trước khi tách kế hoạch slice.** Chưa code/design/API; UI/API 0/7. Kế hoạch áp dụng ADR-025/026, gồm tải dữ liệu theo nhu cầu, version/idempotency, offline còn chờ policy và một command E2E tổng khi triển khai.
+
 Ưu tiên: P0. Phụ thuộc phase: P0, P1. Cổng còn chờ: Q-DATA-01, Q-OFF-01, Q-ATT-01, Q-PLAT-01.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-attendance-offline-queue.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
 [Nhật ký phase](progress/phase/phase-002-attendance-and-notes.md).

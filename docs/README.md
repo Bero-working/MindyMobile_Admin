@@ -4,6 +4,8 @@ Ngày khởi tạo: **30/10/2026** (Asia/Bangkok). Trạng thái hiện hành 31
 
 ## Mục lục
 
+**01/11/2026:** Đã lập [kế hoạch tổng phase 2](implement/phase-002-attendance-and-notes/phase-002-attendance-and-notes.md), chờ duyệt trước khi tách slice; chưa triển khai, UI/API 0/7.
+
 | Tài liệu                                                  | Nội dung                                                        |
 | --------------------------------------------------------- | --------------------------------------------------------------- |
 | [Quy tắc nghiệp vụ](business-rules.md)                    | Glossary, phạm vi, quyền, BR/UC, trạng thái, tham số và câu hỏi |

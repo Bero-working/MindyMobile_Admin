@@ -9,12 +9,13 @@ Chưa có design, chưa duyệt UI, chưa tích hợp/nghiệm thu.
 
 ## Hồ sơ triển khai
 
-Mục triển khai: [phase-002-attendance-and-notes](../../implement/README.md#phase-002-attendance-and-notes). Khi bắt đầu, tạo folder `docs/implement/phase-002-attendance-and-notes/` theo danh mục chung; hồ sơ và bằng chứng triển khai đặt tại đó. Tiến độ và nhật ký phase tiếp tục cập nhật trong file này.
+Ngày 01/11/2026 đã tạo [hồ sơ phase 2](../../implement/phase-002-attendance-and-notes/README.md) và [kế hoạch tổng](../../implement/phase-002-attendance-and-notes/phase-002-attendance-and-notes.md). **Chờ duyệt kế hoạch tổng trước khi tách slice theo ADR-017.** Chưa viết design/code/contract hoặc chạy UI/API/E2E P2; UI/API vẫn 0/7. Kế hoạch áp dụng ADR-025 về UI/tải dữ liệu và ADR-026 về command E2E duy nhất; câu hỏi Q-DATA-01/Q-OFF-01/Q-ATT-01/Q-PLAT-01 giữ nguyên.
 
 ## Các mốc
 
 | Mốc                        | Trạng thái | Ngày thực hiện | Ai làm/duyệt | Test / lint / typecheck               | Commit/PR | Ghi chú / BR-ADR                         |
 | -------------------------- | ---------- | -------------- | ------------ | ------------------------------------- | --------- | ---------------------------------------- |
+| Kế hoạch tổng / duyệt tổng | Chờ duyệt | 01/11/2026 | Codex / Người dùng | Kiểm tra tài liệu; không phải test ứng dụng | — | Đã lập tổng; chưa tách kế hoạch slice (ADR-017) |
 | Design toàn phase (Claude) | Todo       | —              | Claude       | Chưa có test case/design để đối chiếu | —         | Chưa có file; Codex không viết/sửa       |
 | UI toàn phase (TDD)        | Todo       | —              | Codex        | Chưa chạy                             | —         | Mock rõ ràng, tất cả trạng thái/quyền    |
 | Người dùng duyệt UI        | Todo       | —              | Người dùng   | Chưa có kết quả để duyệt              | —         | Cổng bắt buộc trước API                  |
@@ -46,5 +47,7 @@ Mục triển khai: [phase-002-attendance-and-notes](../../implement/README.md#p
 | 30/10/2026 | Người dùng / Codex | Bổ sung cổng E2E Maestro | Người dùng yêu cầu E2E sau mỗi phase trước nghiệm thu và chọn Maestro; mốc E2E Todo, chưa có kết quả chạy; giữ nguyên tiến độ UI/API | ADR-009 bổ sung đã duyệt |
 
 ## Ghi nhận khi thực hiện
+
+01/11/2026 — Codex lập kế hoạch tổng P2 theo yêu cầu “Lập implement phase 2 cho tôi”: phạm vi 7 slice, cổng đầu vào, UI mock → duyệt UI → API, version/key/conflict, tải dữ liệu, offline còn chờ policy, kiểm thử và E2E tổng dự kiến `npm run test:e2e:phase-2` (chưa tạo command). Chỉ đọc source backend để đối chiếu, không chạy mutation hoặc sửa backend. Chưa duyệt tổng/UI/nghiệm thu; không tăng tiến độ hoặc thay luật nghiệp vụ.
 
 Mỗi mốc cập nhật ngày, người làm/duyệt, command và kết quả test/lint/typecheck, môi trường thiết bị, commit/PR thật nếu có, điểm chờ và BR/ADR bị ảnh hưởng. Khi luật đã duyệt thay đổi, phải có ADR Accepted và ghi cả [changelog](../business-rules-changelog.md) trước code. Không chuyển Done chỉ vì đã viết mock UI hoặc có source backend.
