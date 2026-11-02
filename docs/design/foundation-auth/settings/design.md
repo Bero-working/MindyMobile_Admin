@@ -27,7 +27,7 @@ Mentor và Quản lý dùng **chung hai trang, cùng bố cục và hành vi**. 
 
 | | Mentor | Quản lý |
 | --- | --- | --- |
-| Phụ đề header workspace | Mentor · {email} | Quản lý · {email} |
+| Phụ đề header workspace | Mentor | Quản lý |
 | Chip vai trò ở Hồ sơ | Mentor | Quản lý (en: Manager) |
 
 ## 2. Điểm vào và điều hướng

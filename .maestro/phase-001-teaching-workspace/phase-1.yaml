@@ -110,5 +110,32 @@ name: 'P1 API - seven screens with authenticated backend data'
       id: manager-detail-student-.*
     timeout: 30000
 - takeScreenshot: build-logs/phase-1/api/manager-roster
+- tapOn:
+    id: manager-detail-tab-schedule
+- scrollUntilVisible:
+    element:
+      id: manager-detail-session-${MAESTRO_MANAGER_SESSION_ID}
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: manager-detail-session-${MAESTRO_MANAGER_SESSION_ID}
+- extendedWaitUntil:
+    visible:
+      id: session-date-tile
+    timeout: 30000
+- assertVisible:
+    id: session-tab-overview
+- assertVisible:
+    id: session-tab-students
+- assertNotVisible:
+    id: session-tab-materials
+- takeScreenshot: build-logs/phase-1/api/manager-session-overview
+- tapOn:
+    id: session-tab-students
+- extendedWaitUntil:
+    visible:
+      id: session-student-.*
+    timeout: 30000
+- takeScreenshot: build-logs/phase-1/api/manager-session-students
 - assertNotVisible:
     id: teaching-mock-badge

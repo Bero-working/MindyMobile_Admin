@@ -205,7 +205,13 @@ export function Screen({
       className={cn(ui.flex, 'bg-mdy-bg')}
       style={variables}
     >
-      <StatusBar barStyle="light-content" />
+      {/* Keep the header under the status bar: the default translucent={false}
+          can push the whole app down and expose the window background. */}
+      <StatusBar
+        barStyle="light-content"
+        translucent
+        backgroundColor="transparent"
+      />
       <Gradient
         id={testID}
         variant="background"
@@ -444,7 +450,7 @@ export function Avatar({
   name: string;
   profile?: boolean;
   testID?: string;
-  size?: 36 | 40 | 52;
+  size?: 28 | 36 | 40 | 52 | 60;
 }) {
   const words = name.trim().split(/\s+/).filter(Boolean);
   const initials =
@@ -467,7 +473,8 @@ export function Avatar({
         className={cn(
           ui.title,
           'text-mdy-avatarText',
-          profile && 'text-size-28 leading-line-42'
+          profile && 'text-size-28 leading-line-42',
+          size === 28 && 'text-size-11 leading-line-16'
         )}
       >
         {initials.toLocaleUpperCase()}

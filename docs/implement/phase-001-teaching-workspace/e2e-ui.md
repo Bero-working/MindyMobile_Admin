@@ -1,5 +1,9 @@
 # Phase 1 — Native UI smoke
 
+**Cập nhật command 01/11/2026:** Theo ADR-026, chỉ dùng `npm run test:e2e:phase-1` cho bộ E2E hiện hành; command tự kiểm API/tạo dataset rồi chạy UI native với API thật. Các command `test:api:phase-1` và `test:e2e:phase-1:ui` bên dưới là lịch sử đã bỏ khỏi package.json, không phải bước cần chạy thêm. Kết quả kiểm chứng cũ giữ nguyên.
+
+**Trạng thái hiện hành 01/11/2026:** Người dùng đã nghiệm thu Phase 1, UI/API 7/7, **Done**. [Rà soát source hiện tại và giới hạn kiểm chứng](review-cleanup.md). Nội dung theo ngày bên dưới là hồ sơ lịch sử; các câu chờ duyệt/API 0/7 không còn là trạng thái hiện hành.
+
 Ngày 31/10/2026 (Asia/Bangkok). Flow: `.maestro/phase-001-teaching-workspace/ui-mock/phase-1-ui.yaml`. Lệnh: `npm run test:e2e:phase-1:ui`.
 
 Auth P0 dùng server deploy; 7 màn P1 dùng fixture, không có dữ liệu P1 từ backend. Tài khoản lấy từ biến môi trường `MAESTRO_MENTOR_EMAIL/PASSWORD`, `MAESTRO_MANAGER_EMAIL/PASSWORD`, hoặc file local bị ignore `.maestro/accounts.local.json`; runner không ghi credentials ra console.
@@ -18,23 +22,22 @@ Bộ E2E tích hợp API P1 theo ADR-020 chỉ được viết/chạy sau approv
 
 Report gốc: `C:/Users/admin/.maestro/tests/2026-10-31_091807/`. Ảnh từ `takeScreenshot/build-logs/phase-1/ui/` được copy về workspace để review; không đưa dữ liệu đăng nhập hoặc report auth vào Git.
 
-| UI | Ảnh đã rà |
-| --- | --- |
-| S1 Lịch | [schedule.png](../../../build-logs/phase-1/ui/schedule.png) |
-| S2 Lớp Mentor | [mentor-classes.png](../../../build-logs/phase-1/ui/mentor-classes.png) |
-| S3 Workspace | [mentor-class-detail.png](../../../build-logs/phase-1/ui/mentor-class-detail.png) |
-| S4 Context | [session.png](../../../build-logs/phase-1/ui/session.png) |
-| S4 Học viên buổi | [session-students.png](../../../build-logs/phase-1/ui/session-students.png) |
-| S4 Mentor thay | [substitute-session.png](../../../build-logs/phase-1/ui/substitute-session.png) |
-| S5 Roster Mentor | [mentor-students.png](../../../build-logs/phase-1/ui/mentor-students.png) |
-| S6 Lớp Manager | [manager-classes.png](../../../build-logs/phase-1/ui/manager-classes.png) |
-| S7 Chi tiết Manager | [manager-class-detail.png](../../../build-logs/phase-1/ui/manager-class-detail.png) |
-| S7 Roster Manager | [manager-students.png](../../../build-logs/phase-1/ui/manager-students.png) |
-| English/dark | [manager-dark-en.png](../../../build-logs/phase-1/ui/manager-dark-en.png) |
+| UI                                   | Ảnh đã rà                                                                                               |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| S1 Lịch                              | [schedule.png](../../../build-logs/phase-1/ui/schedule.png)                                             |
+| S2 Lớp Mentor                        | [mentor-classes.png](../../../build-logs/phase-1/ui/mentor-classes.png)                                 |
+| S3 Workspace                         | [mentor-class-detail.png](../../../build-logs/phase-1/ui/mentor-class-detail.png)                       |
+| S4 Context                           | [session.png](../../../build-logs/phase-1/ui/session.png)                                               |
+| S4 Học viên buổi                     | [session-students.png](../../../build-logs/phase-1/ui/session-students.png)                             |
+| S4 Mentor thay                       | [substitute-session.png](../../../build-logs/phase-1/ui/substitute-session.png)                         |
+| S5 Roster Mentor                     | [mentor-students.png](../../../build-logs/phase-1/ui/mentor-students.png)                               |
+| S6 Lớp Manager                       | [manager-classes.png](../../../build-logs/phase-1/ui/manager-classes.png)                               |
+| S7 Chi tiết Manager                  | [manager-class-detail.png](../../../build-logs/phase-1/ui/manager-class-detail.png)                     |
+| S7 Roster Manager                    | [manager-students.png](../../../build-logs/phase-1/ui/manager-students.png)                             |
+| English/dark                         | [manager-dark-en.png](../../../build-logs/phase-1/ui/manager-dark-en.png)                               |
 | Lỗi riêng tab học viên, English/dark | [manager-students-error-dark-en.png](../../../build-logs/phase-1/ui/manager-students-error-dark-en.png) |
 
 Không chạy iOS, không khẳng định đã kiểm screen reader hoặc mọi mức font scale. API P1 0/7, người dùng chưa approve UI hoặc nghiệm thu phase.
-
 
 ## Home — kết quả bổ sung 31/10/2026
 
@@ -45,11 +48,11 @@ Không chạy iOS, không khẳng định đã kiểm screen reader hoặc mọi
 
 Ảnh đã copy về workspace và rà trực tiếp:
 
-| Biến thể | Ảnh |
-| --- | --- |
-| Mentor vi/light | [home-mentor-vi-light.png](../../../build-logs/phase-1/ui/home-mentor-vi-light.png) |
-| Manager vi/light | [home-manager-vi-light.png](../../../build-logs/phase-1/ui/home-manager-vi-light.png) |
-| Manager en/dark | [home-manager-en-dark.png](../../../build-logs/phase-1/ui/home-manager-en-dark.png) |
+| Biến thể                         | Ảnh                                                                                                         |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Mentor vi/light                  | [home-mentor-vi-light.png](../../../build-logs/phase-1/ui/home-mentor-vi-light.png)                         |
+| Manager vi/light                 | [home-manager-vi-light.png](../../../build-logs/phase-1/ui/home-manager-vi-light.png)                       |
+| Manager en/dark                  | [home-manager-en-dark.png](../../../build-logs/phase-1/ui/home-manager-en-dark.png)                         |
 | Manager en/dark, 360dp/font 130% | [home-manager-en-dark-360-font130.png](../../../build-logs/phase-1/ui/home-manager-en-dark-360-font130.png) |
 
 Kết quả rà: đúng tile theo role; linh vật không che nhóm; nhãn tile không chồng nhau; tiêu đề nhóm English đầy đủ kể cả 360dp/130%; email rút gọn một dòng và nút Settings không bị đẩy khỏi màn. Chưa kiểm native tên rất dài, TalkBack/focus và mọi tổ hợp role/theme/language/font; giảm chuyển động đã kiểm bằng Jest, chưa kiểm thiết bị. iOS chưa chạy. Không thay bộ E2E tích hợp API P1 hoặc cổng duyệt UI/nghiệm thu.

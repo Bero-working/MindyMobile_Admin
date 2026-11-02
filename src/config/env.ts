@@ -12,6 +12,7 @@ export const envSchema = z
         .regex(/^https?:\/\//)
         .optional()
     ),
+    API_ORIGIN: z.string().url().optional(),
     DEBUG_MODE: z
       .enum(['true', 'false'])
       .transform((value) => value === 'true'),
@@ -38,6 +39,7 @@ export const envSchema = z
 export const env = envSchema.parse({
   APP_ENV: Config.APP_ENV,
   API_URL: Config.API_URL,
+  API_ORIGIN: Config.API_ORIGIN,
   DEBUG_MODE: Config.DEBUG_MODE,
 });
 

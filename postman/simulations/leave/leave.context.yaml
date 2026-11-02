@@ -1,0 +1,24 @@
+name: leave
+updated_at: '2026-11-02'
+assumptions:
+  - id: explicit-replay-after-commit
+    status: supported
+    claim: The adapter can explicitly replay create and placement with identical key and body after response loss without a second synthetic commit.
+    reason: The local stand-in commits first, delays past Axios timeout and deduplicates by key plus route/body. Backend receipts hash route and body; live replay separately passed for create, decisions, placement and cancellation.
+    verification: Actual mobile adapter ran over Postman HTTP simulation on port 4634. Create and placement returned uncertain then success on explicit replay with commits exactly 1 and 3 respectively (approval is the intervening commit). Changed create body with old key returned IDEMPOTENCY_KEY_REUSED. This proves caller behavior in these scenarios, not a real server outage.
+    source: src/modules/leave/services/leaveService.ts; scripts/verify-leave-simulation.cjs; postman/mocks/leave/default.js; docs/api-contract/legacy/2026-11-02-leave/README.md
+    updated_at: '2026-11-02'
+  - id: read-post-failure-is-safe
+    status: supported
+    claim: Preview and makeup-slots POST requests are reads and return error instead of uncertain on transport or 503 failures.
+    reason: Backend controller delegates to read-only transactions; adapter distinguishes mutation semantics from HTTP method.
+    verification: Unit test checks slots network rejection. Actual adapter preview returned error on simulated HTML 503 while approval write returned uncertain.
+    source: scripts/verify-leave-simulation.cjs; __tests__/leave-api.test.ts; docs/api-contract/legacy/2026-11-02-leave/README.md
+    updated_at: '2026-11-02'
+  - id: native-cookie-and-e2e
+    status: unknown
+    claim: Integrated P4 flows including refresh work on Android and iOS with native cookie jars.
+    reason: Node Axios used a cookie interceptor; native E2E was deferred by the user.
+    verification: No native E2E or build in this turn. Existing P4 Maestro mock review cannot establish this claim.
+    source: docs/implement/phase-004-leave-and-makeup/api-integration.md
+    updated_at: '2026-11-02'

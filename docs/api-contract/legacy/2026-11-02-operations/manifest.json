@@ -1,0 +1,20 @@
+{
+  "capturedAt": "2026-11-02",
+  "source": "../Mindy-BE/src",
+  "sha256": {
+    "modules/classes/controllers/teaching-management.controller.ts": "86cf3feb1c1e908ac06bce9aebd13539c33d1a37b778a64e9cf90e56cd293ac0",
+    "modules/classes/controllers/session-operations.controller.ts": "10df51d7f3ca4cd611cc8ddbee0d4ad2d2fee05f8787fa6db4d7cd93fe27edce",
+    "modules/classes/dtos/teaching.dto.ts": "58c78caa08efecbaebe423b6a55b9c3d9c7fc887ac8b6d6c20a373dcd2c0013c",
+    "modules/classes/dtos/teaching-query.dto.ts": "18dffd5a32b015a55f7860cde99dc374f54a86ccf872ac13b1e8c12110e3a55c",
+    "modules/classes/dtos/session-operations.dto.ts": "b48f0f3c6bc5c2f0c22e5e879fc1397a2fb13cf6b30731778097f3bbc262c9b8",
+    "modules/classes/services/session-operations.service.ts": "17d3f06017c3e997ac4b86d1910c28cc942abf20631b8d17b18da0aef88ab020",
+    "modules/manager-operations/manager-operations.controller.ts": "1b26c7708e6db165c0806b7b05cba834b90e0cedefbdca41d5369a097cbec669",
+    "modules/manager-operations/dtos/manager-query.dto.ts": "27175efa0acf1c833d913926dadc47e0072edb480e50077a618458fab5144dfe",
+    "modules/manager-operations/dtos/manager-response.dto.ts": "11b721410ae8529b043690c851f18e131b6ca5356101a7987cbbf1ae465f7aaf",
+    "modules/manager-operations/services/manager-operations.service.ts": "e3deed42dd628f9854586c2040ee77fa5988c541bdc619676e899b866772a631",
+    "modules/payments/controllers/cash-payments.controller.ts": "056197b82ee9d6a3cb972e993b4c696c75c2452614e19020bb78f7a9fa41d8d3",
+    "modules/payments/dtos/confirm-cash.dto.ts": "93182631ca837844c7cb57a34abef611fc1e59037bb91141842783ea935e53ec",
+    "modules/payments/services/cash-payments.service.ts": "6c3c08839df9b9ff2617a87ba1fb76ca4b4ce1a69e65df3c84d7840f5aeb98e6",
+    "modules/commerce/dtos/order.dto.ts": "6130c81c8ea011e0ed7ea29bb7a17f90f8b584cef65150a0c60018bca904e0e5"
+  }
+}

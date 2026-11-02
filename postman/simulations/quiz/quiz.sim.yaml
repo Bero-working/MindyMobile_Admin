@@ -1,0 +1,6 @@
+simulation: quiz
+routing: path
+mocks:
+  - name: quiz
+    routeKey: quiz
+    path: postman/mocks/quiz

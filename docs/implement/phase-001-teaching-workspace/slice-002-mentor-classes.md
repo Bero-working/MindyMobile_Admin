@@ -1,11 +1,8 @@
 # P1-S2 — Lớp được giao cho Mentor
 
-**API 31/10/2026:** Đã nối slice này theo yêu cầu “Triển khai API cho phase 1”; [contract 7 slice](../../api-contract/phase-001-teaching-workspace/README.md) và [kết quả tích hợp](api-integration.md) là trạng thái hiện hành. Các checklist/kết luận chưa triển khai bên dưới giữ làm kế hoạch lịch sử, không phải kết quả kiểm chứng. Chưa nghiệm thu phase.
+**Đã nghiệm thu ngày 01/11/2026 — UI/API 7/7, phase Done.** [Trạng thái hiện hành](../../progress/phase/phase-001-teaching-workspace.md) · [Hồ sơ rà soát](review-cleanup.md).
 
-**Cập nhật triển khai 31/10/2026:** Người dùng yêu cầu “Triển khai phase 1”. Đã có design Claude toàn phase và câu trả lời Q-CLASS-01/02 tại design cấp phase; triển khai UI mock 7 màn; Android build và Maestro UI smoke pass. API 0/7, UI chưa approve. Xem [hồ sơ review](ui-review.md), [kiểm chứng](ui-verification.md) và [smoke native](e2e-ui.md). Các ghi nhận chưa có design/chưa có chỉ thị code bên dưới là snapshot lịch sử của kế hoạch.
-Ngày tách kế hoạch: 31/10/2026 (Asia/Bangkok). Người lập: Codex.
-
-**Trạng thái: tài liệu slice đã tách theo yêu cầu “Duyệt và tách slice đi”. Chưa triển khai UI/API.** Kế hoạch tổng đã được duyệt; việc tách tài liệu không thay thế chỉ thị implement, design Claude hoặc approve UI toàn phase.
+Nội dung bên dưới là kế hoạch gốc ngày 31/10/2026, giữ để truy vết phạm vi/task và cổng triển khai; các câu chưa triển khai/chờ duyệt mô tả thời điểm lập kế hoạch. Kết quả thực hiện tra hồ sơ hiện hành ở trên.
 
 ## 1. Phạm vi, căn cứ và phụ thuộc
 
@@ -38,14 +35,14 @@ Chỉ code UI khi có chỉ thị implement và đủ design cả 7 slice/câu t
 
 Bảng sau là yêu cầu từ BR/kế hoạch tổng, **chưa phải test case Claude hoặc kết quả đã chạy**. Sau khi có design, bổ sung mapping ID thật và đường dẫn test/flow vào hồ sơ verification; khác biệt phải xử lý trước phần phụ thuộc.
 
-| Điều kiện / thao tác | Kết quả cần chứng minh |
-| --- | --- |
-| Mentor có lớp chính và buổi dạy thay | Chỉ hiện dữ liệu được giao; scope được phân biệt. |
-| Mentor không có assignment | Hiển thị empty phù hợp; không dựng lớp mẫu ở chế độ thật. |
-| Chọn lớp SESSION | Không mở roster CLASS hoặc dữ liệu tiền/draft ngoài scope. |
-| Lớp không còn được giao khi quay lại | Làm mới quyền/danh sách, không giữ đường truy cập trái quyền. |
+| Điều kiện / thao tác                           | Kết quả cần chứng minh                                                                         |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Mentor có lớp chính và buổi dạy thay           | Chỉ hiện dữ liệu được giao; scope được phân biệt.                                              |
+| Mentor không có assignment                     | Hiển thị empty phù hợp; không dựng lớp mẫu ở chế độ thật.                                      |
+| Chọn lớp SESSION                               | Không mở roster CLASS hoặc dữ liệu tiền/draft ngoài scope.                                     |
+| Lớp không còn được giao khi quay lại           | Làm mới quyền/danh sách, không giữ đường truy cập trái quyền.                                  |
 | Loading, empty, lỗi server và mất mạng/thử lại | Trạng thái theo design, không dùng mock fallback ở bản tích hợp; không lộ dữ liệu ngoài scope. |
-| vi/en, dark/light và accessibility | Nội dung/label/khả năng thao tác đúng design trên native; Jest không thay bằng chứng thiết bị. |
+| vi/en, dark/light và accessibility             | Nội dung/label/khả năng thao tác đúng design trên native; Jest không thay bằng chứng thiết bị. |
 
 ## 5. Task API — sau approve UI cả 7 slice
 

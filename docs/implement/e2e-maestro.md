@@ -11,6 +11,7 @@ Codex viết và chạy flow khi triển khai phase; không đợi người dùn
 ## Tổ chức flow và bằng chứng
 
 - Khi tạo flow, đặt tại `.maestro/phase-NNN-<slug>/`, cùng số và slug với hồ sơ phase. Flow dùng chung đặt tại `.maestro/shared/`; không chạy flow helper như ca độc lập.
+- Theo [ADR-026](../adr/ADR-026-single-e2e-command-per-phase.md), mỗi phase chỉ có một command npm E2E công khai; command tự chạy kiểm API/chuẩn bị dataset nếu cần rồi native flow, dừng và trả thất bại khi bất kỳ bước bắt buộc nào lỗi. Helper nội bộ được tách file; không yêu cầu chạy command API/UI riêng trước. Flow mock trước tích hợp giữ làm lịch sử, không thay bộ API hiện hành.
 - Mỗi phase phải có lệnh `npm run test:e2e:phase-<số>` trong `package.json`, chạy flow tổng của riêng phase đó. Flow tổng phải bao gồm toàn bộ ca E2E tích hợp bắt buộc của phase, truyền đúng tài khoản/vai trò và trả exit code thất bại nếu một ca lỗi. Bổ sung lệnh, flow và hồ sơ E2E khi triển khai phase; không tạo lệnh hoặc flow rỗng cho phase chưa triển khai.
 - Ưu tiên selector `testID` ổn định; kiểm tra kết quả người dùng thấy và trạng thái nghiệp vụ sau thao tác. Dữ liệu thử phải tái lập được, tách biệt để chạy lại không gây xung đột.
 - Mỗi phase ghi mapping BR/UC/slice → flow → expected result trong `docs/implement/phase-NNN-<slug>/e2e.md` khi bắt đầu viết E2E. Không tạo hàng loạt flow rỗng hoặc báo pass từ skeleton.

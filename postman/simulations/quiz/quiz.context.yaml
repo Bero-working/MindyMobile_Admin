@@ -1,0 +1,11 @@
+purpose:
+  stands_in_for: Local quiz authoring HTTP contract from the 2026-11-02 backend snapshot.
+  unblocks: Verify real mobile adapter serialization and uncertain write recovery without changing real quizzes.
+assumptions:
+  - id: quiz-lost-response
+    status: supported
+    claim: A committed publish followed by HTTP 503 is uncertain; GET can reconcile it without another POST.
+    reason: Actual mobile adapter through HTTP reported uncertain after the mock committed and returned 503. A GET observed PUBLISHED, with exactly one commit and one write before any explicit stale-revision probe.
+    source: docs/api-contract/legacy/2026-11-02-quiz; src/modules/quiz/service.ts
+    verification: scripts/verify-quiz-simulation.cjs passed on 2026-11-02; phase-6-simulation.ndjson records publish 503 and reconciliation GET 200. This proves caller behavior against the stand-in, not native E2E.
+    updated_at: '2026-11-02'

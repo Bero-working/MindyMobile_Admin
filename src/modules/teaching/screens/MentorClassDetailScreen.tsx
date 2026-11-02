@@ -112,17 +112,12 @@ function Detail({
         <>
           <Card className="mx-space-0 px-space-24 py-space-16 gap-space-14">
             <View className="flex-row items-start gap-space-12">
-              <View className="flex-1 gap-space-3">
-                <Text className="text-size-17 font-bvp-semibold">
-                  {item.name}
-                </Text>
-                <Text
-                  testID="class-detail-course"
-                  className="text-size-12 text-mdy-tertiary"
-                >
-                  {item.course}
-                </Text>
-              </View>
+              <Text
+                testID="class-detail-course"
+                className="flex-1 text-size-17 font-bvp-semibold"
+              >
+                {item.course}
+              </Text>
               <StatusChip
                 group="mentorClassStatus"
                 value={item.status}

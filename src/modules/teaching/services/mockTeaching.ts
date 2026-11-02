@@ -26,6 +26,7 @@ export function createTeachingMock(
     maxStudents: 20,
     course: 'IELTS-F · IELTS Foundation',
     readClassRoster: true,
+    readClassReports: true,
     unitCount: 4,
     sessionCount: 5,
     currentUnit: 2,
@@ -54,6 +55,7 @@ export function createTeachingMock(
       mentor: 'Lê Văn Phúc',
       deliveryMode: 'ONLINE',
       readClassRoster: false,
+      readClassReports: false,
       unitCount: 1,
       sessionCount: 1,
       currentUnit: 1,
@@ -93,6 +95,20 @@ export function createTeachingMock(
     actualEnd: null,
   };
   const sessions: TeachingSession[] = [
+    ...[
+      'overdue-not-started',
+      'overdue-not-finalized',
+      'expired-in-progress',
+    ].map((id) => ({
+      ...session,
+      id,
+      startsAt: `${addDays(today, -2)}T18:30:00+07:00`,
+      endsAt: `${addDays(today, -2)}T20:00:00+07:00`,
+      status:
+        id === 'overdue-not-started'
+          ? ('SCHEDULED' as const)
+          : ('IN_PROGRESS' as const),
+    })),
     session,
     {
       ...session,
@@ -186,6 +202,10 @@ export function createTeachingMock(
     },
   ];
   return {
+    updateSession: (update) => {
+      const item = sessions.find((value) => value.id === update.id);
+      if (item) Object.assign(item, update);
+    },
     async read(request) {
       if (scenario === 'loading') return new Promise(() => {});
       if (['offline', 'error', 'denied', 'notFound'].includes(scenario))
@@ -305,6 +325,8 @@ export function createTeachingMock(
       else if (field === 'students')
         data.students = data.students.slice(offset, end);
       else data.units = data.units.slice(offset, end);
+      if (data.session)
+        data.session = { ...data.session, asOf: new Date().toISOString() };
       return { kind: 'success', data };
     },
   };

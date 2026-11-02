@@ -1,5 +1,7 @@
 # Phase 1 — Kiểm chứng UI
 
+**Trạng thái hiện hành 01/11/2026:** Người dùng đã nghiệm thu Phase 1, UI/API 7/7, **Done**. [Rà soát source hiện tại và giới hạn kiểm chứng](review-cleanup.md). Nội dung theo ngày bên dưới là hồ sơ lịch sử; các câu chờ duyệt/API 0/7 không còn là trạng thái hiện hành.
+
 Ngày 31/10/2026 (Asia/Bangkok). Design: `docs/design/teaching-workspace/design.md` và 7 design slice của Claude. Không sửa design hoặc ADR Accepted.
 
 ## Phạm vi thực hiện
@@ -10,12 +12,12 @@ Mở rộng Chip, token success/warning/lịch và Material Symbols Rounded weig
 
 ## Mapping test tự động
 
-| File | Design / hành vi được kiểm tra |
-| --- | --- |
-| `__tests__/teaching-model.test.ts` | S1-01/02/04: ngày Việt Nam/biên tuần; S2-06: calendar date; S4-08/09: link http(s); S5-02/03: chặn roster theo capability tại boundary; empty/offline/error/denied/not-found; filter/search ở nguồn fixture |
-| `__tests__/teaching-ui.test.tsx` | S2-04/09, S3-02/06, S4-15: scope SESSION đi tới roster buổi; S3-01/07/08 và S5-05/06: quyền, snapshot legacy, payment; S6-04/16 và S7-02/07/12/13: Manager/tab/contact/context; S1-09 và S4-08/20: link/xóa dữ liệu khi mất quyền; S6-08/14/21: English/search/reset; S2-18: denied không giữ thẻ; S4-18/19: lỗi nhóm học viên/422; S3-03: capability false; S2-17: giữ dữ liệu khi refresh lỗi; S7-10, S4-14/31: lớp/buổi hủy |
-| `__tests__/teaching-query.test.tsx` | S2-13: response bộ lọc cũ không ghi đè bộ lọc mới; S1-10: tự tải đủ 130 buổi; S2-10: nối trang và giữ total, không trùng item |
-| Các test P0 hiện hữu | Bootstrap/login/deny/preferences/logout, HTTP/cookie và primitives; không dùng kết quả API P0 để khẳng định API P1 |
+| File                                | Design / hành vi được kiểm tra                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `__tests__/teaching-model.test.ts`  | S1-01/02/04: ngày Việt Nam/biên tuần; S2-06: calendar date; S4-08/09: link http(s); S5-02/03: chặn roster theo capability tại boundary; empty/offline/error/denied/not-found; filter/search ở nguồn fixture                                                                                                                                                                                                                    |
+| `__tests__/teaching-ui.test.tsx`    | S2-04/09, S3-02/06, S4-15: scope SESSION đi tới roster buổi; S3-01/07/08 và S5-05/06: quyền, snapshot legacy, payment; S6-04/16 và S7-02/07/12/13: Manager/tab/contact/context; S1-09 và S4-08/20: link/xóa dữ liệu khi mất quyền; S6-08/14/21: English/search/reset; S2-18: denied không giữ thẻ; S4-18/19: lỗi nhóm học viên/422; S3-03: capability false; S2-17: giữ dữ liệu khi refresh lỗi; S7-10, S4-14/31: lớp/buổi hủy |
+| `__tests__/teaching-query.test.tsx` | S2-13: response bộ lọc cũ không ghi đè bộ lọc mới; S1-10: tự tải đủ 130 buổi; S2-10: nối trang và giữ total, không trùng item                                                                                                                                                                                                                                                                                                  |
+| Các test P0 hiện hữu                | Bootstrap/login/deny/preferences/logout, HTTP/cookie và primitives; không dùng kết quả API P0 để khẳng định API P1                                                                                                                                                                                                                                                                                                             |
 
 TDD: test model ban đầu fail vì chưa có module `format`/mock source. Sau implementation bộ model/UI pass; lượt UI đầu phát hiện selector nhãn payment trùng với chip lọc, sửa assertion để kiểm tra trong đúng hàng học viên. Không coi test wire DTO/HTTP/phân trang server/401 hoặc endpoint được ghi trong design là đã kiểm chứng ở giai đoạn UI.
 
@@ -31,7 +33,6 @@ TDD: test model ban đầu fail vì chưa có module `format`/mock source. Sau i
 
 UI đang dùng danh sách cuộn và phân trang fixture; việc kiểm chứng virtualization/viewability với dataset lớn sẽ phải hoàn tất khi nối danh sách API, không dùng dataset fixture nhỏ làm bằng chứng hiệu năng.
 
-
 ## Home — triển khai 31/10/2026
 
 Theo chỉ thị “Triển khai Home UI trong phase 1”, dùng design Claude mục 3/6, H-A–H-I. `WorkspaceScreen` chuyển danh sách Row thành nhóm/lưới HomeTile; linh vật trích từ design được copy nguyên byte vào assets runtime. Card padding 24/16/16, gap 14, overlap −50; linh vật nằm ngoài overflow của card, không nhận chạm hoặc đọc bởi screen reader. Tên tự xuống dòng, email một dòng; các nút avatar/Settings không co. Home chỉ dùng phiên xác minh, không thêm nguồn API/KPI, giữ guard route mock của build và fallback P0.
@@ -42,7 +43,6 @@ Theo chỉ thị “Triển khai Home UI trong phase 1”, dùng design Claude m
 - H-A/B/E: Jest kiểm nhóm đúng role, không có tile role khác, vi/en/light/dark; Settings đổi en/dark rồi back áp dụng tức thì. H-C: hồi quy điều hướng S1/S2/S6 và P0 Profile/Settings/back. H-D: không hiện nhãn yêu thích/xem tất cả, không có KPI hoặc badge mới. H-F: test tên dài không giới hạn dòng, email một dòng và control không co; không coi assertion props là bằng chứng layout native.
 - H-H/I: Jest kiểm role/label nút, mascot ẩn khỏi accessibility tree và pointerEvents none, phản hồi scale .94 hoặc opacity .8 theo reduced motion. Thứ tự focus/TalkBack thực chưa kiểm, không suy từ Jest thành pass.
 - Native Home và smoke hồi quy: xem phần Home trong `e2e-ui.md`. iOS, tên dài trên native, mất mạng thật trên Home và TalkBack còn chưa kiểm đầy đủ. API P1 vẫn 0/7, UI chờ người dùng duyệt.
-
 
 Cập nhật kết quả Home cuối: Android build lại trên source cuối **BUILD SUCCESSFUL, 11s** (`build-logs/home-android-build-final.log`); Maestro toàn flow P1 mở rộng Home **pass exit 0**, lượt `094806`. Rà 4 ảnh Home, gồm Manager en/dark 360dp/font130 (flow `095121`, pass exit 0); xem `e2e-ui.md`. Đã khôi phục emulator 1080×2400/font_scale 1.0. Đây là smoke UI fixture, chưa phải E2E API.
 
@@ -60,7 +60,6 @@ Phản hồi ảnh của người dùng:
 Kiểm chứng đã có: Android `app:assembleDebug` BUILD SUCCESSFUL (59s), cài APK thành công trên emulator-5554. Bộ `npm run check` cuối sau chỉnh lề tab PASS: 13 suite / 139 test, ESLint 0 warning, Prettier và TypeScript pass. Log: `build-logs/phase-1-ui-new-check-final.log`. Sau chỉnh gap header 12px, lint/format/typecheck kiểm lại PASS (`build-logs/phase-1-ui-layout-final-lint.log`). Maestro cuối PASS exit 0, lượt `2026-10-31_165317`, đủ 7 màn, Manager vi/light và en/dark, tìm kiếm/reset, lỗi roster độc lập; log `build-logs/phase-1-ui-new-smoke-final.log`. Đã rà ảnh native Home, Session, Manager list/detail; ảnh đã copy về `build-logs/phase-1/ui/`. Jest bổ sung kiểm số đếm lỗi không ảnh hưởng danh sách, không gọi đếm theo từng lần gõ, lazy-load tab đúng một lần, lỗi tóm tắt không khóa roster, dữ liệu roster tối giản, lựa chọn buổi hôm nay và Meet độc lập.
 
 API P1 vẫn chưa tích hợp, UI chưa được duyệt. iOS, TalkBack và font scale đầy đủ chưa được kiểm chứng. Các kết quả Home cũ bên trên là lịch sử, không đại diện layout bản mới.
-
 
 ## Cập nhật chi tiết buổi học Manager — 01/11/2026
 

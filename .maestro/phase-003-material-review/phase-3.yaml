@@ -1,0 +1,112 @@
+appId: com.mindymobile_admin
+name: P3 live Mentor authoring and Manager review
+---
+- runFlow:
+    file: ../phase-001-teaching-workspace/api/login.yaml
+    env:
+      TEST_EMAIL: ${MAESTRO_MENTOR_EMAIL}
+      TEST_PASSWORD: ${MAESTRO_MENTOR_PASSWORD}
+      WORKSPACE: workspace-mentor-root
+- tapOn:
+    id: workspace-open-materials
+- tapOn:
+    id: materials-filter-OPEN
+- extendedWaitUntil:
+    visible:
+      id: materials-class-${MAESTRO_CLASS_ID}
+    timeout: 30000
+- tapOn:
+    id: materials-class-${MAESTRO_CLASS_ID}
+- extendedWaitUntil:
+    visible:
+      id: materials-upload
+    timeout: 30000
+- tapOn:
+    id: materials-upload
+- tapOn:
+    id: editor-kind-article
+- tapOn:
+    id: editor-title
+- inputText: ${MAESTRO_NEW_TITLE}
+- tapOn:
+    id: editor-article
+- inputText: P3 native article content
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: editor-save
+    direction: DOWN
+- tapOn:
+    id: editor-save
+- extendedWaitUntil:
+    visible:
+      id: material-detail-submit
+    timeout: 30000
+- tapOn:
+    id: material-detail-view
+- extendedWaitUntil:
+    visible:
+      id: preview-article
+    timeout: 30000
+- takeScreenshot: build-logs/phase-3-api/01-article-preview
+- tapOn:
+    id: preview-back
+- tapOn:
+    id: material-detail-submit
+- tapOn:
+    id: submit-confirm
+- extendedWaitUntil:
+    notVisible:
+      id: material-detail-submit
+    timeout: 30000
+- takeScreenshot: build-logs/phase-3-api/02-mentor-submitted
+- runFlow:
+    file: ../phase-001-teaching-workspace/api/login.yaml
+    env:
+      TEST_EMAIL: ${MAESTRO_MANAGER_EMAIL}
+      TEST_PASSWORD: ${MAESTRO_MANAGER_PASSWORD}
+      WORKSPACE: workspace-manager-root
+- scrollUntilVisible:
+    element:
+      id: workspace-open-material-review
+    direction: DOWN
+- tapOn:
+    id: workspace-open-material-review
+- extendedWaitUntil:
+    visible: ${MAESTRO_NEW_TITLE}
+    timeout: 30000
+- tapOn: ${MAESTRO_NEW_TITLE}
+- extendedWaitUntil:
+    visible:
+      id: review-detail-approve
+    timeout: 30000
+- tapOn:
+    id: review-detail-approve
+- tapOn:
+    id: approve-confirm
+- extendedWaitUntil:
+    notVisible:
+      id: review-detail-approve
+    timeout: 30000
+- takeScreenshot: build-logs/phase-3-api/03-manager-approved
+- tapOn:
+    id: review-detail-back
+- extendedWaitUntil:
+    visible:
+      id: review-queue-row-${MAESTRO_REJECT_ID}
+    timeout: 30000
+- tapOn:
+    id: review-queue-row-${MAESTRO_REJECT_ID}
+- tapOn:
+    id: review-detail-reject
+- tapOn:
+    id: reject-reason
+- inputText: P3 native rejection reason
+- hideKeyboard
+- tapOn:
+    id: reject-confirm
+- extendedWaitUntil:
+    notVisible:
+      id: review-detail-reject
+    timeout: 30000
+- takeScreenshot: build-logs/phase-3-api/04-manager-rejected

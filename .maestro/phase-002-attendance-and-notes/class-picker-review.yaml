@@ -1,0 +1,68 @@
+appId: com.mindymobile_admin
+name: Phase 2 select class before attendance tabs
+---
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: phase-2-review-open
+    timeout: 60000
+- tapOn:
+    id: phase-2-review-open
+- tapOn:
+    id: phase-2-review-MANAGER
+- tapOn:
+    id: workspace-open-attendance-management
+- extendedWaitUntil:
+    visible:
+      id: attendance-classes-row-primary
+    timeout: 15000
+- assertNotVisible:
+    id: attendance-tools-tabs
+- takeScreenshot: 01-select-class
+- tapOn:
+    id: attendance-classes-row-primary
+- extendedWaitUntil:
+    visible:
+      id: correction-row-attendance-1
+    timeout: 15000
+- assertVisible:
+    id: attendance-tools-mode-correction
+- assertVisible:
+    id: attendance-tools-mode-history
+- assertNotVisible:
+    id: attendance-tools-status-scroll
+- assertNotVisible:
+    id: attendance-tools-row-today-primary
+- takeScreenshot: 02-class-attendance-tabs
+- tapOn:
+    id: attendance-tools-mode-history
+- extendedWaitUntil:
+    visible:
+      id: audit-empty
+    timeout: 15000
+- takeScreenshot: 02b-class-history
+- tapOn:
+    id: attendance-tools-mode-correction
+- extendedWaitUntil:
+    visible:
+      id: correction-row-attendance-1
+    timeout: 15000
+- tapOn:
+    id: correction-back
+- tapOn:
+    id: attendance-classes-row-substitute
+- extendedWaitUntil:
+    visible:
+      id: attendance-tools-empty
+    timeout: 15000
+- assertNotVisible:
+    id: correction-row-attendance-1
+- takeScreenshot: 03-other-class-empty
+- tapOn:
+    id: attendance-tools-back
+- assertVisible:
+    id: attendance-classes-row-primary
+- tapOn:
+    id: attendance-classes-back
+- assertVisible:
+    id: workspace-open-attendance-management

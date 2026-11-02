@@ -1,0 +1,7 @@
+version: 1
+name: quiz
+description: Synthetic session quiz contract from local backend snapshot, not production data.
+interceptRequests: true
+scenarios:
+  - name: default
+    path: default.js

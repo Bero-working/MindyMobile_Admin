@@ -11,3 +11,7 @@ Source: `D:/FPT_University/FA26/WDP301/Mindy-BE`. Imported 30/10/2026 (Asia/Bang
 | `src/modules/auth/dtos/login.dto.ts` | [login.dto.ts](2026-10-30-auth/login.dto.ts) | `675DA1654EBB7D1F93B91B2A79C1AF0A29839DBD81DB03D28EF44EDC418CFC87` |
 | `src/modules/auth/exceptions/auth.exceptions.ts` | [auth.exceptions.ts](2026-10-30-auth/auth.exceptions.ts) | `1819C5A51E0D1BFE0B772EB2203DB88D1EC7BDDD15FAF695C528E1C7E905506D` |
 | `src/modules/users/dtos/user.dto.ts` | [user.dto.ts](2026-10-30-auth/user.dto.ts) | `2EFAD5F417A526655DEECE95DCA7BC5A7A3B19F42210949F9219D3D790788FE3` |
+
+## Quiz — 02/11/2026
+
+[Snapshot/manifest](2026-11-02-quiz/manifest.json) lưu controller/DTO/service/access/domain/Origin guard đã đối chiếu cho P6. SHA-256 từng file; kết quả runtime ghi riêng trong hồ sơ tích hợp.

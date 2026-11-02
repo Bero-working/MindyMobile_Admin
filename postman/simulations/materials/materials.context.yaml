@@ -1,0 +1,16 @@
+purpose:
+  stands_in_for: Local material review HTTP contract, not the real backend or storage.
+  unblocks: Exercise the actual mobile adapter through HTTP for uncertain approval and safe replay.
+assumptions:
+  - id: material-review-replay
+    status: supported
+    claim: The adapter reports an uncertain write after an upstream 503 and allows the caller to reuse expectedRevision without an automatic replay.
+    reason: The actual mobile adapter reported uncertain after the stand-in committed and returned 503, then an explicit same-revision replay returned approval with one commit.
+    verification: On 2026-11-02 scripts/verify-material-simulation.cjs passed; build-logs/phase-3-simulation.ndjson contains the queue and approval POST events, 503 then 200, stale 409, HTML 503 and denied 403. This supports caller behavior against the stand-in, not native cookie isolation or production availability.
+    source: src/modules/materials/service.ts; postman/mocks/materials/default.js
+    updated_at: '2026-11-02'
+fingerprints:
+  - id: local-material-contract
+    date: '2026-11-02'
+    commit: null
+    cli: '1.77.0'

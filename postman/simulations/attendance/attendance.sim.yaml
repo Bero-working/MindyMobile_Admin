@@ -1,0 +1,6 @@
+simulation: attendance
+routing: path
+mocks:
+  - name: attendance
+    routeKey: attendance
+    path: postman/mocks/attendance

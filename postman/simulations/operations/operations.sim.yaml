@@ -1,0 +1,6 @@
+simulation: operations
+routing: path
+mocks:
+  - name: operations
+    routeKey: operations
+    path: postman/mocks/operations

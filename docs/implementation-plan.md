@@ -1,6 +1,22 @@
 # Kế hoạch triển khai
 
-**P1 hiện hành 31/10/2026:** Đã triển khai UI mock 7 màn theo design Claude; lint/typecheck/Jest 120 test, Android build và Maestro UI smoke pass. Chờ người dùng approve UI toàn phase; API 0/7, chưa nghiệm thu. Xem [review P1](implement/phase-001-teaching-workspace/ui-review.md).
+**P5 hiện hành — 02/11/2026:** Đã triển khai UI/API 5/5, bỏ cổng UI accept riêng theo ADR-027 và E2E theo ADR-030; chưa nghiệm thu. [Kiểm chứng/giới hạn](implement/phase-005-manager-operations-cash/api-integration.md). Các ghi nhận P5 chờ design/code bên dưới là lịch sử.
+
+**P3 hiện hành — 02/11/2026:** đã triển khai mã UI/API trực tiếp theo chỉ thị bỏ chờ UI accept; xem [hồ sơ và bằng chứng](implement/phase-003-material-review/api-integration.md). E2E đã dừng theo yêu cầu người dùng, sẽ chạy lại khi được yêu cầu; chưa nghiệm thu. Các ghi nhận chờ design/Q-MAT-01 trước đó là lịch sử.
+
+**P3 — cập nhật chỉ thị triển khai 02/11/2026:** Người dùng yêu cầu “Triển khai phase 3”; đã ghi nhận chỉ thị và tách 6 kế hoạch slice. Q-MAT-01 đã chốt: Mentor FILE/VIDEO/ARTICLE, Manager duyệt/từ chối. Chưa có design Claude/test case nên UI TDD chờ theo ADR-009; UI/API 0/6. Các dòng chờ duyệt kế hoạch tổng hoặc Q-MAT-01 bên dưới là lịch sử trước chỉ thị này.
+
+**Quy tắc command E2E — 01/11/2026:** [ADR-026](adr/ADR-026-single-e2e-command-per-phase.md) Accepted: mỗi phase chỉ có `npm run test:e2e:phase-<số>`. P1 tự kiểm API/tạo dataset và chạy Maestro qua `npm run test:e2e:phase-1`; các command API/UI riêng trong nhật ký cũ là lịch sử.
+
+Ngày 01/11/2026 (Asia/Bangkok), người dùng “duyệt adr 23 24”: [ADR-023](adr/ADR-023-button-origin-navigation.md) và [ADR-024](adr/ADR-024-demand-driven-status-and-schedule-loading.md) đã Accepted và đóng băng theo ADR-012. P1 áp dụng điều hướng trực tiếp không animation/gesture chuyển màn và tải API theo status/ngày/tab; ADR-025 tiếp tục ưu tiên trong phạm vi xung đột. Lượt duyệt chỉ đồng bộ tài liệu, không thay runtime hoặc bổ sung bằng chứng test/E2E.
+
+## Chuẩn chung cho kế hoạch tiếp theo
+
+**P3 — 02/11/2026:** đã lập [kế hoạch tổng Material Review](implement/phase-003-material-review/phase-003-material-review.md), chờ người dùng duyệt theo ADR-017; chưa tách tài liệu slice, chưa code. Q-MAT-01 và design Claude còn chờ; UI/API 0/6. Xem [progress P3](progress/phase/phase-003-material-review.md).
+
+[ADR-025 — Accepted](adr/ADR-025-shared-ui-data-loading-and-verification-rules.md) áp dụng cho các phase và lần sửa tiếp theo. Mỗi kế hoạch ghi lựa chọn ban đầu, thời điểm tải từng phần/status/ngày/tab, phân trang, cache/offline, quyền và cách kiểm chứng. UI tuân thủ quy tắc điều hướng trực tiếp, skeleton theo nội dung, feedback theo phần và token spacing; không tự mở rộng phạm vi nghiệp vụ hoặc bỏ cổng duyệt hiện hành.
+
+**P1 hiện hành 01/11/2026:** Người dùng đã duyệt nghiệm thu; UI/API 7/7, slice hoàn chỉnh 7/7, **Done**. Xem [tiến độ P1](progress/phase/phase-001-teaching-workspace.md) và [hồ sơ rà soát](implement/phase-001-teaching-workspace/review-cleanup.md).
 
 **Hiện hành 31/10/2026:** Phase 0 đã được duyệt kế hoạch/UI và tích hợp API thật 4/4; người dùng xác nhận duyệt phase 0, yêu cầu kiểm tra và dọn dẹp. Tra [tiến độ P0](progress/phase/phase-000-foundation-auth.md) và [hồ sơ rà soát](implement/phase-000-foundation-auth/review-cleanup.md). Trạng thái Todo/chờ duyệt trong bản kế hoạch ban đầu bên dưới là lịch sử.
 
@@ -25,7 +41,7 @@ Cổng trước nghiệm thu mỗi phase: cleanup/lint/typecheck/Jest pass → *
 | Phase                                 | Luồng                                                     | Ưu tiên | Số UI | Phụ thuộc                                        | Trạng thái |
 | ------------------------------------- | --------------------------------------------------------- | ------- | ----: | ------------------------------------------------ | ---------- |
 | [P0](#p0-foundation-auth)             | Nền tảng → đăng nhập → đúng workspace                     | P0      |     4 | Không                                            | Todo       |
-| [P1](#p1-teaching-workspace)          | Mentor xem lịch/lớp → Manager theo dõi lớp                | P0      |     7 | P0                                               | Todo       |
+| [P1](#p1-teaching-workspace)          | Mentor xem lịch/lớp → Manager theo dõi lớp                | P0      |     7 | P0                                               | Done       |
 | [P2](#p2-attendance-and-notes)        | Mentor điểm danh/ghi chú → Manager theo dõi và correction | P0      |     7 | P0, P1                                           | Todo       |
 | [P3](#p3-material-review)             | Mentor tải tài liệu → Manager duyệt/công bố               | P0      |     6 | P0, P1                                           | Todo       |
 | [P4](#p4-leave-and-makeup)            | Mentor xin nghỉ → Manager duyệt → lịch bù cập nhật        | P0      |     7 | P0, P1, P2                                       | Todo       |
@@ -184,26 +200,26 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 ## P2 — Mentor điểm danh/ghi chú → Manager theo dõi và correction
 
-**01/11/2026 — đã lập [kế hoạch tổng P2](implement/phase-002-attendance-and-notes/phase-002-attendance-and-notes.md), chờ người dùng duyệt theo ADR-017 trước khi tách kế hoạch slice.** Chưa code/design/API; UI/API 0/7. Kế hoạch áp dụng ADR-025/026, gồm tải dữ liệu theo nhu cầu, version/idempotency, offline còn chờ policy và một command E2E tổng khi triển khai.
+**01/11/2026 — đã có design Claude và tách [7 kế hoạch slice P2](implement/phase-002-attendance-and-notes/README.md#kế-hoạch-theo-slice) theo chỉ thị trực tiếp của người dùng (ADR-017).** [Kế hoạch tổng](implement/phase-002-attendance-and-notes/phase-002-attendance-and-notes.md) đã đồng bộ quyết định offline chỉ RAM/tự bấm Lưu, filter issue/classId, Manager chốt thay và Home total. Đã nhận yêu cầu implement và có [mã UI mock 7/7 để review](implement/phase-002-attendance-and-notes/ui-review.md); UI được người dùng duyệt 7/7 ngày 02/11/2026 theo chỉ thị “Duyệt UI phase 2”; đã nối API 7/7 theo yêu cầu “Tích hợp api đi”, xem [hồ sơ P2](implement/phase-002-attendance-and-notes/api-integration.md). Áp dụng ADR-025/026.
 
-Ưu tiên: P0. Phụ thuộc phase: P0, P1. Cổng còn chờ: Q-DATA-01, Q-OFF-01, Q-ATT-01, Q-PLAT-01.
+Ưu tiên: P0. Phụ thuộc phase: P0, P1. Cổng UI đã được duyệt; còn chờ API/E2E/nghiệm thu và Q-PLAT-01. Các quyết định P2 đã chốt tại design chung mục 2.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-attendance-offline-queue.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
 [Nhật ký phase](progress/phase/phase-002-attendance-and-notes.md).
 
-| Slice / mục tiêu (1 UI)                           | BR / UC                                                                                                                                          | Phụ thuộc | UI               | API                  |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ---------------- | -------------------- |
-| P2-S1 — Start, roster, đánh dấu, sync và finalize | BR-ATT-01 BR-ATT-02 BR-ATT-03 BR-ATT-04 BR-ATT-05 BR-ATT-06 BR-ATT-07 BR-ATT-08 BR-ATT-09 BR-ATT-11 BR-OFF-01 BR-OFF-02; UC-M-04 UC-M-05 UC-M-06 | P1-S4     | Todo — mock, TDD | Todo — contract, TDD |
-| P2-S2 — Lưu ghi chú nội bộ buổi                   | BR-NOTE-01 BR-NOTE-02 BR-ATT-06; UC-M-07                                                                                                         | P1-S4     | Todo — mock, TDD | Todo — contract, TDD |
-| P2-S3 — Manager theo dõi buổi cần xử lý           | BR-ATT-01 BR-ATT-05 BR-REPORT-01; UC-MG-02 UC-MG-03                                                                                              | P1-S6     | Todo — mock, TDD | Todo — contract, TDD |
-| P2-S4 — Manager đọc điểm danh và hành động hợp lệ | BR-ATT-03 BR-ATT-10 BR-REPORT-01; UC-MG-03                                                                                                       | P2-S3     | Todo — mock, TDD | Todo — contract, TDD |
-| P2-S5 — Sửa điểm danh có lý do                    | BR-ATT-08 BR-ATT-10 BR-ATT-11; UC-MG-03                                                                                                          | P2-S4     | Todo — mock, TDD | Todo — contract, TDD |
-| P2-S6 — Khôi phục dữ liệu thiếu bằng bằng chứng   | BR-ATT-10 BR-ATT-08; UC-MG-03                                                                                                                    | P2-S4     | Todo — mock, TDD | Todo — contract, TDD |
-| P2-S7 — Xem lịch sử correction/recovery           | BR-ATT-10; UC-MG-03                                                                                                                              | P2-S4     | Todo — mock, TDD | Todo — contract, TDD |
+| Slice / mục tiêu (1 UI)                           | BR / UC                                                                                                                                          | Phụ thuộc | UI              | API          |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | --------------- | ------------ |
+| P2-S1 — Start, roster, đánh dấu, sync và finalize | BR-ATT-01 BR-ATT-02 BR-ATT-03 BR-ATT-04 BR-ATT-05 BR-ATT-06 BR-ATT-07 BR-ATT-08 BR-ATT-09 BR-ATT-11 BR-OFF-01 BR-OFF-02; UC-M-04 UC-M-05 UC-M-06 | P1-S4     | Mock — đã duyệt | Đã nối — TDD |
+| P2-S2 — Lưu ghi chú nội bộ buổi                   | BR-NOTE-01 BR-NOTE-02 BR-ATT-06; UC-M-07                                                                                                         | P1-S4     | Mock — đã duyệt | Đã nối — TDD |
+| P2-S3 — Manager theo dõi buổi cần xử lý           | BR-ATT-01 BR-ATT-05 BR-REPORT-01; UC-MG-02 UC-MG-03                                                                                              | P1-S6     | Mock — đã duyệt | Đã nối — TDD |
+| P2-S4 — Manager đọc điểm danh và hành động hợp lệ | BR-ATT-03 BR-ATT-10 BR-REPORT-01; UC-MG-03                                                                                                       | P2-S3     | Mock — đã duyệt | Đã nối — TDD |
+| P2-S5 — Sửa điểm danh có lý do                    | BR-ATT-08 BR-ATT-10 BR-ATT-11; UC-MG-03                                                                                                          | P2-S4     | Mock — đã duyệt | Đã nối — TDD |
+| P2-S6 — Khôi phục dữ liệu thiếu bằng bằng chứng   | BR-ATT-10 BR-ATT-08; UC-MG-03                                                                                                                    | P2-S4     | Mock — đã duyệt | Đã nối — TDD |
+| P2-S7 — Xem lịch sử correction/recovery           | BR-ATT-10; UC-MG-03                                                                                                                              | P2-S4     | Mock — đã duyệt | Đã nối — TDD |
 
 ### P2-S1 — attendance-editor
 
 - Mục tiêu: Start, roster, đánh dấu, sync và finalize.
-- Design dự kiến, **chờ Claude**: `docs/design/attendance-and-notes/attendance-editor/design.md`.
+- [Design Claude](design/attendance-and-notes/attendance-editor/design.md) đã có; triển khai theo kế hoạch slice P2 hiện hành.
 - Contract dự kiến, **chưa tạo**: `docs/api-contract/attendance-editor.md`; [mapping P2-S1](api-contract/README.md#p2-s1).
 - Tiêu chí nghiệm thu riêng: Bulk mọi trang/guest; finalize cảnh báo UNMARKED; conflict không ghi đè; offline chỉ sau chốt policy.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
@@ -212,7 +228,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-
 ### P2-S2 — teaching-note-editor
 
 - Mục tiêu: Lưu ghi chú nội bộ buổi.
-- Design dự kiến, **chờ Claude**: `docs/design/attendance-and-notes/teaching-note-editor/design.md`.
+- [Design Claude](design/attendance-and-notes/teaching-note-editor/design.md) đã có; triển khai theo kế hoạch slice P2 hiện hành.
 - Contract dự kiến, **chưa tạo**: `docs/api-contract/teaching-note-editor.md`; [mapping P2-S2](api-contract/README.md#p2-s2).
 - Tiêu chí nghiệm thu riêng: Note version riêng; hạn sửa, nội dung/nextSteps và lỗi conflict đúng; không hứa offline note.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
@@ -221,7 +237,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-
 ### P2-S3 — incomplete-sessions
 
 - Mục tiêu: Manager theo dõi buổi cần xử lý.
-- Design dự kiến, **chờ Claude**: `docs/design/attendance-and-notes/incomplete-sessions/design.md`.
+- [Design Claude](design/attendance-and-notes/incomplete-sessions/design.md) đã có; triển khai theo kế hoạch slice P2 hiện hành.
 - Contract dự kiến, **chưa tạo**: `docs/api-contract/incomplete-sessions.md`; [mapping P2-S3](api-contract/README.md#p2-s3).
 - Tiêu chí nghiệm thu riêng: Mặc định toàn backlog unresolved overdue theo API; không giới hạn tuần ngầm; không coi chưa start là ABSENT.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
@@ -230,7 +246,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-
 ### P2-S4 — manager-attendance
 
 - Mục tiêu: Manager đọc điểm danh và hành động hợp lệ.
-- Design dự kiến, **chờ Claude**: `docs/design/attendance-and-notes/manager-attendance/design.md`.
+- [Design Claude](design/attendance-and-notes/manager-attendance/design.md) đã có; triển khai theo kế hoạch slice P2 hiện hành.
 - Contract dự kiến, **chưa tạo**: `docs/api-contract/manager-attendance.md`; [mapping P2-S4](api-contract/README.md#p2-s4).
 - Tiêu chí nghiệm thu riêng: Hiện permission/totals server, regular/guest; phân biệt correction và recovery.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
@@ -239,7 +255,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-
 ### P2-S5 — attendance-correction
 
 - Mục tiêu: Sửa điểm danh có lý do.
-- Design dự kiến, **chờ Claude**: `docs/design/attendance-and-notes/attendance-correction/design.md`.
+- [Design Claude](design/attendance-and-notes/attendance-correction/design.md) đã có; triển khai theo kế hoạch slice P2 hiện hành.
 - Contract dự kiến, **chưa tạo**: `docs/api-contract/attendance-correction.md`; [mapping P2-S5](api-contract/README.md#p2-s5).
 - Tiêu chí nghiệm thu riêng: Reason bắt buộc, record hiện hữu, conflict và audit; không giả Mentor hay đổi hạn.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
@@ -248,7 +264,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-
 ### P2-S6 — attendance-recovery
 
 - Mục tiêu: Khôi phục dữ liệu thiếu bằng bằng chứng.
-- Design dự kiến, **chờ Claude**: `docs/design/attendance-and-notes/attendance-recovery/design.md`.
+- [Design Claude](design/attendance-and-notes/attendance-recovery/design.md) đã có; triển khai theo kế hoạch slice P2 hiện hành.
 - Contract dự kiến, **chưa tạo**: `docs/api-contract/attendance-recovery.md`; [mapping P2-S6](api-contract/README.md#p2-s6).
 - Tiêu chí nghiệm thu riêng: Insert-only, bằng chứng/actual times hợp lệ, body limit; không dựng snapshot lịch sử.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
@@ -257,7 +273,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-006](adr/ADR-006-
 ### P2-S7 — attendance-audits
 
 - Mục tiêu: Xem lịch sử correction/recovery.
-- Design dự kiến, **chờ Claude**: `docs/design/attendance-and-notes/attendance-audits/design.md`.
+- [Design Claude](design/attendance-and-notes/attendance-audits/design.md) đã có; triển khai theo kế hoạch slice P2 hiện hành.
 - Contract dự kiến, **chưa tạo**: `docs/api-contract/attendance-audits.md`; [mapping P2-S7](api-contract/README.md#p2-s7).
 - Tiêu chí nghiệm thu riêng: Phân trang/filter trong scope; chỉ trình bày audit thật, không tự dựng before/after.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
@@ -342,6 +358,8 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 ## P4 — Mentor xin nghỉ → Manager duyệt → lịch bù cập nhật
 
+**02/11/2026:** Đã lập [kế hoạch tổng P4](implement/phase-004-leave-and-makeup/phase-004-leave-and-makeup.md), chờ người dùng duyệt trước tách tài liệu slice; chưa có design Claude/code P4. UI/API 0/7; Q-LEAVE-01/Q-MAKEUP-01 còn mở, S6/S7 vẫn là đề xuất. Các đường dẫn design/contract phía dưới là đích dự kiến, chưa phải hồ sơ đã tồn tại.
+
 Ưu tiên: P0. Phụ thuộc phase: P0, P1, P2. Cổng còn chờ: Q-LEAVE-01, Q-MAKEUP-01; hai slice placement chưa chốt P0.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
 [Nhật ký phase](progress/phase/phase-004-leave-and-makeup.md).
@@ -425,6 +443,10 @@ Kết quả cuối phase: toàn luồng trên cả hai vai trò khi có tương 
 
 ## P5 — Manager phân công/xử lý lịch → xác nhận CASH
 
+**Hiện hành 02/11/2026:** Người dùng yêu cầu triển khai và chốt chỉ dạy thay theo buổi, tên “đơn thanh toán tiền mặt”; không thêm đổi mentor chính, sửa meeting URL hoặc xuất hóa đơn/biên nhận riêng. Q-CLASS-02/Q-PAY-01 đã chốt cho P5; đã chuẩn bị [5 checklist slice](implement/phase-005-manager-operations-cash/README.md#kế-hoạch-theo-slice), chờ design Claude/test case và policy dữ liệu trước code. UI/API giữ 0/5; ghi nhận “chờ duyệt/chưa tách/câu hỏi chưa chốt” bên dưới là lịch sử trước cập nhật này. Phụ thuộc P4 và cổng UI trước API giữ nguyên.
+
+**Cập nhật 02/11/2026:** Đã lập [kế hoạch tổng P5](implement/phase-005-manager-operations-cash/phase-005-manager-operations-cash.md) và [hồ sơ phase](implement/phase-005-manager-operations-cash/README.md), chờ đọc duyệt theo ADR-016/017. Chưa tách slice, chưa có design Claude hoặc code P5; UI/API 0/5. Các đường dẫn design/contract dự kiến bên dưới vẫn chưa tồn tại; cấu trúc contract theo phase được đề xuất trong kế hoạch tổng.
+
 Ưu tiên: P0. Phụ thuộc phase: P0, P1, P2, P4. Cổng còn chờ: Q-CLASS-02, Q-PAY-01; không thêm tạo enrollment/invoice.
 ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-role-navigation-and-scope.md), [ADR-007](adr/ADR-007-error-contract.md), [ADR-008](adr/ADR-008-money-time-domain-representation.md), [ADR-009](adr/ADR-009-phase-tdd-and-ownership.md).
 [Nhật ký phase](progress/phase/phase-005-manager-operations-cash.md).
@@ -502,7 +524,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-
 
 - Mục tiêu: Xem quiz theo lớp/buổi.
 - Design dự kiến, **chờ Claude**: `docs/design/mentor-quiz/quiz-list/design.md`.
-- Contract dự kiến, **chưa tạo**: `docs/api-contract/quiz-list.md`; [mapping P6-S1](api-contract/README.md#p6-s1).
+- Contract dự kiến, **chưa tạo**: [contract P6](api-contract/phase-006-mentor-quiz/quiz-list.md); [mapping P6-S1](api-contract/README.md#p6-s1).
 - Tiêu chí nghiệm thu riêng: Assignment thuộc session; scope dạy thay đúng; không hiện chức năng ZIP publish.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-QUIZ → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
@@ -511,7 +533,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-
 
 - Mục tiêu: Tạo/sửa draft và câu hỏi.
 - Design dự kiến, **chờ Claude**: `docs/design/mentor-quiz/quiz-editor/design.md`.
-- Contract dự kiến, **chưa tạo**: `docs/api-contract/quiz-editor.md`; [mapping P6-S2](api-contract/README.md#p6-s2).
+- Contract dự kiến, **chưa tạo**: [contract P6](api-contract/phase-006-mentor-quiz/quiz-editor.md); [mapping P6-S2](api-contract/README.md#p6-s2).
 - Tiêu chí nghiệm thu riêng: ABCD một đáp án, số câu hợp lệ, không sửa cấu hình đóng băng.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-QUIZ → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.
@@ -520,7 +542,7 @@ ADR liên quan: [ADR-004](adr/ADR-004-query-mmkv-zod.md), [ADR-005](adr/ADR-005-
 
 - Mục tiêu: Đọc, publish/archive theo quyền.
 - Design dự kiến, **chờ Claude**: `docs/design/mentor-quiz/quiz-detail/design.md`.
-- Contract dự kiến, **chưa tạo**: `docs/api-contract/quiz-detail.md`; [mapping P6-S3](api-contract/README.md#p6-s3).
+- Contract dự kiến, **chưa tạo**: [contract P6](api-contract/phase-006-mentor-quiz/quiz-detail.md); [mapping P6-S3](api-contract/README.md#p6-s3).
 - Tiêu chí nghiệm thu riêng: Đúng trạng thái/quyền; không tự dựng điểm/tổng hợp chưa có endpoint.
 - UI: test case từ design → test fail → mock UI pass → duyệt cùng toàn phase.
 - API: đối chiếu nguồn SRC-QUIZ → contract → schema/service/hook test fail → tích hợp thật pass; không fallback mock khi server lỗi.

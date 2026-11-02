@@ -17,6 +17,8 @@ export function HomeTile({
   onPress,
   featured = false,
   compact = false,
+  badge,
+  accessibilityLabel,
 }: {
   label: string;
   icon: IconName;
@@ -24,6 +26,8 @@ export function HomeTile({
   onPress: () => void;
   featured?: boolean;
   compact?: boolean;
+  badge?: number | undefined;
+  accessibilityLabel?: string | undefined;
 }) {
   const { colors } = useMindyTheme();
   const reduced = useReducedMotion();
@@ -32,7 +36,7 @@ export function HomeTile({
     <Pressable
       testID={testID}
       accessibilityRole="button"
-      accessibilityLabel={label}
+      accessibilityLabel={accessibilityLabel ?? label}
       onPress={onPress}
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
@@ -68,6 +72,16 @@ export function HomeTile({
           color={featured ? colors.onBrand : colors.link}
         />
       </View>
+      {!!badge && badge > 0 && (
+        <View
+          testID={`${testID}-badge`}
+          className="absolute top-space-0 right-space-0 min-w-space-18 h-space-18 rounded-radius-99 bg-mdy-dangerButton items-center justify-center px-space-4"
+        >
+          <Text className="text-size-11 font-bvp-bold text-mdy-onBrand">
+            {badge > 99 ? '99+' : String(badge)}
+          </Text>
+        </View>
+      )}
       <Text className="text-size-12 text-center leading-[16.2px] w-full">
         {label}
       </Text>

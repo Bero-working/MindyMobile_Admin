@@ -1,0 +1,44 @@
+appId: com.mindymobile_admin
+name: Phase 2 correction simplified layout
+---
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: phase-2-review-open
+    timeout: 60000
+- tapOn:
+    id: phase-2-review-open
+- tapOn:
+    id: phase-2-review-MANAGER
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-attendance-management
+    timeout: 15000
+- tapOn:
+    id: workspace-open-attendance-management
+- extendedWaitUntil:
+    visible:
+      id: attendance-classes-row-primary
+    timeout: 15000
+- tapOn:
+    id: attendance-classes-row-primary
+- extendedWaitUntil:
+    visible:
+      id: correction-row-attendance-1
+    timeout: 15000
+- extendedWaitUntil:
+    visible:
+      id: correction-row-attendance-1
+    timeout: 15000
+- assertNotVisible:
+    id: correction-totals
+- assertNotVisible:
+    id: correction-bulk-present
+- assertNotVisible:
+    id: correction-bulk-absent
+- assertNotVisible:
+    id: correction-pending
+- assertNotVisible: 'Chưa điểm danh'
+- assertVisible:
+    id: correction-counts
+- takeScreenshot: build-logs/phase-2-utilities/04-correction-loaded

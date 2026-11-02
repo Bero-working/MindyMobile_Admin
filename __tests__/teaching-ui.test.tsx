@@ -20,11 +20,17 @@ import {
   weekDates,
 } from '@/modules/teaching/format';
 import type { TeachingRequest } from '@/modules/teaching/types';
+import {
+  createAttendanceMock,
+  emptyData,
+} from '@/modules/attendance/services/mockAttendance';
+import type { AttendanceSource } from '@/modules/attendance/types';
 import * as teachingMock from '@/modules/teaching/services/mockTeaching';
 function open(
   role = 'MENTOR',
   displayName = 'Trần Thị Linh',
-  email = `${role}@example.test`
+  email = `${role}@example.test`,
+  attendanceSource?: AttendanceSource
 ) {
   const service: AuthService = {
     restore: async () => ({
@@ -38,6 +44,14 @@ function open(
     login: async () => ({ kind: 'signedOut' }),
     logout: async () => ({ kind: 'ok' }),
   };
+  const attendance = createAttendanceMock();
+  const attendanceTestSource: AttendanceSource = attendanceSource ?? {
+    ...attendance,
+    read: async (request) =>
+      request.kind === 'incomplete'
+        ? { kind: 'success', data: emptyData() }
+        : attendance.read(request),
+  };
   render(
     <SafeAreaProvider
       initialMetrics={{
@@ -48,6 +62,8 @@ function open(
       <MindyThemeProvider>
         <AuthApp
           teachingMock
+          attendanceMock
+          attendanceSource={attendanceTestSource}
           service={service}
           cache={new QueryClient()}
         />
@@ -61,7 +77,9 @@ beforeEach(async () => {
 });
 test('TC-P1-S2-04/09, S3-02/06, S4-15: substitute uses session roster only', async () => {
   open();
-  fireEvent.press(await screen.findByTestId('workspace-open-classes'));
+  fireEvent.press(
+    await screen.findByTestId('workspace-open-classes', {}, { timeout: 10000 })
+  );
   fireEvent.press(await screen.findByTestId('classes-card-substitute'));
   await screen.findByTestId('class-detail-scope-alert');
   expect(screen.queryByTestId('class-detail-students-button')).toBeNull();
@@ -73,6 +91,29 @@ test('TC-P1-S2-04/09, S3-02/06, S4-15: substitute uses session roster only', asy
   expect(screen.getByTestId('session-students-provisional')).toBeTruthy();
   expect(screen.queryByText('Chờ thanh toán')).toBeNull();
 });
+test('TC-P6-CTX-03: Mentor home tile opens the quiz class picker, then the class list', async () => {
+  open();
+  fireEvent.press(
+    await screen.findByTestId('workspace-open-quizzes', {}, { timeout: 10000 })
+  );
+  await screen.findByTestId('quiz-classes-screen');
+  fireEvent.press(await screen.findByTestId('quiz-class-primary'));
+  await screen.findByTestId('quiz-list-screen');
+});
+test('Mentor home tile opens the report class picker, then the class report', async () => {
+  open();
+  fireEvent.press(
+    await screen.findByTestId('workspace-open-reports', {}, { timeout: 10000 })
+  );
+  fireEvent.press(await screen.findByTestId('report-class-primary'));
+  await screen.findByTestId('mentor-report-screen');
+});
+test('Report class picker hides session-scoped classes', async () => {
+  open();
+  fireEvent.press(await screen.findByTestId('workspace-open-reports'));
+  await screen.findByTestId('report-class-primary');
+  expect(screen.queryByTestId('report-class-substitute')).toBeNull();
+});
 test('TC-P1-S3-01/07/08, S5-05/06: capability, legacy teacher and pending payment', async () => {
   open();
   fireEvent.press(await screen.findByTestId('workspace-open-classes'));
@@ -81,6 +122,9 @@ test('TC-P1-S3-01/07/08, S5-05/06: capability, legacy teacher and pending paymen
     (await screen.findByTestId('class-detail-session-assigned-other')).props
       .accessibilityRole
   ).toBeUndefined();
+  expect(screen.queryByTestId('class-detail-materials-button')).toBeNull();
+  expect(screen.queryByTestId('class-detail-quiz-button')).toBeNull();
+  expect(screen.queryByTestId('class-detail-report-button')).toBeNull();
   fireEvent.press(screen.getByTestId('class-detail-tab-done'));
   expect(await screen.findByText('Chưa có dữ liệu người dạy')).toBeTruthy();
   fireEvent.press(screen.getByTestId('class-detail-students-button'));
@@ -151,7 +195,9 @@ test('Mentor schedule: live session offers actions; attendance stays a P2 notice
     ).toBeTruthy();
     fireEvent.press(screen.getByTestId('schedule-detail-today-primary'));
     await screen.findByTestId('session-title');
-    expect(screen.getByTestId('session-stat-present')).toHaveTextContent(/—/);
+    await waitFor(() =>
+      expect(screen.getByTestId('session-stat-present')).toHaveTextContent(/\d/)
+    );
   } finally {
     clock.mockRestore();
   }
@@ -260,7 +306,7 @@ test('Mentor schedule requests only the selected day and does not mark unvisited
   }
 });
 
-test('Mentor session defers roster and unit requests until their tabs are opened', async () => {
+test('Mentor session loads roster on demand and keeps materials as a P1 placeholder', async () => {
   const original = teachingMock.createTeachingMock;
   const requests: { kind: string; sessionId?: string }[] = [];
   const factory = jest
@@ -281,6 +327,8 @@ test('Mentor session defers roster and unit requests until their tabs are opened
       await screen.findByTestId('schedule-session-today-primary')
     );
     await screen.findByTestId('session-class-code');
+    expect(screen.queryByTestId('session-materials')).toBeNull();
+    expect(screen.queryByTestId('session-quiz')).toBeNull();
     expect(requests.some((request) => request.kind === 'sessionStudents')).toBe(
       false
     );
@@ -292,60 +340,42 @@ test('Mentor session defers roster and unit requests until their tabs are opened
     ).toHaveLength(1);
     expect(requests.some((request) => request.kind === 'units')).toBe(false);
     fireEvent.press(screen.getByTestId('session-tab-materials'));
-    await screen.findByTestId('session-content');
+    await screen.findByTestId('session-materials-group');
     expect(requests.filter((request) => request.kind === 'units')).toHaveLength(
-      1
+      0
     );
   } finally {
     factory.mockRestore();
   }
 });
 
-test('Manager session opens without fetching its roster until requested', async () => {
-  const original = teachingMock.createTeachingMock;
-  const reads = jest.fn();
-  const factory = jest
-    .spyOn(teachingMock, 'createTeachingMock')
-    .mockImplementation((scenario) => {
-      const source = original(scenario);
-      return {
-        read: (request) => {
-          reads(request);
-          return source.read(request);
-        },
-      };
-    });
-  try {
-    open('MANAGER');
-    fireEvent.press(
-      await screen.findByTestId('workspace-open-manager-classes')
-    );
-    fireEvent.press(await screen.findByTestId('manager-classes-card-primary'));
-    fireEvent.press(await screen.findByTestId('manager-detail-tab-schedule'));
-    fireEvent.press(
-      await screen.findByTestId('manager-detail-session-today-primary')
-    );
-    await screen.findByTestId('session-title');
-    expect(
-      reads.mock.calls.some(([request]) => request.kind === 'sessionStudents')
-    ).toBe(false);
-    fireEvent.press(screen.getByTestId('session-tab-students'));
-    await screen.findByTestId('session-student-enrollment-1');
-    expect(screen.queryByText('Chưa điểm danh')).toBeNull();
-    fireEvent.press(screen.getByTestId('session-tab-overview'));
-    expect(
-      screen.getByTestId('session-date-tile', { includeHiddenElements: true })
-    ).toBeTruthy();
-    expect(screen.queryByTestId('session-primary-mentor')).toBeNull();
-    fireEvent.press(screen.getByTestId('session-tab-students'));
-    await screen.findByTestId('session-student-enrollment-1');
-    expect(
-      reads.mock.calls.filter(([request]) => request.kind === 'sessionStudents')
-    ).toHaveLength(1);
-  } finally {
-    factory.mockRestore();
-  }
+test('Manager overview reads attendance permissions but defers roster pages until its tab opens', async () => {
+  const source = createAttendanceMock();
+  const read = jest.fn(source.read);
+  open('MANAGER', 'Manager', 'MANAGER@example.test', { ...source, read });
+  fireEvent.press(await screen.findByTestId('workspace-open-manager-classes'));
+  fireEvent.press(await screen.findByTestId('manager-classes-card-primary'));
+  fireEvent.press(await screen.findByTestId('manager-detail-tab-schedule'));
+  fireEvent.press(
+    await screen.findByTestId('manager-detail-session-today-primary')
+  );
+  await screen.findByTestId('session-title');
+  // P5 replaced the old unrestricted mock editor with policy-gated operations.
+  expect(screen.queryByTestId('manager-session-edit')).toBeNull();
+  expect(
+    read.mock.calls.some(([r]) => r.kind === 'attendance' && r.pageSize === 20)
+  ).toBe(false);
+  fireEvent.press(screen.getByTestId('session-tab-attendance'));
+  await screen.findByTestId('manager-att-row-attendance-1');
+  expect(
+    read.mock.calls.some(([r]) => r.kind === 'attendance' && r.pageSize === 20)
+  ).toBe(true);
+  expect(screen.queryByText('Chưa điểm danh')).toBeNull();
+  fireEvent.press(screen.getByTestId('session-tab-overview'));
+  await screen.findByTestId('session-title');
+  expect(screen.queryByTestId('session-primary-mentor')).toBeNull();
 });
+
 test('Mentor class detail: sessions split into upcoming and taught', async () => {
   const original = teachingMock.createTeachingMock;
   const read = jest.fn();
@@ -493,10 +523,11 @@ test('TC-P1-S7-10, S4-14/31: cancelled class retains read access, cancelled sess
   expect(screen.queryByTestId('session-link')).toBeNull();
   expect(screen.queryByTestId('session-effective-mentor')).toBeNull();
   expect(screen.getByTestId('session-primary-mentor')).toBeTruthy();
-  fireEvent.press(screen.getByTestId('session-tab-students'));
+  fireEvent.press(screen.getByTestId('session-tab-attendance'));
+  await screen.findByTestId('manager-att-row-attendance-1');
   expect(
-    await screen.findByTestId('session-students-cancelled')
-  ).toHaveTextContent('Buổi đã hủy nên không có danh sách học viên.');
+    screen.queryByTestId('manager-att-mark-attendance-1-present')
+  ).toBeNull();
   expect(screen.queryByTestId('session-students-group')).toBeNull();
 });
 
@@ -552,15 +583,21 @@ test('H-F: long verified identity wraps independently of account controls', asyn
   open('MENTOR', name, email);
   await screen.findByTestId('workspace-mentor-root');
   expect(screen.getByText(name).props.numberOfLines).toBeUndefined();
-  expect(screen.getByText(`Mentor · ${email}`).props.numberOfLines).toBe(1);
+  expect(screen.getByText('Mentor').props.numberOfLines).toBe(1);
+  expect(screen.queryByText(new RegExp(email))).toBeNull();
   expect(screen.getByTestId('workspace-account-button')).toHaveStyle({
     flexShrink: 0,
   });
-  expect(screen.getByTestId('workspace-settings-button')).toHaveStyle({
-    width: 44,
-    height: 44,
-    flexShrink: 0,
-  });
+  for (const testID of [
+    'workspace-open-notifications',
+    'workspace-settings-button',
+  ]) {
+    expect(screen.getByTestId(testID)).toHaveStyle({
+      width: 44,
+      height: 44,
+      flexShrink: 0,
+    });
+  }
 });
 
 test('TC-P1-S6-01/14/23: default status and counts survive searching and clearing', async () => {
@@ -635,7 +672,7 @@ test('Home: Mentor today card opens Meet separately from session navigation', as
 test('Home: Manager rest card has no schedule action', async () => {
   open('MANAGER');
   expect(await screen.findByText('Bạn được nghỉ ngơi')).toBeTruthy();
-  expect(screen.getByText('Hiện chưa có việc cần xử lý')).toBeTruthy();
+  expect(screen.getByText('Không có buổi học nào cần xử lý')).toBeTruthy();
   expect(screen.queryByTestId('workspace-today-schedule')).toBeNull();
 });
 

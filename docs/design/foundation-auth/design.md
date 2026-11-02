@@ -146,7 +146,7 @@ P0 chưa có Trang chủ (P1 thiết kế riêng). Khung tối thiểu cho cả 
 ┌──────────────────────────────┐
 │▓▓ header gradient (workspace)▓│
 │ (TL)  Trần Thị Linh      (⚙) │  ← Avatar → Hồ sơ; bánh răng → Cài đặt
-│       Mentor · linh.tran@…   │
+│       Mentor                 │
 │▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
 │  ┌────────────────────────┐  │
 │  │ (icon tròn teal)        │  │  GlassCard, overlap −50px

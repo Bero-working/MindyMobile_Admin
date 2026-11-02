@@ -1,0 +1,172 @@
+appId: com.mindymobile_admin
+name: P4 UI mock - Mentor leave and Manager review/placement
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: phase-2-review-open
+    timeout: 120000
+- tapOn:
+    id: phase-2-review-open
+- tapOn:
+    id: phase-4-review-MENTOR
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-leave
+    timeout: 30000
+- tapOn:
+    id: workspace-open-leave
+- extendedWaitUntil:
+    visible:
+      id: leave-list-row-leave-1
+    timeout: 30000
+- takeScreenshot: build-logs/phase-4-ui/01-mentor-list
+- tapOn:
+    id: leave-list-row-leave-1
+- assertVisible:
+    id: leave-detail-withdraw
+- takeScreenshot: build-logs/phase-4-ui/02-mentor-detail
+- tapOn:
+    id: leave-detail-withdraw
+- tapOn:
+    id: leave-detail-withdraw-reason
+- inputText: Personal plans changed
+- hideKeyboard
+- tapOn:
+    id: leave-detail-withdraw-send
+- assertNotVisible:
+    id: leave-detail-withdraw
+- back
+- tapOn:
+    id: leave-list-create
+- tapOn:
+    id: leave-plan-from
+- runFlow:
+    when:
+      notVisible:
+        id: leave-plan-from-days.day_${P4_LEAVE_DATE}
+    commands:
+      - tapOn:
+          id: leave-plan-from-days.header.rightArrow
+- tapOn:
+    id: leave-plan-from-days.day_${P4_LEAVE_DATE}
+- tapOn:
+    id: leave-plan-preview
+- scrollUntilVisible:
+    element:
+      id: leave-plan-pick-source-a
+    direction: DOWN
+- tapOn:
+    id: leave-plan-pick-source-a
+- tapOn:
+    id: leave-plan-target-date
+- runFlow:
+    when:
+      notVisible:
+        id: leave-plan-target-date-days.day_${P4_TARGET_DATE}
+    commands:
+      - tapOn:
+          id: leave-plan-target-date-days.header.rightArrow
+- tapOn:
+    id: leave-plan-target-date-days.day_${P4_TARGET_DATE}
+- scrollUntilVisible:
+    element:
+      id: leave-plan-slot-18:00
+    direction: DOWN
+- tapOn:
+    id: leave-plan-slot-18:00
+- tapOn:
+    id: leave-plan-use-slot
+- scrollUntilVisible:
+    element:
+      id: leave-plan-reason
+    direction: DOWN
+- tapOn:
+    id: leave-plan-reason
+- inputText: Family appointment
+- hideKeyboard
+- takeScreenshot: build-logs/phase-4-ui/03-leave-plan
+- tapOn:
+    id: leave-plan-submit
+- tapOn:
+    id: leave-plan-confirm-send
+- extendedWaitUntil:
+    visible:
+      id: leave-detail-status
+    timeout: 30000
+- tapOn:
+    id: phase-2-review-open
+- tapOn:
+    id: phase-4-review-MANAGER
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-leave-review
+    timeout: 30000
+- tapOn:
+    id: workspace-open-leave-review
+- extendedWaitUntil:
+    visible:
+      id: leave-queue-row-leave-1
+    timeout: 30000
+- takeScreenshot: build-logs/phase-4-ui/04-review-queue
+- tapOn:
+    id: leave-queue-row-leave-1
+- assertVisible:
+    id: leave-review-approve
+- takeScreenshot: build-logs/phase-4-ui/05-review-detail
+- tapOn:
+    id: leave-review-approve
+- scrollUntilVisible:
+    element:
+      id: leave-review-approve-reason
+    direction: DOWN
+- tapOn:
+    id: leave-review-approve-reason
+- inputText: Approved as proposed
+- hideKeyboard
+- tapOn:
+    id: leave-review-approve-send
+- extendedWaitUntil:
+    visible:
+      id: leave-review-status
+    timeout: 30000
+- assertNotVisible:
+    id: leave-review-approve
+- back
+- back
+- scrollUntilVisible:
+    element:
+      id: workspace-open-makeup-conflicts
+    direction: DOWN
+- tapOn:
+    id: workspace-open-makeup-conflicts
+- extendedWaitUntil:
+    visible:
+      id: makeup-conflicts-row-conflict-open
+    timeout: 30000
+- takeScreenshot: build-logs/phase-4-ui/06-conflicts
+- tapOn:
+    id: makeup-conflicts-row-conflict-open
+- scrollUntilVisible:
+    element:
+      id: makeup-placement-candidate-target-a
+    direction: DOWN
+- tapOn:
+    id: makeup-placement-candidate-target-a
+- assertVisible:
+    id: makeup-placement-content-check
+- tapOn:
+    id: makeup-placement-content-check
+- tapOn:
+    id: makeup-placement-reason
+- inputText: Equivalent unit checked
+- hideKeyboard
+- takeScreenshot: build-logs/phase-4-ui/07-placement-confirm
+- tapOn:
+    id: makeup-placement-submit
+- extendedWaitUntil:
+    visible:
+      id: makeup-placement-placed
+    timeout: 30000
+- takeScreenshot: build-logs/phase-4-ui/08-placement-result

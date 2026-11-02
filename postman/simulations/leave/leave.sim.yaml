@@ -1,0 +1,6 @@
+simulation: leave
+routing: path
+mocks:
+  - name: leave
+    routeKey: leave
+    path: postman/mocks/leave

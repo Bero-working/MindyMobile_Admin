@@ -1,6 +1,9 @@
 /* eslint-env jest */
 import 'react-native-gesture-handler/jestSetup';
 
+global.crypto = require('node:crypto').webcrypto;
+jest.mock('react-native-get-random-values', () => ({}));
+
 jest.mock('react-native-reanimated', () => {
   const Reanimated = jest.requireActual('react-native-reanimated/mock');
 
@@ -48,6 +51,11 @@ jest.mock('react-native-device-info', () => ({
 }));
 
 jest.mock('@react-native-community/netinfo', () => ({
+  useNetInfo: jest.fn(() => ({
+    isConnected: true,
+    isInternetReachable: true,
+    type: 'wifi',
+  })),
   addEventListener: jest.fn(() => jest.fn()),
   fetch: jest.fn(() =>
     Promise.resolve({
@@ -73,3 +81,8 @@ jest.mock('@react-native-community/blur', () => {
 
   return { BlurView: View };
 });
+
+jest.mock('@react-native-clipboard/clipboard', () => ({
+  setString: jest.fn(),
+  getString: jest.fn(async () => ''),
+}));

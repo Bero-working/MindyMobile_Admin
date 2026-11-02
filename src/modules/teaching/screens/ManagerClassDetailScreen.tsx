@@ -1,8 +1,9 @@
 import { useState, useContext, useEffect } from 'react';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { AuthStackParams } from '@/modules/auth/AuthApp';
+import '@/modules/reports/messages';
 import {
   Alert,
   Avatar,
@@ -81,7 +82,17 @@ function Detail({
           query={query}
           prefix="manager-detail"
         >
-          {item && <Overview item={item} />}
+          {item && (
+            <Overview
+              item={item}
+              onReport={() =>
+                navigation.navigate('ManagerAttendanceReport', {
+                  classId,
+                  classTitle: item.name,
+                })
+              }
+            />
+          )}
         </QueryBlock>
       </View>
       {(['schedule', 'students'] as const).map(
@@ -153,8 +164,15 @@ function InfoRow({
     </View>
   );
 }
-function Overview({ item }: { item: TeachingClass }) {
+function Overview({
+  item,
+  onReport,
+}: {
+  item: TeachingClass;
+  onReport: () => void;
+}) {
   const { t } = useTranslation('teaching');
+  const { t: report } = useTranslation('reports');
   return (
     <>
       {item.status === 'CANCELLED' && (
@@ -250,6 +268,28 @@ function Overview({ item }: { item: TeachingClass }) {
           icon="menu_book"
           testID="manager-detail-count"
         />
+        {item.status !== 'DRAFT' && (
+          <Pressable
+            testID="manager-detail-report"
+            accessibilityRole="button"
+            onPress={onReport}
+            className="min-h-space-44 flex-row items-center gap-space-12 p-space-10 active:opacity-80"
+          >
+            <View className="h-space-40 w-space-40 rounded-radius-99 bg-mdy-tint2 items-center justify-center">
+              <Icon
+                name="monitoring"
+                size={20}
+              />
+            </View>
+            <Text className="flex-1 text-size-14 font-bvp-medium">
+              {report('managerLink')}
+            </Text>
+            <Icon
+              name="chevron_right"
+              size={20}
+            />
+          </Pressable>
+        )}
       </Card>
     </>
   );

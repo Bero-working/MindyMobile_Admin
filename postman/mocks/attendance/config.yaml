@@ -1,0 +1,7 @@
+version: 1
+name: attendance
+description: Synthetic P2 contract fixture from the 2026-11-02 backend snapshot.
+interceptRequests: true
+scenarios:
+  - name: default
+    path: default.js

@@ -1,0 +1,80 @@
+appId: com.mindymobile_admin
+name: P6 UI mock review — not integrated API E2E
+---
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: phase-2-review-open
+    timeout: 120000
+- tapOn:
+    id: phase-2-review-open
+- tapOn:
+    id: phase-2-review-MENTOR
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-quizzes
+    timeout: 15000
+- tapOn:
+    id: workspace-open-quizzes
+- tapOn:
+    id: quiz-class-primary
+- assertVisible:
+    id: quiz-mock-badge
+- takeScreenshot: build-logs/phase-6-ui/01-list
+- tapOn:
+    id: quiz-list-row-mock-quiz-draft
+- assertVisible:
+    id: quiz-detail-publish
+- takeScreenshot: build-logs/phase-6-ui/02-detail
+- tapOn:
+    id: quiz-detail-edit
+- assertVisible:
+    id: quiz-editor-title
+- takeScreenshot: build-logs/phase-6-ui/03-editor-info
+- tapOn:
+    id: quiz-editor-tab-questions
+- tapOn:
+    id: quiz-editor-add-question
+- tapOn:
+    id: quiz-question-prompt
+- inputText: Review question
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: quiz-question-discard-stay
+    commands:
+      - tapOn:
+          id: quiz-question-discard-stay
+- takeScreenshot: build-logs/phase-6-ui/04-question-form
+- tapOn:
+    id: quiz-editor-back
+- tapOn:
+    id: quiz-question-discard-confirm
+- tapOn:
+    id: quiz-editor-preview
+- tapOn:
+    id: quiz-detail-publish
+- assertVisible:
+    id: quiz-detail-publish-dialog
+- takeScreenshot: build-logs/phase-6-ui/05-publish-confirm
+- tapOn:
+    id: quiz-detail-publish-confirm
+- assertVisible:
+    id: quiz-detail-archive
+- assertNotVisible:
+    id: quiz-detail-edit
+- tapOn:
+    id: quiz-detail-archive
+- tapOn:
+    id: quiz-detail-archive-reason
+- inputText: Review fixture only
+- hideKeyboard
+- takeScreenshot: build-logs/phase-6-ui/06-archive-confirm
+- tapOn:
+    id: quiz-detail-archive-confirm
+- assertVisible:
+    id: quiz-detail-archived-note
+- assertNotVisible:
+    id: quiz-detail-archive
+- takeScreenshot: build-logs/phase-6-ui/07-archived

@@ -1,0 +1,52 @@
+appId: com.mindymobile_admin
+name: Phase 2 loaded preview and settings access
+---
+- launchApp
+- tapOn:
+    id: phase-2-review-open
+- tapOn:
+    id: phase-2-review-MENTOR
+- extendedWaitUntil:
+    visible:
+      id: workspace-today-attend
+    timeout: 15000
+- tapOn:
+    id: workspace-today-attend
+- extendedWaitUntil:
+    visible:
+      id: attendance-row-attendance-1
+    timeout: 15000
+- takeScreenshot: build-logs/phase-2-ui/01-attendance-loaded
+- tapOn:
+    id: phase-2-review-open
+- tapOn:
+    id: phase-2-review-MANAGER
+- extendedWaitUntil:
+    visible:
+      id: workspace-settings-button
+    timeout: 15000
+- takeScreenshot: build-logs/phase-2-ui/04-manager-home-clear-controls
+- tapOn:
+    id: workspace-settings-button
+- assertVisible:
+    id: settings-language-en
+- tapOn:
+    id: settings-language-en
+- tapOn:
+    id: settings-theme-dark
+- takeScreenshot: build-logs/phase-2-ui/10-settings-en-dark
+- tapOn:
+    id: settings-back-button
+- tapOn:
+    id: workspace-open-incomplete
+- assertVisible:
+    id: incomplete-row-overdue-not-started
+- takeScreenshot: build-logs/phase-2-ui/11-incomplete-en-dark
+- tapOn:
+    id: incomplete-back
+- tapOn:
+    id: workspace-settings-button
+- tapOn:
+    id: settings-language-vi
+- tapOn:
+    id: settings-theme-light

@@ -36,6 +36,7 @@ const shell = {
   visibleSessionCount: 12,
 };
 const session = {
+  asOf: '2026-10-31T10:00:00Z',
   sessionId,
   classId,
   classUnitId: classId,

@@ -1,0 +1,7 @@
+version: 1
+name: materials
+description: Synthetic material review fixture from the local 2026-11-02 backend contract.
+interceptRequests: true
+scenarios:
+  - name: default
+    path: default.js

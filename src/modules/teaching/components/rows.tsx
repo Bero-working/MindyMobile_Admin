@@ -51,36 +51,6 @@ export function StatusChip({
     </Chip>
   );
 }
-export function ProgressBar({
-  current,
-  total,
-  label,
-}: {
-  current: number | null;
-  total: number | null;
-  label: string;
-}) {
-  const { t } = useTranslation('teaching');
-  if (current === null || total === null) return null;
-  return (
-    <View className="gap-space-6">
-      <View className="flex-row justify-between">
-        <Text className="text-size-12 text-mdy-secondary">{t('progress')}</Text>
-        <Text className="text-size-12 font-bvp-semibold text-mdy-link">
-          {label}
-        </Text>
-      </View>
-      <View className="h-space-6 rounded-radius-99 bg-mdy-muted overflow-hidden">
-        <View
-          className="h-full rounded-radius-99 bg-mdy-primary"
-          style={{
-            width: `${total ? Math.max(0, Math.min(100, Math.round((current / total) * 100))) : 0}%`,
-          }}
-        />
-      </View>
-    </View>
-  );
-}
 export function classScheduleLine(item: TeachingClass, language: string) {
   const days = weekdayLabels(language);
   return [
@@ -91,9 +61,11 @@ export function classScheduleLine(item: TeachingClass, language: string) {
 export function MentorClassCard({
   item,
   onPress,
+  testID,
 }: {
   item: TeachingClass;
   onPress: () => void;
+  testID?: string;
 }) {
   const { t } = useTranslation('teaching');
   const detail = [
@@ -104,7 +76,7 @@ export function MentorClassCard({
   ].join(' · ');
   return (
     <Pressable
-      testID={`classes-card-${item.id}`}
+      testID={testID ?? `classes-card-${item.id}`}
       accessibilityRole="button"
       onPress={onPress}
       className="active:opacity-80"
@@ -129,23 +101,6 @@ export function MentorClassCard({
             value={item.status}
           />
         </View>
-        <ProgressBar
-          current={item.elapsedSessions ?? null}
-          total={item.sessionCount}
-          label={t('sessionProgress', {
-            current: item.elapsedSessions ?? 0,
-            total: item.sessionCount,
-            remaining: Math.max(
-              0,
-              (item.sessionCount ?? 0) - (item.elapsedSessions ?? 0)
-            ),
-          })}
-        />
-        {item.elapsedSessions == null && (
-          <Text className="text-size-12 text-mdy-secondary">
-            {t('progressUnavailable')}
-          </Text>
-        )}
         {item.scope === 'SESSION' && (
           <>
             <StatusChip
@@ -195,15 +150,31 @@ export function ClassCard({
   item,
   prefix,
   onPress,
+  testID,
+  showSeats = true,
 }: {
-  item: TeachingClass;
+  item: Pick<
+    TeachingClass,
+    | 'id'
+    | 'name'
+    | 'code'
+    | 'status'
+    | 'mentor'
+    | 'startDate'
+    | 'endDate'
+    | 'deliveryMode'
+    | 'availableSeats'
+    | 'maxStudents'
+  >;
   prefix: string;
   onPress: () => void;
+  testID?: string;
+  showSeats?: boolean;
 }) {
   const { t } = useTranslation('teaching');
   return (
     <Pressable
-      testID={`${prefix}-card-${item.id}`}
+      testID={testID ?? `${prefix}-card-${item.id}`}
       accessible
       accessibilityRole="button"
       onPress={onPress}
@@ -248,27 +219,29 @@ export function ClassCard({
           />
           <Text className="flex-1 text-size-13 text-mdy-secondary">{`${calendarDate(item.startDate)} – ${calendarDate(item.endDate)} · ${t(`delivery.${item.deliveryMode}`)}`}</Text>
         </View>
-        <View className="flex-row items-center gap-space-6">
-          <Icon
-            name="groups"
-            size={16}
-          />
-          <Text
-            testID={`${prefix}-seats-${item.id}`}
-            className="flex-1 text-size-13 text-mdy-secondary"
-          >
-            {item.availableSeats === null || item.maxStudents === null
-              ? '—'
-              : t('seats', {
-                  available: item.availableSeats,
-                  max: item.maxStudents,
-                })}
-          </Text>
-          <Icon
-            name="chevron_right"
-            size={20}
-          />
-        </View>
+        {showSeats && (
+          <View className="flex-row items-center gap-space-6">
+            <Icon
+              name="groups"
+              size={16}
+            />
+            <Text
+              testID={`${prefix}-seats-${item.id}`}
+              className="flex-1 text-size-13 text-mdy-secondary"
+            >
+              {item.availableSeats === null || item.maxStudents === null
+                ? '—'
+                : t('seats', {
+                    available: item.availableSeats,
+                    max: item.maxStudents,
+                  })}
+            </Text>
+            <Icon
+              name="chevron_right"
+              size={20}
+            />
+          </View>
+        )}
       </Card>
     </Pressable>
   );

@@ -1,0 +1,103 @@
+appId: com.mindymobile_admin
+name: Phase 2 Manager utilities and horizontal filters
+---
+- launchApp
+- tapOn:
+    id: phase-2-review-open
+- tapOn:
+    id: phase-2-review-MANAGER
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-attendance-management
+    timeout: 15000
+- assertVisible:
+    id: workspace-open-manager-finalize
+- takeScreenshot: build-logs/phase-2-utilities/01-home
+- tapOn:
+    id: workspace-open-incomplete
+- extendedWaitUntil:
+    visible:
+      id: incomplete-row-overdue-not-started
+    timeout: 15000
+- takeScreenshot: build-logs/phase-2-utilities/02-horizontal-status
+- tapOn:
+    id: incomplete-back
+- tapOn:
+    id: workspace-open-attendance-management
+- extendedWaitUntil:
+    visible:
+      id: attendance-classes-row-primary
+    timeout: 15000
+- tapOn:
+    id: attendance-classes-row-primary
+- assertVisible:
+    id: attendance-tools-mode-history
+- extendedWaitUntil:
+    visible:
+      id: correction-row-attendance-1
+    timeout: 15000
+- takeScreenshot: build-logs/phase-2-utilities/03-attendance-utility
+- assertVisible:
+    id: correction-screen
+- extendedWaitUntil:
+    visible:
+      id: correction-row-attendance-1
+    timeout: 15000
+- assertNotVisible:
+    id: correction-totals
+- assertNotVisible:
+    id: correction-bulk-present
+- assertNotVisible:
+    id: correction-pending
+- takeScreenshot: build-logs/phase-2-utilities/04-correction
+- tapOn:
+    id: attendance-tools-mode-history
+- assertVisible:
+    id: audit-screen
+- extendedWaitUntil:
+    visible:
+      id: audit-empty
+    timeout: 15000
+- takeScreenshot: build-logs/phase-2-utilities/04b-audit-empty-card
+- tapOn:
+    id: audit-back
+- tapOn:
+    id: attendance-classes-back
+- tapOn:
+    id: workspace-open-manager-finalize
+- extendedWaitUntil:
+    visible:
+      id: finalize-sessions-row-today-primary
+    timeout: 15000
+- takeScreenshot: build-logs/phase-2-utilities/05-finalize-utility
+- tapOn:
+    id: finalize-sessions-row-today-primary
+- assertVisible:
+    id: manager-finalize-screen
+- takeScreenshot: build-logs/phase-2-utilities/06-finalize-screen
+- tapOn:
+    id: finalize-use-schedule
+- scrollUntilVisible:
+    element:
+      id: finalize-reason
+    direction: DOWN
+- tapOn:
+    id: finalize-reason
+- inputText: Verified actual end time
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- tapOn:
+    id: finalize-submit
+- extendedWaitUntil:
+    notVisible:
+      id: manager-finalize-screen
+    timeout: 15000
+- assertNotVisible:
+    id: finalize-sessions-row-today-primary
+- takeScreenshot: build-logs/phase-2-utilities/07-finalized-list

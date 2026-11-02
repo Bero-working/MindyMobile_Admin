@@ -13,6 +13,6 @@ module.exports = {
   setupFiles: ['./jest.setup.js'],
   setupFilesAfterEnv: ['./jest.ui-setup.js'],
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|react-native-safe-area-context|react-native-keyboard-controller|react-native-reanimated|@rn-primitives|@react-native|@react-navigation|@sohantalukder/rn-kit|react-native-css-interop|nativewind)/)',
+    'node_modules/(?!(react-native|react-native-calendars|react-native-swipe-gestures|react-native-safe-area-context|react-native-keyboard-controller|react-native-reanimated|@rn-primitives|@react-native|@react-navigation|@sohantalukder/rn-kit|react-native-css-interop|nativewind)/)',
   ],
 };

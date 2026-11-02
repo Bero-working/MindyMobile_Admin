@@ -1,0 +1,11 @@
+purpose:
+  stands_in_for: Mindy P5 operations and CASH API based on the 2026-11-02 source snapshot.
+  unblocks: Verify the actual TypeScript adapter against lost responses after commit without changing real transactions.
+assumptions:
+  - id: lost-response-after-commit
+    status: supported
+    claim: Identical session key/body/version replays after one commit; CASH retry reads PAID and does not commit twice.
+    verification: Actual adapter over Axios HTTP against Postman CLI simulation on port 4018 passed session timeout/replay/one commit, version conflict, CASH commit then timeout/GET PAID/replay/one commit, HTML 503 and denial. Live fixture mutation separately passed session replay and CASH replay.
+    limits: Synthetic failure injection does not establish provider timeout frequency, key retention period, native E2E or every concurrent transaction interleaving.
+    source: docs/api-contract/legacy/2026-11-02-operations; scripts/verify-operations-simulation.cjs; scripts/verify-operations-mutations.cjs
+    updated_at: '2026-11-02'

@@ -105,6 +105,7 @@ export function createAuthService(
     return {
       kind: 'user',
       user: {
+        id: user.id,
         email: user.email,
         displayName: user.displayName,
         role: user.role,

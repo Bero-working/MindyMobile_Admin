@@ -1,0 +1,394 @@
+appId: com.mindymobile_admin
+name: P2 live API - approved accessible Mentor and Manager flows
+---
+- runFlow:
+    file: ../phase-001-teaching-workspace/api/login.yaml
+    env:
+      TEST_EMAIL: ${MAESTRO_MENTOR_EMAIL}
+      TEST_PASSWORD: ${MAESTRO_MENTOR_PASSWORD}
+      WORKSPACE: workspace-mentor-root
+- assertNotVisible:
+    id: workspace-open-manager-classes
+- tapOn:
+    id: workspace-open-classes
+- extendedWaitUntil:
+    visible:
+      id: classes-card-${MAESTRO_CLASS_ID}
+    timeout: 30000
+- tapOn:
+    id: classes-card-${MAESTRO_CLASS_ID}
+- scrollUntilVisible:
+    element:
+      id: class-detail-session-${MAESTRO_MENTOR_SESSION_ID}
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: class-detail-session-${MAESTRO_MENTOR_SESSION_ID}
+- scrollUntilVisible:
+    element:
+      id: session-start
+    direction: DOWN
+- tapOn:
+    id: session-start
+- extendedWaitUntil:
+    visible:
+      id: attendance-start
+    timeout: 30000
+- assertNotVisible:
+    id: attendance-mock-badge
+- tapOn:
+    id: attendance-start
+- tapOn:
+    id: attendance-start-confirm
+- extendedWaitUntil:
+    visible:
+      id: attendance-mark-.*-present
+    timeout: 30000
+- tapOn:
+    id: attendance-mark-.*-present
+    index: 0
+- takeScreenshot: build-logs/phase-2-api/native/01-mentor-draft
+- tapOn:
+    id: attendance-finalize
+- extendedWaitUntil:
+    visible:
+      id: attendance-finalize-confirm
+    timeout: 30000
+- takeScreenshot: build-logs/phase-2-api/native/02-finalize-impact
+- tapOn:
+    id: attendance-finalize-confirm
+- extendedWaitUntil:
+    visible:
+      id: attendance-note-action
+    timeout: 30000
+- tapOn:
+    id: attendance-note-action
+- extendedWaitUntil:
+    visible:
+      id: note-content|note-context-retry|note-retry
+    timeout: 30000
+- runFlow:
+    when:
+      visible:
+        id: note-context-retry
+    commands:
+      - tapOn:
+          id: note-context-retry
+- runFlow:
+    when:
+      visible:
+        id: note-retry
+    commands:
+      - tapOn:
+          id: note-retry
+- extendedWaitUntil:
+    visible:
+      id: note-content
+    timeout: 30000
+- tapOn:
+    id: note-content
+- inputText: P2 native E2E note
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- assertNotVisible:
+    id: phase-2-review-open
+- tapOn:
+    id: note-save
+- extendedWaitUntil:
+    notVisible:
+      id: note-unsaved
+    timeout: 15000
+- assertVisible:
+    id: note-content
+- assertNotVisible:
+    id: phase-2-review-menu
+- takeScreenshot: build-logs/phase-2-api/native/03-note
+- runFlow:
+    file: ../phase-001-teaching-workspace/api/login.yaml
+    env:
+      TEST_EMAIL: ${MAESTRO_MANAGER_EMAIL}
+      TEST_PASSWORD: ${MAESTRO_MANAGER_PASSWORD}
+      WORKSPACE: workspace-manager-root
+- assertNotVisible:
+    id: workspace-open-schedule
+- tapOn:
+    id: workspace-open-attendance-management
+- scrollUntilVisible:
+    element:
+      id: attendance-students-row-${MAESTRO_STUDENT_ID}
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: attendance-students-row-${MAESTRO_STUDENT_ID}
+- extendedWaitUntil:
+    visible:
+      id: student-attendance-class
+    timeout: 30000
+- tapOn:
+    id: student-attendance-class
+- tapOn:
+    id: student-attendance-class-option-${MAESTRO_CLASS_ID}
+- tapOn:
+    id: student-attendance-session
+- tapOn:
+    id: student-attendance-session-option-${MAESTRO_CORRECTION_SESSION_ID}
+- extendedWaitUntil:
+    visible:
+      id: student-attendance-current
+    timeout: 30000
+- tapOn:
+    id: student-attendance-${MAESTRO_CORRECTION_MARK}
+- scrollUntilVisible:
+    element:
+      id: student-attendance-reason
+    direction: DOWN
+- tapOn:
+    id: student-attendance-reason
+- inputText: P2 native E2E correction
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- takeScreenshot: build-logs/phase-2-api/native/04-correction
+- tapOn:
+    id: student-attendance-save
+- extendedWaitUntil:
+    visible:
+      id: student-attendance-save
+      enabled: false
+    timeout: 30000
+- tapOn:
+    id: student-attendance-back
+- tapOn:
+    id: attendance-students-back
+- assertNotVisible:
+    id: phase-2-review-open
+- tapOn:
+    id: workspace-open-manager-finalize
+- scrollUntilVisible:
+    element:
+      id: finalize-sessions-row-${MAESTRO_FINALIZE_SESSION_ID}
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: finalize-sessions-row-${MAESTRO_FINALIZE_SESSION_ID}
+- extendedWaitUntil:
+    visible:
+      id: finalize-end-time
+    timeout: 30000
+- tapOn:
+    id: finalize-end-time
+- eraseText
+- evalScript: ${output.finalizeTime = new Date(Date.now() + 7 * 3600000).toISOString().slice(11,16)}
+- inputText: ${output.finalizeTime}
+- scrollUntilVisible:
+    element:
+      id: finalize-reason
+    direction: DOWN
+- tapOn:
+    id: finalize-reason
+- inputText: P2 native E2E manager finalize
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- takeScreenshot: build-logs/phase-2-api/native/05-manager-finalize
+- tapOn:
+    id: finalize-submit
+- extendedWaitUntil:
+    notVisible:
+      id: manager-finalize-screen
+    timeout: 30000
+- extendedWaitUntil:
+    notVisible:
+      id: finalize-sessions-row-${MAESTRO_FINALIZE_SESSION_ID}
+    timeout: 30000
+- tapOn:
+    id: finalize-sessions-back
+- tapOn:
+    id: workspace-incomplete-summary
+- extendedWaitUntil:
+    visible:
+      id: incomplete-class-filter
+    timeout: 30000
+- tapOn:
+    id: incomplete-class-filter
+- tapOn:
+    id: incomplete-class-search
+- inputText: ${MAESTRO_CLASS_NAME}
+- assertVisible:
+    id: incomplete-class-search
+    text: ${MAESTRO_CLASS_NAME}
+- hideKeyboard
+- runFlow:
+    when:
+      notVisible:
+        id: incomplete-class-sheet
+    commands:
+      - tapOn:
+          id: incomplete-class-filter
+- extendedWaitUntil:
+    visible:
+      id: incomplete-class-option-${MAESTRO_CLASS_ID}
+    timeout: 30000
+- tapOn:
+    id: incomplete-class-option-${MAESTRO_CLASS_ID}
+- extendedWaitUntil:
+    visible:
+      id: incomplete-row-${MAESTRO_RECOVERY_SESSION_ID}
+    timeout: 30000
+- takeScreenshot: build-logs/phase-2-api/native/06-backlog
+- tapOn:
+    id: incomplete-row-${MAESTRO_RECOVERY_SESSION_ID}
+- extendedWaitUntil:
+    visible:
+      id: manager-att-provisional
+    timeout: 30000
+- assertNotVisible:
+    id: manager-att-audits
+- assertNotVisible:
+    id: manager-att-recover
+- takeScreenshot: build-logs/phase-2-api/native/07-manager-snapshot
+
+- swipe:
+    from:
+      id: session-tab-attendance
+    direction: LEFT
+- tapOn:
+    id: session-tab-history
+- extendedWaitUntil:
+    visible:
+      id: audit-empty
+    timeout: 30000
+- takeScreenshot: build-logs/phase-2-api/native/08-history-empty
+- swipe:
+    from:
+      id: session-tab-history
+    direction: LEFT
+- tapOn:
+    id: session-tab-recovery
+- extendedWaitUntil:
+    visible:
+      id: recovery-option-${MAESTRO_ENROLLMENT_ID}
+    timeout: 30000
+- tapOn:
+    id: recovery-option-${MAESTRO_ENROLLMENT_ID}
+- scrollUntilVisible:
+    element:
+      id: recovery-date
+    direction: DOWN
+- tapOn:
+    id: recovery-date
+- eraseText
+- inputText: ${MAESTRO_RECOVERY_DATE}
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- tapOn:
+    id: recovery-start-time
+- eraseText
+- inputText: ${MAESTRO_RECOVERY_START}
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- scrollUntilVisible:
+    element:
+      id: recovery-end-time
+    direction: DOWN
+- tapOn:
+    id: recovery-end-time
+- eraseText
+- evalScript: ${output.recoveryEnd = new Date(Date.now() + 7 * 3600000).toISOString().slice(11,16)}
+- inputText: ${output.recoveryEnd}
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- scrollUntilVisible:
+    element:
+      id: recovery-evidence
+    direction: DOWN
+- tapOn:
+    id: recovery-evidence
+- inputText: P2 native E2E synthetic register observed after confirmed fixture payment
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- scrollUntilVisible:
+    element:
+      id: recovery-reason
+    direction: DOWN
+- tapOn:
+    id: recovery-reason
+- inputText: P2 native E2E recovery
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- scrollUntilVisible:
+    element:
+      id: recovery-mark-${MAESTRO_ENROLLMENT_ID}-present
+    direction: DOWN
+- tapOn:
+    id: recovery-mark-${MAESTRO_ENROLLMENT_ID}-present
+- takeScreenshot: build-logs/phase-2-api/native/09-recovery-form
+- tapOn:
+    id: recovery-review
+- extendedWaitUntil:
+    visible:
+      id: recovery-submit
+    timeout: 30000
+- tapOn:
+    id: recovery-submit
+- extendedWaitUntil:
+    visible:
+      id: manager-att-row-.*
+    timeout: 30000
+- swipe:
+    from:
+      id: session-tab-attendance
+    direction: LEFT
+- tapOn:
+    id: session-tab-history
+- extendedWaitUntil:
+    visible:
+      id: audit-row-.*
+    timeout: 30000
+- takeScreenshot: build-logs/phase-2-api/native/10-recovery-audit

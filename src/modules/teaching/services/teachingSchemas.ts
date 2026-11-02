@@ -38,6 +38,8 @@ export const workspace = z.object({
   capabilities: z.object({
     readClass: z.boolean(),
     readClassRoster: z.boolean(),
+    readClassReports: z.boolean().optional(),
+    authorMaterials: z.boolean().optional(),
   }),
   visibleUnitCount: count,
   visibleSessionCount: count,
@@ -56,6 +58,7 @@ export const managerDetail = classSummary.extend({
   enrollmentCounts,
 });
 export const session = z.object({
+  asOf: instant,
   sessionId: id,
   classId: id,
   classUnitId: id,
@@ -81,6 +84,7 @@ export const context = z.object({
 });
 export const unit = z.object({
   id,
+  courseUnitId: id.optional(),
   title: z.string(),
   position: z.number().int().positive(),
 });

@@ -1,0 +1,38 @@
+{
+  "capturedAt": "2026-11-02",
+  "source": "../Mindy-BE/src",
+  "files": [
+    {
+      "path": "modules/assignments/controllers/mentor-assignments.controller.ts",
+      "sha256": "4e552429b1fe25bfce74a2fb44ce36736154f36ce1e8551cb41ce2b24bf1c9b3"
+    },
+    {
+      "path": "modules/assignments/dtos/assignment-input.dto.ts",
+      "sha256": "9102a0a730e30a5bbe369c1eb5b9fed6e7d9e06d6aefee67f866408a468f8b23"
+    },
+    {
+      "path": "modules/assignments/dtos/assignment.dto.ts",
+      "sha256": "aa677f9e57f9721c1a2562c00c63c045eb1b5c1879b0cbf044fc12242a800227"
+    },
+    {
+      "path": "modules/assignments/services/assignments.service.ts",
+      "sha256": "b591e1d15f7c4ba20d650787fde62a6222442bc0745afd9db82972373ca35332"
+    },
+    {
+      "path": "modules/assignments/services/assignment-access.service.ts",
+      "sha256": "c7fb46b9ed2255d02bb6e613ea0ababb649666ee9fcbc34cb289214bffe4ec17"
+    },
+    {
+      "path": "modules/assignments/domain/quiz.ts",
+      "sha256": "703c407abf1a76865b74540b83b5c9c5286c683e2dbcef57d5390c086ed9afa8"
+    },
+    {
+      "path": "common/dtos/page-options.dto.ts",
+      "sha256": "1f10f020968b5cbbb19f105867074db8636ea5272a6d20b8b181950bdceb05b5"
+    },
+    {
+      "path": "common/guards/request-origin.guard.ts",
+      "sha256": "f51edaecad2048e61dc61cc375ad6813efe7d800a7025a3f78dc318875ba050c"
+    }
+  ]
+}

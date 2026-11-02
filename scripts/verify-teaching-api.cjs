@@ -48,11 +48,11 @@ const { createTeachingService } = load(
 );
 async function main() {
   const simulated = process.argv.includes('--simulation');
-  const accounts = simulated
-    ? {}
-    : JSON.parse(
-        fs.readFileSync(path.join(root, '.maestro/accounts.local.json'), 'utf8')
-      );
+  const accountsFile = path.join(root, '.maestro/accounts.local.json');
+  const accounts =
+    !simulated && fs.existsSync(accountsFile)
+      ? JSON.parse(fs.readFileSync(accountsFile, 'utf8'))
+      : {};
   for (const role of simulated ? ['MENTOR'] : ['MENTOR', 'MANAGER']) {
     const client = axios.create({
       baseURL,

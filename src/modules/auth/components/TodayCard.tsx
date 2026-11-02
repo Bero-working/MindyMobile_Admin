@@ -1,3 +1,4 @@
+import { useAttendance } from '@/modules/attendance';
 import {
   useCallback,
   useEffect,
@@ -221,6 +222,8 @@ function TodaySession({
   classes: ReturnType<typeof useTeachingQuery>;
 }) {
   const { t } = useTranslation('teaching');
+  const attendance = useAttendance();
+  const { t: att } = useTranslation('attendance');
   const { notify } = useAuth();
   const active = item.status !== 'COMPLETED';
   const title =
@@ -295,36 +298,66 @@ function TodaySession({
           )}
         </View>
       </Pressable>
-      {active && !context.result && (
-        <Skeleton label={t('loading')}>
-          <Button
-            disabled
-            size="sm"
-            icon="videocam"
+      {active &&
+        ((attendance.enabled && item.status === 'IN_PROGRESS') ||
+          !context.result ||
+          !!link ||
+          !!info?.meetingUrl) && (
+          <View
+            testID="workspace-today-actions"
+            className="flex-row items-stretch justify-between gap-space-8"
           >
-            {t('home.joinMeet')}
-          </Button>
-        </Skeleton>
-      )}
-      {active && link ? (
-        <Button
-          testID="workspace-today-meet"
-          size="sm"
-          icon="videocam"
-          className="min-h-space-44 rounded-radius-22"
-          onPress={() => {
-            Linking.openURL(link.url).catch(() => notify(t('linkFailed')));
-          }}
-        >
-          {t(
-            link.host === 'meet.google.com' ? 'home.joinMeet' : 'home.openLink'
-          )}
-        </Button>
-      ) : active && info?.meetingUrl && !link ? (
-        <Text className="text-size-12 text-mdy-secondary">
-          {t('linkInvalid')}
-        </Text>
-      ) : null}
+            {attendance.enabled && item.status === 'IN_PROGRESS' && (
+              <Button
+                testID="workspace-today-attend"
+                variant="secondary"
+                size="sm"
+                className="flex-1 min-w-0 min-h-space-52 rounded-radius-99 px-space-8"
+                onPress={() =>
+                  navigation.navigate('AttendanceEditor', {
+                    sessionId: item.id,
+                    classTitle: title,
+                  })
+                }
+              >
+                {att('context.attend')}
+              </Button>
+            )}
+            {active && !context.result && (
+              <View className="flex-1 min-w-0">
+                <Skeleton label={t('loading')}>
+                  <Button
+                    disabled
+                    size="sm"
+                    icon="videocam"
+                    className="flex-1 min-w-0 min-h-space-52 rounded-radius-99 px-space-8"
+                  >
+                    {t('home.joinClass')}
+                  </Button>
+                </Skeleton>
+              </View>
+            )}
+            {active && link ? (
+              <Button
+                testID="workspace-today-meet"
+                size="sm"
+                icon="videocam"
+                className="flex-1 min-w-0 min-h-space-52 rounded-radius-99 px-space-8"
+                onPress={() => {
+                  Linking.openURL(link.url).catch(() =>
+                    notify(t('linkFailed'))
+                  );
+                }}
+              >
+                {t('home.joinClass')}
+              </Button>
+            ) : active && info?.meetingUrl && !link ? (
+              <Text className="flex-1 text-size-12 text-mdy-secondary">
+                {t('linkInvalid')}
+              </Text>
+            ) : null}
+          </View>
+        )}
     </>
   );
 }

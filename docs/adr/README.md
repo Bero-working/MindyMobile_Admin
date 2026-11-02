@@ -1,31 +1,39 @@
 # Sổ quyết định kiến trúc
 
-Ngày khởi tạo: 30/10/2026. **0 ADR Proposed, 22 Accepted (gồm ADR-019 Accepted for implementation).** Ngày 30/10/2026 (Asia/Bangkok), người dùng xác nhận: “Chốt tất cả adr 1->9”. ADR-001–ADR-009 được chấp nhận; các câu hỏi còn mở và cổng duyệt riêng vẫn giữ nguyên. ADR-010 và ADR-011 được người dùng duyệt ngày 30/10/2026 qua phản hồi “Duyệt adr 10 và 11, sau đó hoàn thành adr 11 đi”. ADR-011 đã thực hiện. ADR-010 đã thực hiện ngày 30/10/2026: tạo `docs/design/global.css` từ 3 mẫu; 7 xung đột token chờ người phụ trách design quyết định.
+Ngày khởi tạo: 30/10/2026. **0 ADR Proposed, 26 Accepted (gồm ADR-019 Accepted for implementation).** ADR-023/024 được người dùng duyệt riêng ngày 01/11/2026 qua phản hồi “duyệt adr 23 24”. Ngày 30/10/2026 (Asia/Bangkok), người dùng xác nhận: “Chốt tất cả adr 1->9”. ADR-001–ADR-009 được chấp nhận; các câu hỏi còn mở và cổng duyệt riêng vẫn giữ nguyên. ADR-010 và ADR-011 được người dùng duyệt ngày 30/10/2026 qua phản hồi “Duyệt adr 10 và 11, sau đó hoàn thành adr 11 đi”. ADR-011 đã thực hiện. ADR-010 đã thực hiện ngày 30/10/2026: tạo `docs/design/global.css` từ 3 mẫu; 7 xung đột token chờ người phụ trách design quyết định.
 
-| ADR                                                    | Nội dung                                             | Trạng thái |
-| ------------------------------------------------------ | ---------------------------------------------------- | ---------- |
-| [ADR-001](ADR-001-boilerplate-feature-modules.md)      | Giữ nền boilerplate và tổ chức feature module        | Accepted   |
-| [ADR-002](ADR-002-strict-types-no-any-unknown.md)      | TypeScript strict và cấm kiểu any/unknown tường minh | Accepted   |
-| [ADR-003](ADR-003-reusables-nativewind-theme.md)       | React Native Reusables, NativeWind và theme          | Accepted   |
-| [ADR-004](ADR-004-query-mmkv-zod.md)                   | TanStack Query, MMKV, Zod và ranh giới dữ liệu       | Accepted   |
-| [ADR-005](ADR-005-role-navigation-and-scope.md)        | Navigation một role và scope theo backend            | Accepted   |
-| [ADR-006](ADR-006-attendance-offline-queue.md)         | Draft và queue điểm danh offline                     | Accepted   |
-| [ADR-007](ADR-007-error-contract.md)                   | Chuẩn hóa lỗi theo contract thực                     | Accepted   |
-| [ADR-008](ADR-008-money-time-domain-representation.md) | Biểu diễn tiền, điểm và thời gian                    | Accepted   |
-| [ADR-009](ADR-009-phase-tdd-and-ownership.md)          | TDD theo phase, phân vai và các cổng duyệt           | Accepted   |
-| [ADR-010](ADR-010-global-design-tokens-css.md)        | Tập trung token và CSS mẫu trong design/global.css   | Accepted — đường dẫn/định dạng bị thay thế bởi ADR-014 |
-| [ADR-011](ADR-011-phase-progress-folder.md)           | Gom tài liệu phase vào docs/progress/phase           | Accepted   |
-| [ADR-012](ADR-012-immutable-approved-adrs-and-precedence.md) | Bất biến ADR đã duyệt và ưu tiên ADR mới hơn | Accepted — hiệu lực toàn bộ |
-| [ADR-013](ADR-013-reanimated-gesture-handler-native-stack.md) | Reanimated, Gesture Handler và Native Stack | Accepted — hiệu lực toàn bộ |
-| [ADR-014](ADR-014-design-css-markdown-and-runtime-location.md) | Tài liệu CSS Markdown và stylesheet trong src | Accepted — hiệu lực toàn bộ |
-| [ADR-015](ADR-015-zero-based-phase-numbering.md) | Đánh số phase từ 0 | Accepted |
-| [ADR-016](ADR-016-plan-before-implementation.md) | Kế hoạch trước implement, UI trước API | Accepted |
-| [ADR-017](ADR-017-phase-plan-name-and-slice-breakdown.md) | Tên kế hoạch và tách slice | Accepted |
-| [ADR-018](ADR-018-secure-storage-network-and-lazy-loading.md) | Secure storage, network security và lazy loading | Accepted |
-| [ADR-019](ADR-019-phase-0-cookie-auth.md) | API auth cookie phase 0 | Accepted for implementation |
-| [ADR-020](ADR-020-e2e-suite-per-phase.md) | Bộ E2E tương ứng sau mỗi phase | Accepted — hiệu lực toàn bộ |
-| [ADR-021](ADR-021-entry-side-navigation.md) | Hướng mở UI cho avatar, Back và điều hướng tiến | Accepted — hiệu lực toàn bộ |
-| [ADR-022](ADR-022-frosted-glass-blur.md) | Kính mờ thật bằng thư viện blur native | Accepted — hiệu lực toàn bộ |
+| ADR                                                                 | Nội dung                                                  | Trạng thái                                             |
+| ------------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------ |
+| [ADR-001](ADR-001-boilerplate-feature-modules.md)                   | Giữ nền boilerplate và tổ chức feature module             | Accepted                                               |
+| [ADR-002](ADR-002-strict-types-no-any-unknown.md)                   | TypeScript strict và cấm kiểu any/unknown tường minh      | Accepted                                               |
+| [ADR-003](ADR-003-reusables-nativewind-theme.md)                    | React Native Reusables, NativeWind và theme               | Accepted                                               |
+| [ADR-004](ADR-004-query-mmkv-zod.md)                                | TanStack Query, MMKV, Zod và ranh giới dữ liệu            | Accepted                                               |
+| [ADR-005](ADR-005-role-navigation-and-scope.md)                     | Navigation một role và scope theo backend                 | Accepted                                               |
+| [ADR-006](ADR-006-attendance-offline-queue.md)                      | Draft và queue điểm danh offline                          | Accepted                                               |
+| [ADR-007](ADR-007-error-contract.md)                                | Chuẩn hóa lỗi theo contract thực                          | Accepted                                               |
+| [ADR-008](ADR-008-money-time-domain-representation.md)              | Biểu diễn tiền, điểm và thời gian                         | Accepted                                               |
+| [ADR-009](ADR-009-phase-tdd-and-ownership.md)                       | TDD theo phase, phân vai và các cổng duyệt                | Accepted                                               |
+| [ADR-010](ADR-010-global-design-tokens-css.md)                      | Tập trung token và CSS mẫu trong design/global.css        | Accepted — đường dẫn/định dạng bị thay thế bởi ADR-014 |
+| [ADR-011](ADR-011-phase-progress-folder.md)                         | Gom tài liệu phase vào docs/progress/phase                | Accepted                                               |
+| [ADR-012](ADR-012-immutable-approved-adrs-and-precedence.md)        | Bất biến ADR đã duyệt và ưu tiên ADR mới hơn              | Accepted — hiệu lực toàn bộ                            |
+| [ADR-013](ADR-013-reanimated-gesture-handler-native-stack.md)       | Reanimated, Gesture Handler và Native Stack               | Accepted — chuyển màn bị thay thế bởi ADR-025          |
+| [ADR-014](ADR-014-design-css-markdown-and-runtime-location.md)      | Tài liệu CSS Markdown và stylesheet trong src             | Accepted — hiệu lực toàn bộ                            |
+| [ADR-015](ADR-015-zero-based-phase-numbering.md)                    | Đánh số phase từ 0                                        | Accepted                                               |
+| [ADR-016](ADR-016-plan-before-implementation.md)                    | Kế hoạch trước implement, UI trước API                    | Accepted                                               |
+| [ADR-017](ADR-017-phase-plan-name-and-slice-breakdown.md)           | Tên kế hoạch và tách slice                                | Accepted                                               |
+| [ADR-018](ADR-018-secure-storage-network-and-lazy-loading.md)       | Secure storage, network security và lazy loading          | Accepted                                               |
+| [ADR-019](ADR-019-phase-0-cookie-auth.md)                           | API auth cookie phase 0                                   | Accepted for implementation                            |
+| [ADR-020](ADR-020-e2e-suite-per-phase.md)                           | Bộ E2E tương ứng sau mỗi phase                            | Accepted — tổ chức command được bổ sung bởi ADR-026    |
+| [ADR-021](ADR-021-entry-side-navigation.md)                         | Hướng mở UI cho avatar, Back và điều hướng tiến           | Accepted — quy tắc chuyển màn bị thay thế bởi ADR-025  |
+| [ADR-022](ADR-022-frosted-glass-blur.md)                            | Kính mờ thật bằng thư viện blur native                    | Accepted — hiệu lực toàn bộ                            |
+| [ADR-023](ADR-023-button-origin-navigation.md)                      | Mở màn hình từ nút được bấm; cập nhật bỏ animation        | Accepted — hiệu lực toàn bộ                            |
+| [ADR-024](ADR-024-demand-driven-status-and-schedule-loading.md)     | Tải API theo status, ngày lịch và tab đang mở             | Accepted — hiệu lực toàn bộ                            |
+| [ADR-025](ADR-025-shared-ui-data-loading-and-verification-rules.md) | Quy tắc chung UI, tải dữ liệu và kiểm chứng cho các phase | Accepted — hiệu lực toàn bộ                            |
+| [ADR-026](ADR-026-single-e2e-command-per-phase.md)                  | Mỗi phase chỉ có một command test E2E                     | Accepted — hiệu lực toàn bộ                            |
+
+## Cập nhật P3 — 02/11/2026
+
+[ADR-029 — P3 triển khai UI/API trực tiếp](ADR-029-phase-3-direct-api-implementation.md) Accepted theo chỉ thị “Triển khai phase 3, bỏ qua UI accept, tích hợp API vào luôn”. Thay cổng chờ UI chỉ trong P3; không sửa ADR-009/016 đã đóng băng hoặc tự ghi nghiệm thu. Người dùng tiếp tục yêu cầu dừng E2E để thực hiện sau.
 
 ## Vòng đời
 
@@ -95,7 +103,6 @@ Sau khi nhận báo cáo chuyển tài liệu design thành `docs/design/global.
 
 [ADR-020](ADR-020-e2e-suite-per-phase.md) Accepted theo phản hồi người dùng “Duyệt adr 20”. Bổ sung ADR-009 về bộ Maestro E2E, flow tổng, lệnh npm và hồ sơ bằng chứng riêng từng phase; hiệu lực toàn bộ. Giữ nguyên file ADR-009 và các ADR đã đóng băng, cổng duyệt kế hoạch/UI và quyền nghiệm thu của người dùng. ADR-020 được đóng băng từ lần duyệt này theo ADR-012.
 
-
 ## Duyệt toàn bộ ADR — 31/10/2026
 
 Nguồn: người dùng “Duyệt tất cả adr” ngày 31/10/2026 (Asia/Bangkok). Xác nhận chấp thuận toàn bộ ADR-001–ADR-022 hiện có. ADR-021 và ADR-022 chuyển Proposed → Accepted; đã ghi nguồn/ngày duyệt và đóng băng hai file theo ADR-012. ADR-001–ADR-020 giữ nguyên bản đã duyệt.
@@ -106,4 +113,40 @@ Các ghi nhận Proposed trước đây trong sổ và hồ sơ triển khai là
 
 ## ADR-023 — Mở màn hình từ nút được bấm · 31/10/2026
 
-[ADR-023](ADR-023-button-origin-navigation.md) Proposed, ghi nhận chuỗi yêu cầu về hiệu ứng điều hướng. Chỉ thị mới nhất ngày 01/11/2026 bỏ animation cả khi mở và Back UI; code dùng điều hướng trực tiếp và bỏ lớp chuyển động tùy chỉnh. Chưa ghi nhận duyệt riêng ADR. Đề xuất thay toàn bộ quy tắc chuyển động của ADR-021; giữ nguyên file ADR-021 đã đóng băng.
+[ADR-023](ADR-023-button-origin-navigation.md) **Accepted**, ghi nhận chuỗi yêu cầu về hiệu ứng điều hướng. Chỉ thị mới nhất ngày 01/11/2026 bỏ animation cả khi mở và Back UI; code dùng điều hướng trực tiếp và bỏ lớp chuyển động tùy chỉnh. Đã được duyệt riêng ngày 01/11/2026 qua phản hồi “duyệt adr 23 24”; thay toàn bộ quy tắc chuyển động của ADR-021, giữ nguyên file ADR-021 đã đóng băng. ADR-025 tiếp tục được ưu tiên nếu có xung đột trong phạm vi chung.
+
+## ADR-024 — Tải dữ liệu theo status/ngày/tab · 01/11/2026
+
+[ADR-024](ADR-024-demand-driven-status-and-schedule-loading.md) **Accepted**, ghi nhận lazy API P1 đã triển khai: mở lớp chỉ tải IN_PROGRESS, đổi status mới tải tương ứng; lịch chỉ tải ngày được chọn theo UTC+7; roster/tab tải theo thao tác. Không giả số 0 cho dữ liệu chưa tải, không tải sessions để dựng tiến độ thẻ Mentor. Bổ sung ADR-004/018; giữ nguyên ADR Accepted và trạng thái nghiệm thu P1. Đã được duyệt riêng ngày 01/11/2026 qua phản hồi “duyệt adr 23 24”.
+
+## ADR-025 — Chuẩn chung cho các phase · 01/11/2026
+
+[ADR-025](ADR-025-shared-ui-data-loading-and-verification-rules.md) **Accepted** theo chỉ thị trực tiếp “Viết thành adr để áp dụng đi” cho 15 quy tắc chung vừa liệt kê. Áp dụng khi lập kế hoạch/triển khai/sửa màn các phase tiếp theo: điều hướng trực tiếp, lazy API theo status/ngày/tab, dữ liệu trung thực, skeleton/feedback/offline, spacing/hiệu ứng, quyền và kiểm chứng. Thay phần animation/gesture chuyển màn của ADR-013/021; giữ phần khác và mọi file Accepted cũ nguyên trạng. Tại thời điểm tạo ADR-025, ADR-023/024 còn Proposed; cả hai đã được người dùng duyệt riêng ngày 01/11/2026. Ghi nhận Proposed trong file ADR-025 đóng băng là lịch sử; ADR-025 tiếp tục được ưu tiên trong phạm vi xung đột theo ADR-012. Không tự triển khai phase hoặc refactor toàn app.
+
+## Duyệt ADR-023/024 — 01/11/2026
+
+Nguồn: người dùng “duyệt adr 23 24”. Hai ADR chuyển Proposed → Accepted, ghi nguồn/ngày duyệt rồi đóng băng theo ADR-012. ADR-023 xác nhận điều hướng trực tiếp, bỏ animation và gesture chuyển/back; ADR-024 bổ sung ADR-004/018 về tải API theo status/ngày/tab trong Teaching Workspace. ADR-025 giữ nguyên file và ưu tiên trong phạm vi xung đột do có số lớn hơn; thời điểm duyệt không thay thứ tự ưu tiên. Các ghi nhận Proposed trước đó là lịch sử. Đồng bộ changelog, kế hoạch và hồ sơ P1; không thay runtime hoặc tạo thêm kết quả kiểm chứng ứng dụng.
+
+## ADR-026 — Một command E2E mỗi phase · 01/11/2026
+
+Người dùng yêu cầu gộp command như P0 và ghi quy tắc mỗi phase chỉ có một command E2E. [ADR-026](ADR-026-single-e2e-command-per-phase.md) Accepted theo chỉ thị này, bổ sung/thay phần tổ chức command của ADR-020; giữ nguyên file ADR-020. P1 dùng duy nhất `npm run test:e2e:phase-1`, tự kiểm API/tạo dataset rồi chạy native Maestro; hai command API/UI mock cũ đã bỏ. Flow và bằng chứng UI mock giữ dạng lịch sử. Giữ cổng kiểm chứng và quyền nghiệm thu hiện hành.
+
+## ADR-027 — Ngoại lệ triển khai P5 · 02/11/2026
+
+[ADR-027](ADR-027-phase-5-direct-api-implementation.md) Accepted theo chỉ thị trực tiếp: P5 được triển khai UI/API cùng lượt, bỏ cổng xác nhận UI riêng của ADR-009/016/017 trong phạm vi P5. Người dùng chốt 5 đề xuất design; giữ E2E/nghiệm thu cuối và các file ADR cũ bất biến.
+
+## ADR-028 — Quyết định P4 · 02/11/2026
+
+[ADR-028](ADR-028-phase-4-leave-and-makeup-decisions.md) Accepted theo quyền quyết định người dùng giao khi triển khai P4. Giữ đủ S1–S7, notice/ca theo backend, không tạo đơn quá notice hoặc 0 buổi, chặn duyệt khi còn xung đột học viên, RAM/online và slot theo design. Đính chính BR-LEAVE-05; giữ cổng duyệt UI trước API riêng P4 và ADR cũ bất biến.
+
+## ADR-030 — Miễn E2E lượt hoàn thiện P5 · 02/11/2026
+
+[ADR-030](ADR-030-phase-5-e2e-waiver.md) Accepted theo chỉ thị “Bỏ qua test e2e, triển khai hoàn thiện phase 5”. Miễn chạy E2E trong lượt này, giữ checks/API thật và nghiệm thu riêng; lần Maestro trước lỗi instrumentation, không đổi thành pass. ADR-009/020/025/026 bị thay cổng E2E chỉ trong phạm vi P5 này; giữ file cũ bất biến.
+
+## ADR-031 — P6 design và miễn E2E · 02/11/2026
+
+[ADR-031](ADR-031-phase-6-design-decisions-and-e2e-waiver.md) Accepted theo chỉ thị triển khai, chọn “Chốt gói theo design” và “Không cần test e2e”. Mặc định điểm 10, xóa draft, RAM/soạn offline/ghi online; ngoại lệ quiz cho draft theo scope server. Giữ xử lý revision/mất response/điểm chính xác và cổng UI trước API; chỉ miễn E2E lượt P6 này.
+
+## ADR-032 — Tích hợp API P6 · 02/11/2026
+
+[ADR-032](ADR-032-phase-6-api-integration.md) Accepted theo chỉ thị “Tích hợp luôn api”. Mở cổng API S1–S3 riêng P6, không cần approve UI riêng; giữ phạm vi ADR-031 và miễn E2E được người dùng nhắc lại. Không ghi UI/nghiệm thu Done từ chỉ thị tích hợp.

@@ -1,5 +1,9 @@
 # Phase 1 — API integration
 
+**Cập nhật command 01/11/2026:** Theo ADR-026, chỉ dùng `npm run test:e2e:phase-1` cho bộ E2E hiện hành; command tự kiểm API/tạo dataset rồi chạy UI native với API thật. Các command `test:api:phase-1` và `test:e2e:phase-1:ui` bên dưới là lịch sử đã bỏ khỏi package.json, không phải bước cần chạy thêm. Kết quả kiểm chứng cũ giữ nguyên.
+
+**Trạng thái hiện hành 01/11/2026:** Người dùng đã nghiệm thu Phase 1, UI/API 7/7, **Done**. [Rà soát source hiện tại và giới hạn kiểm chứng](review-cleanup.md). Nội dung theo ngày bên dưới là hồ sơ lịch sử; các câu chờ duyệt/API 0/7 không còn là trạng thái hiện hành.
+
 31/10/2026 (Asia/Bangkok), Codex. Chỉ thị: “Triển khai API cho phase 1”. Chỉ thị này cho phép nối API; không tự ghi nhận UI hoặc phase đã nghiệm thu. Giữ nguyên design Claude và các thay đổi có sẵn trong working tree, không sửa backend.
 
 ## Kết quả triển khai
@@ -15,13 +19,13 @@
 
 ## Kiểm chứng
 
-| Kiểm tra | Kết quả và phạm vi |
-| --- | --- |
-| `npm run check` | Pass: ESLint 0 error/0 warning, Prettier, tsc và Jest 16 suites/174 tests. Log `build-logs/phase-1-api-check.log` |
-| Android `gradlew.bat assembleDebug -PreactNativeArchitectures=x86_64` | BUILD SUCCESSFUL, 29s; đã cài APK vào Pixel_8 / emulator-5554 |
-| `npm run test:api:phase-1` | Pass với API_URL development hiện có: Mentor 6 lớp/5 chương/10 buổi/1 học viên lớp/1 học viên buổi, schedule 9; Manager 10 lớp/6 chương/13 buổi/3 học viên lớp và buổi cho resource được chọn. Login xác minh role; cả hai context pass. Chỉ GET ngoài login; không sửa dataset backend |
-| Postman HTTP simulation | CLI 1.77.0, `postman simulation run postman/simulations/teaching/teaching.sim.yaml --port 4010 --no-history --output ndjson`; chạy adapter thật bằng `TEACHING_API_URL=http://localhost:4010/teaching node scripts/verify-teaching-api.cjs --simulation`: 7 thao tác pass kỳ vọng, context HTML 503 → error, các read còn lại success |
-| Native E2E | `npm run test:e2e:phase-1` pass exit 0 trên Pixel_8, report `2026-10-31_202502`; xem [e2e.md](e2e.md) |
+| Kiểm tra                                                              | Kết quả và phạm vi                                                                                                                                                                                                                                                                                                                    |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run check`                                                       | Pass: ESLint 0 error/0 warning, Prettier, tsc và Jest 16 suites/174 tests. Log `build-logs/phase-1-api-check.log`                                                                                                                                                                                                                     |
+| Android `gradlew.bat assembleDebug -PreactNativeArchitectures=x86_64` | BUILD SUCCESSFUL, 29s; đã cài APK vào Pixel_8 / emulator-5554                                                                                                                                                                                                                                                                         |
+| `npm run test:api:phase-1`                                            | Pass với API_URL development hiện có: Mentor 6 lớp/5 chương/10 buổi/1 học viên lớp/1 học viên buổi, schedule 9; Manager 10 lớp/6 chương/13 buổi/3 học viên lớp và buổi cho resource được chọn. Login xác minh role; cả hai context pass. Chỉ GET ngoài login; không sửa dataset backend                                               |
+| Postman HTTP simulation                                               | CLI 1.77.0, `postman simulation run postman/simulations/teaching/teaching.sim.yaml --port 4010 --no-history --output ndjson`; chạy adapter thật bằng `TEACHING_API_URL=http://localhost:4010/teaching node scripts/verify-teaching-api.cjs --simulation`: 7 thao tác pass kỳ vọng, context HTML 503 → error, các read còn lại success |
+| Native E2E                                                            | `npm run test:e2e:phase-1` pass exit 0 trên Pixel_8, report `2026-10-31_202502`; xem [e2e.md](e2e.md)                                                                                                                                                                                                                                 |
 
 Simulation dùng synthetic DTO example từ snapshot source; không có owning-team mock đã kết nối trong repo nên không tìm/pull cloud mock. Traffic log đã quan sát: 8 GET, 7 response 200 và context 503, không có mutation. Context nhận lỗi và không fallback fixture. Không suy rằng backend thật sẽ luôn trả HTML; đây là tình huống kiểm khả năng xử lý lỗi. Artifact simulation giữ trong `postman/`, không push/deploy bên ngoài.
 
@@ -31,9 +35,7 @@ Node verification nạp chính TypeScript service bằng TypeScript transpiler v
 
 Không tạo dữ liệu dạy thay, revoke assignment hoặc legacy snapshot trên backend chỉ để E2E. Tài khoản kiểm thử hiện không có lớp SESSION đang IN_PROGRESS; quyền này được kiểm bằng unit/UI tests và nhánh Maestro tùy dataset. Các trường progress/fixed schedule thiếu ở API được ghi ở contract. iOS, TalkBack, font scale, native 401 sau access expiry/revocation và môi trường production chưa được kiểm trong lượt này. Phase vẫn chờ nghiệm thu người dùng.
 
-
 Kết quả hồi quy auth cuối: đăng nhập sai + Mentor pass trong report P0 `2026-10-31_202749`; Manager retry riêng pass exit 0 trong `2026-10-31_204004` sau khi restart Metro bị kẹt tải bundle. Lượt tổng P0 không pass do hạ tầng Metro; các nhánh hồi quy đã được kiểm qua hai lượt, chi tiết tại [E2E](e2e.md). Android 17 / API 37. Không có code runtime thay đổi sau `npm run check` 174/174 và E2E P1 pass; chỉ cập nhật tài liệu/format và Git attributes giữ nguyên byte snapshot.
-
 
 ## Sửa phòng học trên thẻ lịch — 31/10/2026
 
@@ -41,9 +43,7 @@ Người dùng báo thẻ Python hiện “Chưa cập nhật”. Đối chiếu
 
 Kiểm chứng sửa lỗi: 2 suites/39 tests pass (teaching UI + 9 test mới về location); ESLint 0 error/0 warning, tsc và Prettier pass. Native flow cục bộ `build-logs/schedule-location.yaml` pass exit 0, report `C:/Users/admin/.maestro/tests/2026-10-31_224741`: login Mentor → lịch → “Phòng Lab 2” và “Trực tuyến” hiện, không còn “Chưa cập nhật”. Đã xem ảnh `takeScreenshot/schedule-location-fixed.png`. Không đổi API/backend hoặc giả phòng học bằng fixture.
 
-
 31/10/2026 — Theo yêu cầu format subtitle, thẻ lịch hiển thị từng dòng theo thứ tự tên lớp → tên buổi → phòng/hình thức học. Không nối tên buổi với phòng bằng dấu “·”; icon vị trí/video chỉ nằm ở dòng phòng/hình thức. 9 test location, ESLint/typecheck/Prettier pass; Maestro targeted `build-logs/schedule-subtitles.yaml` pass (`2026-10-31_225403`, xác nhận schedule-day-title trước khi kiểm subtitle), đã xem ảnh `schedule-separate-subtitles.png` trên Android.
-
 
 ## Chốt UI Home và Lịch dạy — 31/10/2026
 

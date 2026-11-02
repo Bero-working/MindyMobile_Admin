@@ -1,7 +1,11 @@
+**Hiện hành 02/11/2026 — đã nối API thật S1–S7 theo yêu cầu “Triển khai api cho phase 4 đi”.** API 7/7 đã tích hợp; chưa nghiệm thu phase hoặc xác nhận native E2E. Live lifecycle và placement/replay/cancel/reassign trên fixture riêng pass; HTTP simulation pass mất phản hồi sau commit. [Hồ sơ tích hợp](../../implement/phase-004-leave-and-makeup/api-integration.md). Các trạng thái 0/7/chờ duyệt API phía dưới là lịch sử trước lượt này.
+
 # P4 — Mentor xin nghỉ → Manager duyệt → lịch bù cập nhật
 
+**Sửa điều hướng — 02/11/2026:** Người dùng báo bấm “Đơn xin nghỉ” không chuyển màn ở phiên dùng API thật. Nguyên nhân: tile theo source đã bật nhưng 7 route nghỉ/bù vẫn bị điều kiện leaveMock chặn. Đã bỏ điều kiện mock khỏi đăng ký route, giữ đúng phân quyền Mentor/Manager và source HTTP hiện hành. Hai test hồi quy live-mode Mentor/Manager tái hiện fail trước sửa, sau sửa pass; toàn bộ leave-ui 16/16, ESLint 0 lỗi/cảnh báo và tsc --noEmit pass. Không sửa API/nghiệp vụ hoặc tăng trạng thái nghiệm thu.
+
 Ngày khởi tạo: 30/10/2026. Người ghi: Codex.
-**Todo — UI 0/7, API 0/7, slice hoàn chỉnh 0/7 (0%).**
+**Đã lập kế hoạch tổng, chờ duyệt — UI 0/7, API 0/7, slice hoàn chỉnh 0/7 (0%).**
 [Phạm vi/kế hoạch](../../implementation-plan.md#p4-leave-and-makeup). Ưu tiên P0.
 Cổng còn chờ: Q-LEAVE-01, Q-MAKEUP-01; hai slice placement chưa chốt P0.
 ADR liên quan: ADR-004, ADR-005, ADR-007, ADR-008, ADR-009 — đều Accepted ngày 30/10/2026; các câu hỏi còn mở và cổng duyệt riêng giữ nguyên.
@@ -9,12 +13,13 @@ Chưa có design, chưa duyệt UI, chưa tích hợp/nghiệm thu.
 
 ## Hồ sơ triển khai
 
-Mục triển khai: [phase-004-leave-and-makeup](../../implement/README.md#phase-004-leave-and-makeup). Khi bắt đầu, tạo folder `docs/implement/phase-004-leave-and-makeup/` theo danh mục chung; hồ sơ và bằng chứng triển khai đặt tại đó. Tiến độ và nhật ký phase tiếp tục cập nhật trong file này.
+Ngày 02/11/2026 đã lập [kế hoạch tổng P4](../../implement/phase-004-leave-and-makeup/phase-004-leave-and-makeup.md) và [README hồ sơ](../../implement/phase-004-leave-and-makeup/README.md) theo yêu cầu “Lập implement phase 4”. Chờ duyệt tổng trước tách tài liệu slice (ADR-017); code vẫn cần chỉ thị implement, design và câu hỏi đầu vào được giải quyết (ADR-016/009). Chưa duyệt UI/API hoặc nghiệm thu. P2 đã nối API nhưng còn chờ E2E/nghiệm thu; kiểm lại phụ thuộc khi triển khai P4. Tiến độ và nhật ký phase tiếp tục cập nhật trong file này.
 
 ## Các mốc
 
 | Mốc                        | Trạng thái | Ngày thực hiện | Ai làm/duyệt | Test / lint / typecheck               | Commit/PR | Ghi chú / BR-ADR                         |
 | -------------------------- | ---------- | -------------- | ------------ | ------------------------------------- | --------- | ---------------------------------------- |
+| Kế hoạch tổng | Chờ duyệt | 02/11/2026 | Codex / Người dùng | Chỉ kiểm tài liệu; không chạy app/API | — | ADR-016/017/025/026; chưa tách slice |
 | Design toàn phase (Claude) | Todo       | —              | Claude       | Chưa có test case/design để đối chiếu | —         | Chưa có file; Codex không viết/sửa       |
 | UI toàn phase (TDD)        | Todo       | —              | Codex        | Chưa chạy                             | —         | Mock rõ ràng, tất cả trạng thái/quyền    |
 | Người dùng duyệt UI        | Todo       | —              | Người dùng   | Chưa có kết quả để duyệt              | —         | Cổng bắt buộc trước API                  |
@@ -46,5 +51,9 @@ Mục triển khai: [phase-004-leave-and-makeup](../../implement/README.md#phase
 | 30/10/2026 | Người dùng / Codex | Bổ sung cổng E2E Maestro | Người dùng yêu cầu E2E sau mỗi phase trước nghiệm thu và chọn Maestro; mốc E2E Todo, chưa có kết quả chạy; giữ nguyên tiến độ UI/API | ADR-009 bổ sung đã duyệt |
 
 ## Ghi nhận khi thực hiện
+
+**02/11/2026 — nhận chỉ thị triển khai:** Người dùng yêu cầu “Triển khai phase 4”. Đã kiểm tra hồ sơ và design: chưa có folder design Claude P4, Q-LEAVE-01/Q-MAKEUP-01 và policy dữ liệu vẫn chưa chốt. Đã hỏi đầu vào còn thiếu; chỉ thị implement đã có, không yêu cầu lại quyền viết code. Chờ đầu vào theo ADR-009 trước UI TDD; chưa viết code/contract/API hoặc chạy test ứng dụng. UI/API/slice hoàn chỉnh giữ 0/7; chưa thay scope S6/S7 hoặc suy chỉ thị triển khai thành quyết định các câu hỏi nghiệp vụ.
+
+**02/11/2026 — Codex:** Lập kế hoạch tổng 7 slice P4, mapping controller/DTO backend hiện có, cổng Q-LEAVE-01/Q-MAKEUP-01 và policy dữ liệu P4, thứ tự UI mock → duyệt UI → API → E2E/nghiệm thu. S6/S7 giữ đề xuất chờ chốt P0. Chỉ thay tài liệu, không sửa design/code/backend hoặc chạy mutation; UI/API và số slice hoàn chỉnh giữ 0/7. Không thay BR/ADR Accepted.
 
 Mỗi mốc cập nhật ngày, người làm/duyệt, command và kết quả test/lint/typecheck, môi trường thiết bị, commit/PR thật nếu có, điểm chờ và BR/ADR bị ảnh hưởng. Khi luật đã duyệt thay đổi, phải có ADR Accepted và ghi cả [changelog](../business-rules-changelog.md) trước code. Không chuyển Done chỉ vì đã viết mock UI hoặc có source backend.

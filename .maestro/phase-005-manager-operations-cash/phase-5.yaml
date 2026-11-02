@@ -1,0 +1,196 @@
+appId: com.mindymobile_admin
+name: P5 live API - Manager operations and CASH on dedicated fixtures
+---
+- runFlow:
+    file: ../phase-001-teaching-workspace/api/login.yaml
+    env:
+      TEST_EMAIL: ${MAESTRO_MANAGER_EMAIL}
+      TEST_PASSWORD: ${MAESTRO_MANAGER_PASSWORD}
+      WORKSPACE: workspace-manager-root
+- scrollUntilVisible:
+    element:
+      id: workspace-open-cash-orders
+    direction: DOWN
+- tapOn:
+    id: workspace-open-cash-orders
+- extendedWaitUntil:
+    visible:
+      id: cash-list-search
+    timeout: 30000
+- tapOn:
+    id: cash-list-search
+- inputText: ${P5_ORDER_CODE}
+- pressKey: Enter
+- hideKeyboard
+- extendedWaitUntil:
+    visible:
+      id: cash-list-row-${P5_ORDER_ID}
+    timeout: 30000
+- tapOn:
+    id: cash-list-row-${P5_ORDER_ID}
+- extendedWaitUntil:
+    visible:
+      id: cash-detail-confirm
+    timeout: 30000
+- takeScreenshot: build-logs/phase-5/native/01-cash-detail
+- tapOn:
+    id: cash-detail-confirm
+- extendedWaitUntil:
+    visible:
+      id: cash-detail-received
+    timeout: 30000
+- tapOn:
+    id: cash-detail-received
+- inputText: ${P5_ORDER_AMOUNT}
+- hideKeyboard
+- takeScreenshot: build-logs/phase-5/native/02-cash-confirm
+- tapOn:
+    id: cash-detail-submit
+- extendedWaitUntil:
+    visible:
+      id: cash-detail-collector
+    timeout: 30000
+- assertNotVisible:
+    id: cash-detail-confirm
+- tapOn:
+    id: cash-detail-back
+- tapOn:
+    id: cash-list-back
+- tapOn:
+    id: workspace-open-manager-classes
+- tapOn:
+    id: manager-classes-filter-OPEN
+- tapOn:
+    id: manager-classes-search
+- inputText: ${P5_CLASS_NAME}
+- hideKeyboard
+- extendedWaitUntil:
+    visible:
+      id: manager-classes-card-${P5_CLASS_ID}
+    timeout: 30000
+- tapOn:
+    id: manager-classes-card-${P5_CLASS_ID}
+- runFlow:
+    file: open-session.yaml
+    env:
+      P5_SESSION_ID: ${P5_ASSIGN_ID}
+- tapOn:
+    id: session-ops-assign
+- extendedWaitUntil:
+    visible:
+      id: substitute-search
+    timeout: 30000
+- tapOn:
+    id: substitute-search
+- inputText: ${P5_SUBSTITUTE_NAME}
+- hideKeyboard
+- extendedWaitUntil:
+    visible:
+      id: substitute-row-${P5_SUBSTITUTE_ID}
+    timeout: 30000
+- tapOn:
+    id: substitute-row-${P5_SUBSTITUTE_ID}
+- scrollUntilVisible:
+    element:
+      id: substitute-reason
+    direction: DOWN
+- tapOn:
+    id: substitute-reason
+- inputText: P5 native assign
+- hideKeyboard
+- takeScreenshot: build-logs/phase-5/native/03-substitute
+- tapOn:
+    id: substitute-submit
+- tapOn:
+    id: substitute-confirm-submit
+- extendedWaitUntil:
+    visible:
+      id: session-ops-assign
+    timeout: 30000
+- tapOn:
+    id: session-back
+- runFlow:
+    file: open-session.yaml
+    env:
+      P5_SESSION_ID: ${P5_RESCHEDULE_ID}
+- tapOn:
+    id: session-ops-reschedule
+- extendedWaitUntil:
+    visible:
+      id: reschedule-open-calendar
+    timeout: 30000
+- tapOn:
+    id: reschedule-open-calendar
+- tapOn:
+    id: reschedule-calendar.day_${P5_RESCHEDULE_DATE}
+- scrollUntilVisible:
+    element:
+      id: reschedule-reason
+    direction: DOWN
+- tapOn:
+    id: reschedule-reason
+- inputText: P5 native reschedule
+- hideKeyboard
+- tapOn:
+    id: reschedule-submit
+- takeScreenshot: build-logs/phase-5/native/04-reschedule-review
+- tapOn:
+    id: reschedule-confirm-submit
+- extendedWaitUntil:
+    visible:
+      id: session-ops-reschedule
+    timeout: 30000
+- tapOn:
+    id: session-back
+- runFlow:
+    file: open-session.yaml
+    env:
+      P5_SESSION_ID: ${P5_REPLACEMENT_ID}
+- tapOn:
+    id: session-ops-cancel
+- extendedWaitUntil:
+    visible:
+      id: replacement-cancel-reason
+    timeout: 30000
+- tapOn:
+    id: replacement-cancel-reason
+- inputText: P5 native cancel and replace
+- hideKeyboard
+- tapOn:
+    id: replacement-cancel-submit
+- tapOn:
+    id: replacement-cancel-confirm-submit
+- extendedWaitUntil:
+    visible:
+      id: replacement-cancelled
+    timeout: 30000
+- assertNotVisible:
+    id: replacement-cancel-submit
+- tapOn:
+    id: replacement-open-calendar
+- tapOn:
+    id: replacement-calendar.day_${P5_REPLACEMENT_DATE}
+- scrollUntilVisible:
+    element:
+      id: replacement-start
+    direction: DOWN
+- tapOn:
+    id: replacement-start
+- inputText: '18:30'
+- hideKeyboard
+- takeScreenshot: build-logs/phase-5/native/05-replacement
+- tapOn:
+    id: replacement-submit
+- tapOn:
+    id: replacement-confirm-submit
+- extendedWaitUntil:
+    visible:
+      id: session-makeup-source
+    timeout: 30000
+- tapOn:
+    id: session-makeup-source
+- extendedWaitUntil:
+    visible:
+      id: session-ops-replace
+    timeout: 30000
+- takeScreenshot: build-logs/phase-5/native/06-source-kept-cancelled

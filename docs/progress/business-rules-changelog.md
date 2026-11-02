@@ -2,12 +2,12 @@
 
 [Quy tắc duy nhất](../business-rules.md). Ngày khởi tạo: 30/10/2026. ADR-001–ADR-009 được chấp nhận ngày 30/10/2026; việc này không tự phê duyệt toàn bộ baseline nghiệp vụ hoặc giải quyết các câu hỏi còn mở. Các dòng khởi tạo bên dưới giữ trạng thái tại thời điểm ghi.
 
-| Ngày       | Mã BR                              | Cũ → mới                                                            | Lý do / nguồn                                                               | ADR                                                       | Phase/slice bị ảnh hưởng                      | Trạng thái                         |
-| ---------- | ---------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------- | ---------------------------------- |
-| 30/10/2026 | Toàn bộ BR trong business-rules.md | Chưa có tài liệu → bản nháp có nguồn/trạng thái                     | Yêu cầu ban đầu và câu trả lời cho phép tạo draft; đối chiếu BE docs/source | ADR-001–ADR-009 Proposed, không phải quyết định Accepted  | Toàn bộ roadmap; không tính tiến độ implement | Khởi tạo draft                     |
-| 30/10/2026 | BR-AUTH-02                         | Phương thức đăng nhập chưa chốt → P0 email/mật khẩu, Google sau MVP | Người dùng trả lời câu hỏi trực tiếp trước khi tạo baseline                 | Chưa đổi kiến trúc đã duyệt; ADR-005/ADR-009 còn Proposed | P0-S2                                         | Có căn cứ, chưa phê duyệt baseline |
-| 30/10/2026 | BR-DATA-02, BR-OFF-02              | Có đề xuất persist → ghi rõ chưa chốt, không tự bật                 | Người dùng chọn “Chưa chốt chính sách lưu trên thiết bị”                    | ADR-004/ADR-006 Proposed                                  | P0-S4, P2-S1                                  | Chờ xác nhận                       |
-| 30/10/2026 | Các BR được dẫn trong ADR-001–ADR-009 | ADR Proposed → Accepted; giữ nguyên nội dung quyết định và câu hỏi còn mở | Người dùng: “Chốt tất cả adr 1->9” | ADR-001–ADR-009 Accepted | Toàn bộ phase P0–P8 và slice được từng ADR dẫn chiếu; đã cập nhật phase log | Đã duyệt ADR; cổng duyệt UI/nghiệm thu phase giữ nguyên |
+| Ngày       | Mã BR                                 | Cũ → mới                                                                  | Lý do / nguồn                                                               | ADR                                                       | Phase/slice bị ảnh hưởng                                                    | Trạng thái                                              |
+| ---------- | ------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------- |
+| 30/10/2026 | Toàn bộ BR trong business-rules.md    | Chưa có tài liệu → bản nháp có nguồn/trạng thái                           | Yêu cầu ban đầu và câu trả lời cho phép tạo draft; đối chiếu BE docs/source | ADR-001–ADR-009 Proposed, không phải quyết định Accepted  | Toàn bộ roadmap; không tính tiến độ implement                               | Khởi tạo draft                                          |
+| 30/10/2026 | BR-AUTH-02                            | Phương thức đăng nhập chưa chốt → P0 email/mật khẩu, Google sau MVP       | Người dùng trả lời câu hỏi trực tiếp trước khi tạo baseline                 | Chưa đổi kiến trúc đã duyệt; ADR-005/ADR-009 còn Proposed | P0-S2                                                                       | Có căn cứ, chưa phê duyệt baseline                      |
+| 30/10/2026 | BR-DATA-02, BR-OFF-02                 | Có đề xuất persist → ghi rõ chưa chốt, không tự bật                       | Người dùng chọn “Chưa chốt chính sách lưu trên thiết bị”                    | ADR-004/ADR-006 Proposed                                  | P0-S4, P2-S1                                                                | Chờ xác nhận                                            |
+| 30/10/2026 | Các BR được dẫn trong ADR-001–ADR-009 | ADR Proposed → Accepted; giữ nguyên nội dung quyết định và câu hỏi còn mở | Người dùng: “Chốt tất cả adr 1->9”                                          | ADR-001–ADR-009 Accepted                                  | Toàn bộ phase P0–P8 và slice được từng ADR dẫn chiếu; đã cập nhật phase log | Đã duyệt ADR; cổng duyệt UI/nghiệm thu phase giữ nguyên |
 
 ## Bổ sung ADR-010 — 30/10/2026
 
@@ -71,7 +71,6 @@ Nguồn: người dùng “duyệt” sau báo cáo thực hiện ADR-014. Xác 
 
 30/10/2026 — ADR-018 ghi yêu cầu triển khai trực tiếp: secure storage, Android network security, lazy component/router và native viewport observation. Không đổi BR nghiệp vụ hoặc auth contract; không mở cổng API. Kết quả tại [hồ sơ hạ tầng](../implement/phase-000-foundation-auth/security-lazy-loading.md).
 
-
 ## Đề xuất E2E tương ứng từng phase — 31/10/2026
 
 Theo yêu cầu người dùng ghi quy tắc vào ADR, tạo [ADR-020](../adr/ADR-020-e2e-suite-per-phase.md) Proposed: mỗi phase có bộ E2E Maestro, flow tổng, lệnh npm và hồ sơ kiểm chứng riêng; pass trước nghiệm thu theo cổng ADR-009 hiện hành. ADR-020 chờ duyệt theo ADR-012; giữ nguyên các file ADR Accepted và tiến độ phase. Đã gỡ AGENTS.md vừa tạo cho yêu cầu này và chuyển liên kết README sang ADR.
@@ -80,5 +79,46 @@ Theo yêu cầu người dùng ghi quy tắc vào ADR, tạo [ADR-020](../adr/AD
 
 Nguồn: người dùng “Duyệt adr 20”. [ADR-020](../adr/ADR-020-e2e-suite-per-phase.md) Proposed → Accepted; ghi nguồn/ngày duyệt và đóng băng file theo ADR-012. Quy định bộ E2E Maestro, flow tổng, lệnh npm và hồ sơ bằng chứng riêng từng phase có hiệu lực; bổ sung ADR-009, giữ cổng E2E pass trước nghiệm thu. Đã đồng bộ sổ ADR và kế hoạch/progress P1; kế hoạch tổng P1 vẫn chờ duyệt riêng, UI/API giữ 0/7. Không thay đổi BR nghiệp vụ hoặc triển khai code.
 
-
 31/10/2026 (Asia/Bangkok) — Người dùng “Duyệt tất cả adr”: xác nhận ADR-001–ADR-022; ADR-021 (chiều điều hướng) và ADR-022 (blur native) chuyển Accepted, ghi nguồn/ngày duyệt và đóng băng theo ADR-012. Sổ ADR đã đồng bộ; các ghi nhận Proposed trước đây là lịch sử. Không thay đổi tiến độ UI/API hoặc trạng thái nghiệm thu phase.
+
+01/11/2026 — Bổ sung [ADR-024](../adr/ADR-024-demand-driven-status-and-schedule-loading.md) Proposed theo yêu cầu ghi ADR về lazy loading khi mở UI theo status/schedule. Ghi nhận hành vi P1 đã triển khai, bổ sung ADR-004/018; không thay BR nghiệp vụ, runtime hoặc tự duyệt ADR.
+
+## ADR-025 — Áp dụng quy tắc chung · 01/11/2026
+
+Người dùng yêu cầu “Viết thành adr để áp dụng đi” sau danh sách 15 quy tắc chung từ P1. [ADR-025](../adr/ADR-025-shared-ui-data-loading-and-verification-rules.md) Accepted theo chỉ thị trực tiếp; đóng băng sau khi ghi nguồn/ngày. Đồng bộ sổ ADR, danh mục triển khai và kế hoạch tổng. Thay phần chuyển màn của ADR-013/021, không sửa file Accepted cũ; ADR-023/024 giữ Proposed, quy tắc trùng phạm vi áp dụng theo ADR-025. Không đổi BR nghiệp vụ, runtime, số slice hoặc trạng thái nghiệm thu các phase.
+
+## Duyệt ADR-023 và ADR-024 — 01/11/2026
+
+Nguồn: người dùng “duyệt adr 23 24” (Asia/Bangkok). [ADR-023](../adr/ADR-023-button-origin-navigation.md) và [ADR-024](../adr/ADR-024-demand-driven-status-and-schedule-loading.md) chuyển Proposed → Accepted; ghi nguồn/ngày và đóng băng theo ADR-012. Xác nhận điều hướng trực tiếp không animation/gesture chuyển màn và lazy API Teaching Workspace theo status/ngày/tab. Đồng bộ sổ ADR, kế hoạch tổng, kế hoạch/progress P1 và hồ sơ lazy loading. ADR-025 giữ nguyên và ưu tiên khi xung đột; các dòng Proposed trước đây là lịch sử. Không đổi BR nghiệp vụ, runtime, trạng thái nghiệm thu hoặc ghi nhận thêm kết quả test/E2E.
+
+## Chốt phạm vi P5 — 02/11/2026
+
+Nguồn trực tiếp: người dùng “Triển khai phase 5”, sau đó trả lời “Giữ phạm vi này” cho phạm vi chỉ dạy thay theo buổi và tên “đơn thanh toán tiền mặt”, chưa thêm đổi mentor chính, sửa meeting URL hoặc xuất hóa đơn/biên nhận riêng. Q-CLASS-02/Q-PAY-01 được giải quyết cho P5; BR-PAY-06 sử dụng Order/PaymentTransaction hiện hữu, không thêm Invoice. Đây là chốt lựa chọn trong baseline, không thay luật thu đủ tiền/quyền hoặc sửa ADR Accepted. Đã chuẩn bị 5 checklist slice và đầu vào design; chưa có design Claude/test case nên chưa code UI/API. Tiến độ giữ 0/5. Các ghi nhận chờ quyết định P5 cũ là lịch sử.
+
+## ADR-026 — Một command E2E mỗi phase · 01/11/2026
+
+Nguồn: người dùng “Gộp tất cả thành 1 command test e2e như phase 0” và “Thêm quy tắc adr về mỗi phase chỉ có 1 command test e2e”. [ADR-026](../adr/ADR-026-single-e2e-command-per-phase.md) Accepted và đóng băng theo ADR-012, bổ sung/thay phần tổ chức command ADR-020. Giữ file Accepted cũ. P1 gộp kiểm API/tạo dataset và Maestro dưới `npm run test:e2e:phase-1`, bỏ hai command API/UI riêng; flow mock giữ làm lịch sử. Đồng bộ README, quy ước E2E, kế hoạch và hồ sơ P1. Không đổi BR nghiệp vụ hoặc trạng thái nghiệm thu.
+
+## Chốt Q-MAT-01 — 02/11/2026
+
+Người dùng chọn “Mentor: FILE, VIDEO, ARTICLE; Manager: duyệt/từ chối” khi triển khai P3. Chốt phạm vi mobile theo câu hỏi mở, không sửa ADR Accepted hoặc luật review: approve đồng thời công bố, edit/revision và file READY tiếp tục theo BR-MAT/BR-FILE. Manager authoring/publish/unpublish riêng không nằm trong phạm vi. Đã cập nhật business rules và hồ sơ P3; chưa có design Claude/test case nên UI/API chưa triển khai, tiến độ giữ 0/6. Policy dữ liệu/offline không được suy là đã chốt.
+
+## Quyết định P4 — 02/11/2026
+
+Nguồn: người dùng chọn triển khai đủ S1–S7 và giao “Bạn tự xử lý theo hướng tối ưu” cho quy tắc nghỉ/bù. [ADR-028](../adr/ADR-028-phase-4-leave-and-makeup-decisions.md) ghi lựa chọn Codex theo design/backend: notice/ca giữ nguồn, quá hạn không tạo đơn, 0 buổi không cần đơn, RAM/online, slot không lọc khung giờ tùy ý. Đính chính BR-LEAVE-05: còn xung đột học viên thì không duyệt, acknowledgeStudentConflicts=false, không checkbox vượt chặn. Không đổi ADR Accepted cũ; chưa duyệt UI/API/nghiệm thu P4.
+
+## P3 triển khai trực tiếp / dừng E2E — 02/11/2026
+
+Theo chỉ thị “Triển khai phase 3, bỏ qua UI accept, tích hợp API vào luôn”, ghi ADR-029 Accepted chỉ cho P3; không chuyển UI approved hoặc nghiệm thu. Giữ phạm vi chat Mentor FILE/VIDEO/ARTICLE, Manager approve/reject và state machine backend. Design nguồn giữ nguyên, khác biệt ghi tại ADR/hồ sơ. Đã có mã UI/API và kiểm chứng riêng. Người dùng yêu cầu test P3/P4/P5, báo lỗi CASH; đã sửa xung đột module i18n của Metro. Sau chỉ thị “Không cần test e2e, tôi sẽ yêu cầu sau”, dừng các lượt native của chat này, không ghi E2E pass.
+
+## Hoàn thiện P5 — 02/11/2026
+
+Người dùng chốt Q-P5-01–05, yêu cầu “Viết luôn API luôn bỏ qua bước xác nhận UI” (ADR-027) và “Bỏ qua test e2e, triển khai hoàn thiện phase 5” (ADR-030). P5 đọc CASH bằng /manager/orders có filter, không đổi mentor đã start, nhập tiền thực nhận, dời buổi không đổi tên và mở thẳng list. Đã viết UI/API 5/5, source contract có snapshot, kiểm API thật trên fixture riêng và HTTP simulation. Không đổi luật thu đủ tiền/quyền server/giữ lịch sử hoặc sửa ADR cũ, không tự nghiệm thu.
+
+## 02/11/2026 — P6 chốt gói design và bỏ E2E lượt này
+
+Nguồn: người dùng “triển khai phase 6”, chọn “Chốt gói theo design”, “Không cần test e2e”, “Tiếp tục”. [ADR-031](../adr/ADR-031-phase-6-design-decisions-and-e2e-waiver.md) Accepted. P6-S1–S3: điểm mặc định đề xuất 100 → 10; xóa draft ngoài baseline → có xác nhận; offline khóa/che editor → giữ form RAM, cho soạn nhưng ghi online. BR-TEACH-02 riêng quiz: không dựng lọc draft theo tác giả vì DTO thiếu createdBy, dùng scope server; giữ chặn roster/tiền và không mở scope buổi. BR-QUIZ-01–04 giữ lifecycle, một lượt, wire decimal string và không hứa results/ZIP. Q-P1-01 được chốt cho quiz, không đóng P7/P8. Miễn chạy tiếp E2E riêng lượt P6, không ghi pass; UI/API/nghiệm thu vẫn riêng.
+
+## 02/11/2026 — Mở cổng API P6 theo chỉ thị trực tiếp
+
+Người dùng “Tích hợp luôn api”, nhắc “Không cần test e2e”. [ADR-032](../adr/ADR-032-phase-6-api-integration.md) Accepted thay cổng UI accept riêng của ADR-009/016/017/031 chỉ cho API P6 lượt này; giữ phạm vi BR-QUIZ-01–04, quyền và policy theo ADR-031, không thêm ZIP/results. Đã nối 3/3 API và kiểm riêng service/UI/API thật/HTTP simulation; không E2E mới hoặc tự nghiệm thu.

@@ -1,26 +1,38 @@
 # Tiến độ Mindy Mobile
 
+**P5 hiện hành — 02/11/2026:** Đã triển khai UI/API 5/5, bỏ cổng UI accept riêng theo ADR-027 và E2E theo ADR-030; chưa nghiệm thu. [Kiểm chứng/giới hạn](../implement/phase-005-manager-operations-cash/api-integration.md). Các ghi nhận P5 chờ design/code bên dưới là lịch sử.
+
+**P3 hiện hành — 02/11/2026:** đã triển khai mã UI/API trực tiếp theo chỉ thị bỏ chờ UI accept; xem [hồ sơ và bằng chứng](../implement/phase-003-material-review/api-integration.md). E2E đã dừng theo yêu cầu người dùng, sẽ chạy lại khi được yêu cầu; chưa nghiệm thu. Các ghi nhận chờ design/Q-MAT-01 trước đó là lịch sử.
+
+**P5 — 02/11/2026:** Đã nhận chỉ thị triển khai và chốt phạm vi, chuẩn bị [5 checklist slice](../implement/phase-005-manager-operations-cash/README.md#kế-hoạch-theo-slice); chờ design Claude/test case trước code. UI/API/slice hoàn chỉnh 0/5. Trạng thái kế hoạch chờ duyệt P5 trong bảng lập trước đó là lịch sử, không cần hỏi lại chỉ thị implement.
+
+**P3 — cập nhật chỉ thị triển khai 02/11/2026:** Người dùng yêu cầu “Triển khai phase 3”; đã ghi nhận chỉ thị và tách 6 kế hoạch slice. Q-MAT-01 đã chốt: Mentor FILE/VIDEO/ARTICLE, Manager duyệt/từ chối. Chưa có design Claude/test case nên UI TDD chờ theo ADR-009; UI/API 0/6. Các dòng chờ duyệt kế hoạch tổng hoặc Q-MAT-01 bên dưới là lịch sử trước chỉ thị này.
+
 Ngày khởi tạo: **30/10/2026**. P0 đã triển khai **UI/API 4/4 và được người dùng xác nhận duyệt ngày 31/10/2026**, đã rà soát và dọn dẹp; lint/typecheck/102 tests và Maestro signed-out rerun pass. Giới hạn native expiry/iOS và bằng chứng từng nhánh vẫn được theo dõi; chưa quy đổi số slice hoàn chỉnh khi bằng chứng còn thiếu. [Kế hoạch](../implementation-plan.md), [ADR](../adr/README.md), [BR changelog](business-rules-changelog.md).
 
-| Phase / luồng                                                                                               | Ưu tiên | Trạng thái           |  UI | API | Slice hoàn chỉnh | % slice | Ngày cập nhật |
-| ----------------------------------------------------------------------------------------------------------- | ------- | -------------------- | --: | --: | ---------------: | ------: | ------------- |
-| [P0 — Nền tảng → đăng nhập → đúng workspace](phase/phase-000-foundation-auth.md)                            | P0      | Đã duyệt; đã rà soát | 4/4 | 4/4 |              0/4 |      0% | 31/10/2026    |
-| [P1 — Mentor xem lịch/lớp → Manager theo dõi lớp](phase/phase-001-teaching-workspace.md)                    | P0      | Todo                 | 0/7 | 0/7 |              0/7 |      0% | 30/10/2026    |
-| [P2 — Mentor điểm danh/ghi chú → Manager theo dõi và correction](phase/phase-002-attendance-and-notes.md)   | P0      | Chờ duyệt kế hoạch tổng | 0/7 | 0/7 |              0/7 |      0% | 01/11/2026    |
-| [P3 — Mentor tải tài liệu → Manager duyệt/công bố](phase/phase-003-material-review.md)                      | P0      | Todo                 | 0/6 | 0/6 |              0/6 |      0% | 30/10/2026    |
-| [P4 — Mentor xin nghỉ → Manager duyệt → lịch bù cập nhật](phase/phase-004-leave-and-makeup.md)              | P0      | Todo                 | 0/7 | 0/7 |              0/7 |      0% | 30/10/2026    |
-| [P5 — Manager phân công/xử lý lịch → xác nhận CASH](phase/phase-005-manager-operations-cash.md)             | P0      | Todo                 | 0/5 | 0/5 |              0/5 |      0% | 30/10/2026    |
-| [P6 — Mentor tạo quiz → công bố → theo dõi trạng thái](phase/phase-006-mentor-quiz.md)                      | P1      | Todo                 | 0/3 | 0/3 |              0/3 |      0% | 30/10/2026    |
-| [P7 — Mentor/Manager đọc chuyên cần và progress đúng nghĩa](phase/phase-007-attendance-progress-reports.md) | P1      | Todo                 | 0/2 | 0/2 |              0/2 |      0% | 30/10/2026    |
-| [P8 — Mentor trao đổi → nhận thông báo/push đúng quyền](phase/phase-008-chat-notifications.md)              | P1      | Todo                 | 0/3 | 0/3 |              0/3 |      0% | 30/10/2026    |
+| Phase / luồng                                                                                               | Ưu tiên | Trạng thái                           |  UI | API | Slice hoàn chỉnh | % slice | Ngày cập nhật |
+| ----------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------ | --: | --: | ---------------: | ------: | ------------- |
+| [P0 — Nền tảng → đăng nhập → đúng workspace](phase/phase-000-foundation-auth.md)                            | P0      | Đã duyệt; đã rà soát                 | 4/4 | 4/4 |              0/4 |      0% | 31/10/2026    |
+| [P1 — Mentor xem lịch/lớp → Manager theo dõi lớp](phase/phase-001-teaching-workspace.md)                    | P0      | Done — đã nghiệm thu                 | 7/7 | 7/7 |              7/7 |    100% | 01/11/2026    |
+| [P2 — Mentor điểm danh/ghi chú → Manager theo dõi và correction](phase/phase-002-attendance-and-notes.md)   | P0      | API/E2E Android pass, chờ nghiệm thu | 7/7 | 7/7 |              0/7 |      0% | 02/11/2026    |
+| [P3 — Mentor tải tài liệu → Manager duyệt/công bố](phase/phase-003-material-review.md)                      | P0      | UI/API đã viết; chờ QA               | 6/6 | 6/6 |              0/6 |      0% | 02/11/2026    |
+| [P4 — Mentor xin nghỉ → Manager duyệt → lịch bù cập nhật](phase/phase-004-leave-and-makeup.md)              | P0      | Kế hoạch chờ duyệt                   | 0/7 | 0/7 |              0/7 |      0% | 02/11/2026    |
+| [P5 — Manager phân công/xử lý lịch → xác nhận CASH](phase/phase-005-manager-operations-cash.md)             | P0      | UI/API đã nối; E2E miễn | 5/5 | 5/5 |              0/5 |      0% | 02/11/2026    |
+| [P6 — Mentor tạo quiz → công bố → theo dõi trạng thái](phase/phase-006-mentor-quiz.md)                      | P1      | UI/API đã nối; chưa nghiệm thu       | 3/3 | 3/3 |              0/3 |      0% | 02/11/2026    |
+| [P7 — Mentor/Manager đọc chuyên cần và progress đúng nghĩa](phase/phase-007-attendance-progress-reports.md) | P1      | Todo                                 | 0/2 | 0/2 |              0/2 |      0% | 30/10/2026    |
+| [P8 — Mentor trao đổi → nhận thông báo/push đúng quyền](phase/phase-008-chat-notifications.md)              | P1      | Todo                                 | 0/3 | 0/3 |              0/3 |      0% | 30/10/2026    |
 
-MVP P0–P5: **0/36 slice hoàn chỉnh (0%)**. P1 chỉ roadmap, chưa chốt phạm vi chi tiết; không gộp vào % MVP.
+MVP P0–P5: **7/36 slice hoàn chỉnh (19,4%)** theo số đã ghi nhận; P0 giữ 0/4 slice hoàn chỉnh như hồ sơ riêng. P6–P8 là roadmap ngoài MVP. Phase P1 (Teaching Workspace) nằm trong MVP, khác với nhãn ưu tiên P1.
+
+**Cập nhật 01/11/2026:** Người dùng nghiệm thu P1; UI/API 7/7, phase Done. [Hồ sơ rà soát P1](../implement/phase-001-teaching-workspace/review-cleanup.md). Các ghi nhận bên dưới theo ngày là lịch sử.
 
 ## Quy ước
 
+**P3 — 02/11/2026:** đã lập [kế hoạch tổng](../implement/phase-003-material-review/phase-003-material-review.md), chờ người dùng duyệt trước tách tài liệu slice theo ADR-017. Chưa có design Claude, chưa code hoặc mở cổng API; UI/API giữ 0/6. Câu hỏi và điều kiện thực hiện theo [progress P3](phase/phase-003-material-review.md).
+
 Slice hoàn chỉnh khi UI và API đều có bằng chứng hoàn tất; tỉ lệ không thay thế nghiệm thu. Phase chỉ Done sau người dùng nghiệm thu. Các mốc: Design (Claude) → UI toàn phase (TDD) → Người dùng duyệt UI → API toàn phase (TDD) → Cleanup + lint + test → E2E Maestro toàn phase và hồi quy liên quan pass → Nghiệm thu.
 
-Chưa chạy lint/typecheck/Jest mobile trong lần tạo tài liệu. Việc đọc controller, tài liệu hoặc collection backend không làm tăng tiến độ. Kết quả test ghi trong tài liệu BE cũ không phải kết quả mobile. Chưa có commit/PR trong workspace này; không tạo Git history tự động.
+Tại lần khởi tạo 30/10/2026 chưa chạy lint/typecheck/Jest mobile. Việc đọc controller, tài liệu hoặc collection backend không làm tăng tiến độ. Kết quả test ghi trong tài liệu BE cũ không phải kết quả mobile. Tại lần khởi tạo chưa có commit/PR; hiện repo đã có Git history. Không tự tạo commit/PR trong lượt rà soát này.
 
 ## Trạng thái cổng chung khi khởi tạo (lịch sử)
 

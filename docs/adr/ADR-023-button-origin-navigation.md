@@ -2,13 +2,13 @@
 
 ## Status
 
-**Proposed** — 31/10/2026 (Asia/Bangkok). Ghi nhận yêu cầu trực tiếp của người dùng: “Tôi muốn bỏ phần chuyển UI bằng lướt trái hoặc phải (tính cả back). Đổi thành khi click vào button chuyển UI thì mở ra từ button”. Code được cập nhật theo yêu cầu này; chưa ghi nhận duyệt riêng ADR.
+**Accepted** — người dùng duyệt ngày 01/11/2026 (Asia/Bangkok) qua phản hồi “duyệt adr 23 24”. ADR được khởi tạo ngày 31/10/2026 từ yêu cầu mở UI từ nút; quyết định cuối cùng bên dưới ghi nhận chỉ thị ngày 01/11 bỏ animation khi mở và Back. Ghi nguồn/ngày duyệt và đóng băng file tại lần chuyển trạng thái này theo ADR-012.
 
 ## Context và phạm vi
 
 Yêu cầu mới thay toàn bộ quy tắc chiều chuyển màn của [ADR-021](ADR-021-entry-side-navigation.md), gồm ngoại lệ avatar, Profile, MentorClasses, TeachingSchedule và Back. Giữ nguyên file ADR-021 đã đóng băng. Quyền truy cập, dữ liệu và lịch sử navigation stack tiếp tục giữ nguyên.
 
-## Decision đề xuất
+## Decision
 
 - Tắt native slide và gesture vuốt để chuyển/back trên stack đang dùng của app.
 - Theo chỉ thị mới nhất ngày 01/11/2026: “Bỏ luôn animation khi mở và back UI”. Mở màn, Back toolbar, Android Back và chuyển tab đều hiển thị trực tiếp, không slide, fade hay scale.

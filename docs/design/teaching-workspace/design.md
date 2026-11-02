@@ -56,8 +56,8 @@ Mentor: thẻ kính là thẻ hôm nay (mục 3.4), tiện ích nằm trên nề
 ```
 ┌──────────────────────────────┐
 │▓▓ header gradient (workspace)▓│
-│ (TL)  Trần Thị Linh      (⚙) │
-│       Mentor · linh.tran@…   │
+│ (TL)  Trần Thị Linh  (🔔)(⚙) │  Chuông chỉ có ở Mentor
+│       Mentor                 │
 │▓▓  🐸 linh vật ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓│
 │  ┌─👇─────────────────────┐  │  GlassCard, overlap −50px
 │  │            Xem lịch  › │  │

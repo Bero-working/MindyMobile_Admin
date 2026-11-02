@@ -71,8 +71,7 @@ Kết quả và giới hạn kiểm chứng: [hồ sơ cấu hình nền P0](doc
 Phase 1 đã nối API lịch/lớp/context/roster cho Mentor và Manager, gồm Home Today. App dùng API thật cả khi DEBUG_MODE=true. Xem [contract 7 slice](docs/api-contract/phase-001-teaching-workspace/README.md), [hồ sơ tích hợp](docs/implement/phase-001-teaching-workspace/api-integration.md) và [E2E API](docs/implement/phase-001-teaching-workspace/e2e.md).
 
 ```powershell
-npm run test:api:phase-1
 npm run test:e2e:phase-1
 ```
 
-Lệnh đầu đọc backend bằng adapter thật và tạo `.maestro/phase-1-dataset.local.json` chứa ID để Maestro chọn đúng lớp/buổi. Lệnh E2E dùng tài khoản test local và dataset có học viên. Dữ liệu chưa có trong endpoint được để trống/“—”, không thay bằng mock. Phase 1 vẫn chờ người dùng nghiệm thu.
+Lệnh duy nhất tự kiểm adapter với backend thật, tạo lại `.maestro/phase-1-dataset.local.json`, kiểm đủ ID cho hai role rồi chạy toàn bộ flow Maestro tích hợp P1. Bước nào lỗi thì dừng và trả exit code khác 0. Dùng cùng tài khoản từ biến môi trường hoặc `.maestro/accounts.local.json`; cần app Debug kết nối cùng backend, Metro và emulator/thiết bị đã sẵn sàng. Hai command API/UI mock riêng đã bỏ theo [ADR-026](docs/adr/ADR-026-single-e2e-command-per-phase.md).

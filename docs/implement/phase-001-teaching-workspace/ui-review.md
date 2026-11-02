@@ -1,5 +1,9 @@
 # Phase 1 — Review UI mock
 
+**Cập nhật command 01/11/2026:** Theo ADR-026, chỉ dùng `npm run test:e2e:phase-1` cho bộ E2E hiện hành; command tự kiểm API/tạo dataset rồi chạy UI native với API thật. Các command `test:api:phase-1` và `test:e2e:phase-1:ui` bên dưới là lịch sử đã bỏ khỏi package.json, không phải bước cần chạy thêm. Kết quả kiểm chứng cũ giữ nguyên.
+
+**Trạng thái hiện hành 01/11/2026:** Người dùng đã nghiệm thu Phase 1, UI/API 7/7, **Done**. [Rà soát source hiện tại và giới hạn kiểm chứng](review-cleanup.md). Nội dung theo ngày bên dưới là hồ sơ lịch sử; các câu chờ duyệt/API 0/7 không còn là trạng thái hiện hành.
+
 Ngày 31/10/2026 (Asia/Bangkok). Phạm vi: UI của 7 slice Teaching Workspace theo design Claude; API P1 chưa tích hợp, UI chưa được người dùng approve.
 
 ## Mở bản review
@@ -22,25 +26,24 @@ Không dùng fixture để suy quyền thật của tài khoản đang đăng nh
 
 Bấm nhãn để mở sheet; chọn scenario rồi đóng tự động:
 
-| Scenario | Hành vi |
-| --- | --- |
-| success | Dữ liệu fixture mặc định |
-| loading | Skeleton đứng chờ; tắt animation khi hệ thống giảm chuyển động |
-| empty | Danh sách rỗng theo từng màn/bộ lọc |
-| offline / error | Lỗi tải đầu; nếu đã tải thì giữ dữ liệu + cảnh báo làm mới thất bại |
-| refreshError | Giữ dữ liệu đã tải + mã hỗ trợ mock khi làm mới |
-| denied / notFound | Xóa dữ liệu khỏi toàn màn, có nút Quay lại |
-| noRoster | Capability roster false, kể cả scope CLASS; màn roster trực tiếp bị chặn |
-| studentsError | Nhóm/tab học viên lỗi riêng, phần context/tóm tắt còn nguyên |
-| unitError | Buổi của chương lỗi riêng, thẻ tóm tắt còn nguyên |
-| unavailable | Mô phỏng candidates 422: chưa có danh sách học viên cho buổi |
+| Scenario          | Hành vi                                                                  |
+| ----------------- | ------------------------------------------------------------------------ |
+| success           | Dữ liệu fixture mặc định                                                 |
+| loading           | Skeleton đứng chờ; tắt animation khi hệ thống giảm chuyển động           |
+| empty             | Danh sách rỗng theo từng màn/bộ lọc                                      |
+| offline / error   | Lỗi tải đầu; nếu đã tải thì giữ dữ liệu + cảnh báo làm mới thất bại      |
+| refreshError      | Giữ dữ liệu đã tải + mã hỗ trợ mock khi làm mới                          |
+| denied / notFound | Xóa dữ liệu khỏi toàn màn, có nút Quay lại                               |
+| noRoster          | Capability roster false, kể cả scope CLASS; màn roster trực tiếp bị chặn |
+| studentsError     | Nhóm/tab học viên lỗi riêng, phần context/tóm tắt còn nguyên             |
+| unitError         | Buổi của chương lỗi riêng, thẻ tóm tắt còn nguyên                        |
+| unavailable       | Mô phỏng candidates 422: chưa có danh sách học viên cho buổi             |
 
 Chọn success để phục hồi. Kéo xuống làm mới; focus/foreground tải lại fixture. Request cũ bị bỏ qua; lỗi quyền của request con xóa toàn màn. Conflict không áp dụng vì toàn phase chỉ đọc. 401/refresh, parse DTO và lỗi HTTP thật được kiểm chứng ở bước API sau approve.
 
 ## Kiểm chứng
 
 Tra [ui-verification.md](ui-verification.md) và [e2e-ui.md](e2e-ui.md). Lệnh `npm run test:e2e:phase-1:ui` chạy smoke native của cả 7 màn. Đây là kiểm chứng UI mock; chưa phải bộ nghiệm thu E2E tích hợp API P1.
-
 
 ## Home bổ sung 31/10/2026
 

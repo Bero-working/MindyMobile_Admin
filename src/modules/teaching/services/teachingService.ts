@@ -65,6 +65,8 @@ const mapSession = (
   allowed = false
 ): TeachingSession => ({
   id: item.sessionId,
+  asOf: item.asOf,
+  makeupForSessionId: item.makeupForSessionId,
   classId: item.classId,
   unitId: item.classUnitId,
   title: item.title,
@@ -278,6 +280,10 @@ export function createTeachingService({
                 readClassRoster:
                   item.accessScope === 'CLASS' &&
                   item.capabilities.readClassRoster,
+                readClassReports:
+                  item.accessScope === 'CLASS' &&
+                  (item.capabilities.readClassReports ?? false),
+                authorMaterials: item.capabilities.authorMaterials ?? false,
                 unitCount: item.visibleUnitCount,
                 sessionCount: item.visibleSessionCount,
               };

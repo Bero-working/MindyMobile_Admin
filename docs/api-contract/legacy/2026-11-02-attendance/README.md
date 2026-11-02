@@ -1,0 +1,60 @@
+# Backend snapshot P2 — 02/11/2026
+
+Nguồn: `D:/FPT_University/FA26/WDP301/Mindy-BE/src`. Sao chép nguyên byte; không có env/credentials. Snapshot source không chứng minh build đang deploy.
+
+| Source relative to src | SHA-256 |
+| --- | --- |
+| `modules/attendance/controllers/attendance-management.controller.ts` | `8f5079887911c5f1c5b35149fd660e3be1681228ec1e32d3905006fdceda8a4f` |
+| `modules/attendance/controllers/attendance-reports.controller.ts` | `f46c9fd042a629ef0b80d7ed3b61ad8a211730186d0e3372aca8eac57c0c4b38` |
+| `modules/attendance/controllers/attendance.controller.ts` | `f838bceb5bee16ab7294a49ca946042f81dafff99ba60e92d05dcd6d00382f8f` |
+| `modules/attendance/controllers/makeup-management.controller.ts` | `b37f8606fa6c4e3fd3fcf33e67793ea04d5bd0bedfd38e1c6b4a2ffa33124878` |
+| `modules/attendance/controllers/mentor-attendance-reports.controller.ts` | `7098625027540410630b1ca3eb8587c22517aec47fac86d40f4975f737ed2074` |
+| `modules/attendance/controllers/student-makeup.controller.ts` | `26efc950f07736c1c8ed86d460711cd6c7df2d11483a8214f98255002eff0c4b` |
+| `modules/attendance/dtos/attendance-audit.dto.ts` | `c49e071d91e58a07621d3b71bc7826bba1b54d075318fdb476f346cacf70de1c` |
+| `modules/attendance/dtos/attendance-input.dto.ts` | `ad32468da59a154f15a7c7ee2d16ab4713bcad3c0efe35bdf1f19ba1834d4fb3` |
+| `modules/attendance/dtos/attendance-report-query.dto.ts` | `37a76d45a0bdc50b483b3ddeaa42f85450015a6a5d639228d4bb7d5ff5e34605` |
+| `modules/attendance/dtos/attendance-report.dto.ts` | `3e482359ac52d85f71f1861384148926af5a732696bd1dc6954c021eb9b4ffc5` |
+| `modules/attendance/dtos/attendance.dto.ts` | `3ad00d2e88f2c6ce6860c6ca93da9186740a3d018dd27b218dd6dffcfdf85092` |
+| `modules/attendance/dtos/makeup.dto.ts` | `33265c59c1c54235ef5c622929cf3154f391848f990be48f6d74ed334adc7ab7` |
+| `modules/attendance/dtos/mentor-attendance-report.dto.ts` | `352f4226b0415f8205b7e6646c8671bba827f60d51aeca9ba529f609f1a8dff9` |
+| `modules/attendance/services/attendance-audit.service.ts` | `c784990ba7c956768cbd076452a33067d9ace099e50580c2b0f0c595ff225c31` |
+| `modules/attendance/services/attendance-projection.service.ts` | `684f9f36933063e43f22b1a2dcb4fc23a6a40b52306f6b0061b8a2659935b66b` |
+| `modules/attendance/services/attendance-reports.service.ts` | `f26f557c8141f982e82df750b64b5514d918ffbb087b398f1a2790e927a413ab` |
+| `modules/attendance/services/attendance.service.ts` | `e4a2249391d3c9ea594f25f0a5b8f2c2882762f6e66b8f50e6b6a5f170d7e78d` |
+| `modules/attendance/services/guest-attendance.service.ts` | `f50969b50c35682438cb2dbd24103508d2ce4acd7c37e3880e33b715ca5889e2` |
+| `modules/attendance/services/makeup-placement.service.ts` | `cb6c8a69cc6a0c36eb18dbb748372426f07a9affe0db06076aab63e56d5f4e81` |
+| `modules/attendance/services/mentor-attendance-reports.service.ts` | `c46d82f4071e3ab87e0ccbd83af2158aaa42561967e8cef45823f4628cb16a23` |
+| `modules/attendance/exceptions/attendance.exceptions.ts` | `09b0fe23f4f968d9bb242f9772cbf0fbecc3b361a9310f3dcb4d7f0b8c004587` |
+| `modules/attendance/exceptions/makeup.exceptions.ts` | `aa30701273e13d1fc9e08627cdc317eabfcd2d70446a440a036335175a770e15` |
+| `modules/teaching-operations/controllers/management-leave.controller.ts` | `cfd511e05257879830ca69fb8144299d748de33d2dba7a869b372e07bb5d6c35` |
+| `modules/teaching-operations/controllers/mentor-leave.controller.ts` | `37cfc3d1eba052349081f46955ef3a265ccf4ba08e971d92fdab93ae53841c6b` |
+| `modules/teaching-operations/controllers/teaching-notes.controller.ts` | `c60e968e6c4698587936591586c2cf49411f0100738c0e4215c0ad8b4f6ee4a8` |
+| `modules/teaching-operations/dtos/leave.dto.ts` | `1c8962843126f5ce021bc22a15556feb70ecdb9f8d0e5519bde4ef29d7725377` |
+| `modules/teaching-operations/dtos/teaching-note.dto.ts` | `880cf1ea6ed8b38c02593f144466efcf209a4bc8cd206ac2145aefc46b9dba78` |
+| `modules/teaching-operations/services/leave-planning.service.ts` | `c14e57886d1aa1f8cb1c55f1c7b673195f4aa6de41d6f9c958041ca7a52eb8b8` |
+| `modules/teaching-operations/services/mentor-leave.service.ts` | `e77ba3964794d3b9e571faa91805f5accb844beab3b16efd1d4724da0fae3e83` |
+| `modules/teaching-operations/services/teaching-notes.service.ts` | `2e8b23b3ac76d7eaa0a35c8e2ea91fcaf3017ad5b9ddd2ef80e8eb75dd6418b5` |
+| `modules/classes/dtos/admin-class-student.dto.ts` | `4d09805350560ae11873fadeff02070cc47abbd83e6c14fe9e0281ca21117969` |
+| `modules/classes/dtos/class-page-options.dto.ts` | `54b29d0f569e40d7683d5dd2d610a6ade7e4838d9427abee42247dea6dae5185` |
+| `modules/classes/dtos/class.dto.ts` | `b0e0e0cc6449d802895a81e9e887b650b5ef825f7dd3e6c56c00e773413afcf7` |
+| `modules/classes/dtos/create-class.dto.ts` | `ed8d597f454f32c7f10bb93d62e87a59f713a79eb68ba5a1c3da4fd07a686ee5` |
+| `modules/classes/dtos/mentor-content-context.dto.ts` | `433dd963b8ec1a3d76a3bac6dd68becf3b8e8e349937ee55776fc61f3b8ba3e9` |
+| `modules/classes/dtos/mentor-workspace.dto.ts` | `62017d2309ce8242f814ab41c9149cb2cdaa356824de7e33d1d5ad43adc2b31e` |
+| `modules/classes/dtos/schedule-class-session.dto.ts` | `34bd9f17d581b70194bbc51b1026ecfa99ab8d2a41230d49daf5a9a6d9986506` |
+| `modules/classes/dtos/session-meeting.dto.ts` | `013d59924dbe92ec3dcef14cb6708e2a496069a216dfe90b9054c4d666ca9e95` |
+| `modules/classes/dtos/session-operations.dto.ts` | `b48f0f3c6bc5c2f0c22e5e879fc1397a2fb13cf6b30731778097f3bbc262c9b8` |
+| `modules/classes/dtos/student-class.dto.ts` | `6d113c3d01dda818c22a2b169f237038ba90a6cb3b10deb1bba6ca2a37b35abc` |
+| `modules/classes/dtos/teaching-query.dto.ts` | `18dffd5a32b015a55f7860cde99dc374f54a86ccf872ac13b1e8c12110e3a55c` |
+| `modules/classes/dtos/teaching.dto.ts` | `58c78caa08efecbaebe423b6a55b9c3d9c7fc887ac8b6d6c20a373dcd2c0013c` |
+| `modules/classes/dtos/unit-content.dto.ts` | `dbc6ba2f15fff87ec738028f0ce2beab5b9715db0f3927d8bc2d85b8198376fd` |
+| `modules/classes/dtos/update-class-session-time.dto.ts` | `fc58c18eef99b4f923cc1454e73067f2c8974b9bbc0e3e8de62232a876292bec` |
+| `modules/classes/dtos/update-class.dto.ts` | `e6dabcd3656adb3975d67eeb90b37e3519c2188b4f9beb52000c3b807af9639e` |
+| `modules/manager-operations/dtos/manager-query.dto.ts` | `27175efa0acf1c833d913926dadc47e0072edb480e50077a618458fab5144dfe` |
+| `modules/manager-operations/dtos/manager-response.dto.ts` | `11b721410ae8529b043690c851f18e131b6ca5356101a7987cbbf1ae465f7aaf` |
+| `modules/manager-operations/manager-operations.controller.ts` | `1b26c7708e6db165c0806b7b05cba834b90e0cedefbdca41d5369a097cbec669` |
+| `modules/classes/controllers/mentor-workspace.controller.ts` | `6353d8476000f91471ed5168051c73e78f784bbf4929c35b31a3848ed61118c1` |
+| `modules/classes/controllers/session-context.controller.ts` | `792014288e7ce3c6043a100f1d398b2b01264698296a86a4cefab5f9a8ebafc1` |
+| `modules/payments/controllers/manager-class-roster.controller.ts` | `9c2969d344ad56cd40f4afbf1a3a44c34cda96e4861f243dae0eac5dda529b95` |
+| `common/guards/request-origin.guard.ts` | `f51edaecad2048e61dc61cc375ad6813efe7d800a7025a3f78dc318875ba050c` |
+| `modules/classes/controllers/teaching-management.controller.ts` | `86cf3feb1c1e908ac06bce9aebd13539c33d1a37b778a64e9cf90e56cd293ac0` |
+| `modules/classes/services/teaching-read.service.ts` | `d4e8277036c9e18b401ca25a46e4a20167b154c23bafe0f92150be59016cbf92` |

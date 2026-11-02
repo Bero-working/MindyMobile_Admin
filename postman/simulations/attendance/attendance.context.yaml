@@ -1,0 +1,16 @@
+purpose:
+  stands_in_for: Mindy attendance HTTP dependency using synthetic DTOs from the local backend snapshot.
+  unblocks: Verify the actual mobile adapter against response loss after commit, conflict, denial and HTML failures.
+assumptions:
+  - id: idempotent-replay
+    status: supported
+    claim: The backend returns the original response for identical key/body/version after response loss.
+    reason: Source uses idempotency records. Live start replay passed; response loss needs deterministic injection.
+    verification: 02/11/2026 CLI 1.77.0 on port 4016 ran the actual TypeScript adapter over Axios HTTP. Two pages contained regular and guest rows. A write committed then delayed its response beyond the 10-second client timeout; the caller returned uncertain, retried the same key/body/version and the mock state recorded exactly one commit. Conflict, HTML 503 and 403 also matched caller expectations; observed request events are retained locally. Live unchanged-key start replay separately passed. This supports the exercised contract, not timeout frequency or the full provider retention window.
+    source: docs/api-contract/legacy/2026-11-02-attendance; scripts/verify-attendance-mutations.cjs; scripts/verify-attendance-simulation.cjs
+    updated_at: '2026-11-02'
+fingerprints:
+  - id: snapshot
+    date: '2026-11-02'
+    commit: null
+    cli: Postman 1.77.0

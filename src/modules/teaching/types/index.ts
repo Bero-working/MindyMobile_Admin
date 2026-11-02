@@ -40,6 +40,8 @@ export type TeachingClass = {
   maxStudents: number | null;
   course: string;
   readClassRoster: boolean;
+  readClassReports?: boolean;
+  authorMaterials?: boolean;
   unitCount: number | null;
   sessionCount: number | null;
   currentUnit: number | null;
@@ -56,6 +58,8 @@ export type TeachingClass = {
   >;
 };
 export type TeachingSession = {
+  asOf?: string;
+  makeupForSessionId?: string | null;
   id: string;
   classId: string;
   unitId: string;
@@ -88,7 +92,12 @@ export type TeachingStudent = {
   studentStatus: 'ACTIVE' | 'SUSPENDED' | 'PENDING_VERIFICATION' | null;
   admission: 'REGULAR' | 'MAKEUP';
 };
-export type TeachingUnit = { id: string; position: number; title: string };
+export type TeachingUnit = {
+  id: string;
+  position: number;
+  title: string;
+  courseUnitId?: string | undefined;
+};
 export type TeachingData = {
   classes: TeachingClass[];
   sessions: TeachingSession[];
@@ -127,6 +136,7 @@ export type TeachingResult =
       requestId?: string;
     };
 export interface TeachingSource {
+  updateSession?(session: Partial<TeachingSession> & { id: string }): void;
   read(request: TeachingRequest): Promise<TeachingResult>;
 }
 export type TeachingStackParams = {
@@ -134,7 +144,11 @@ export type TeachingStackParams = {
   MentorClasses: undefined;
   MentorClassDetail: { classId: string };
   MentorStudents: { classId: string };
-  SessionContext: { sessionId: string; classTitle?: string };
+  SessionContext: {
+    sessionId: string;
+    classTitle?: string;
+    initialTab?: 'overview' | 'attendance' | 'history' | 'recovery';
+  };
   ManagerClasses: undefined;
   ManagerClassDetail: { classId: string };
 };

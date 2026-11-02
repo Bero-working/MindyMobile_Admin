@@ -1,0 +1,7 @@
+version: 1
+name: operations
+description: P5 synthetic contract dependency, including committed writes whose responses are lost.
+interceptRequests: true
+scenarios:
+  - name: default
+    path: default.js

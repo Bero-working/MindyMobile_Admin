@@ -1,0 +1,6 @@
+simulation: materials
+routing: path
+mocks:
+  - name: materials
+    routeKey: materials
+    path: postman/mocks/materials

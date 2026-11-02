@@ -1,3 +1,8 @@
 * text=auto eol=lf
 *.bat text eol=crlf
 docs/api-contract/legacy/2026-10-31-teaching/**/*.ts -text
+
+docs/api-contract/legacy/2026-11-02-attendance/**/*.ts -text
+
+# P4 immutable backend contract snapshot
+docs/api-contract/legacy/2026-11-02-leave/**/*.ts -text

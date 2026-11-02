@@ -6,6 +6,7 @@ package-lock.json
 docs/
 .git/
 build-logs/
+.maestro/*.local.json
 
 # Immutable backend contract snapshots
 docs/api-contract/legacy/2026-10-31-teaching/**

@@ -1,3 +1,7 @@
+import { SessionOperations } from '@/modules/operations';
+import { useAttendance } from '@/modules/attendance';
+import { MentorAttendanceEntry } from '@/modules/attendance/components/EntryPoints';
+import { ManagerAttendancePanel } from '@/modules/attendance/components/ManagerAttendancePanel';
 import { useEffect, useState } from 'react';
 import { Linking, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +40,7 @@ import {
   weekdayName,
 } from '../format';
 import type { TeachingRole, TeachingSession } from '../types';
+/* eslint-disable @typescript-eslint/no-require-imports -- defer attendance form modules until their tab opens */
 export function SessionContextScreen({
   route,
   navigation,
@@ -43,7 +48,79 @@ export function SessionContextScreen({
   const { t } = useTranslation('teaching');
   const { state } = useAuth();
   const manager = state.user?.role === 'MANAGER';
-  const [tab, setTab] = useState<MentorTab>('overview');
+  const attendance = useAttendance();
+  const [tab, setTab] = useState<MentorTab>(
+    manager && attendance.enabled
+      ? (route.params.initialTab ?? 'overview')
+      : 'overview'
+  );
+  const changeManagerTab = (value: string) => {
+    if (
+      !['overview', 'attendance', 'history', 'recovery'].includes(value) ||
+      value === tab
+    )
+      return;
+    navigation.replace('SessionContext', {
+      ...route.params,
+      initialTab: value as 'overview' | 'attendance' | 'history' | 'recovery',
+    });
+  };
+  const managerTabs = [
+    {
+      value: 'overview',
+      label: t('tabOverview'),
+      testID: 'session-tab-overview',
+    },
+    {
+      value: 'attendance',
+      label: t('attend'),
+      testID: 'session-tab-attendance',
+    },
+    {
+      value: 'history',
+      label: t('attendance:session.historyTab'),
+      testID: 'session-tab-history',
+    },
+    {
+      value: 'recovery',
+      label: t('attendance:session.recoveryTab'),
+      testID: 'session-tab-recovery',
+    },
+  ];
+  const detailTabs = {
+    title: t('mentorSessionTitle'),
+    tabs: managerTabs,
+    tab,
+    onTab: changeManagerTab,
+  };
+  if (manager && attendance.enabled && tab === 'history') {
+    const { AttendanceAuditsView } =
+      require('@/modules/attendance/screens/AttendanceAuditsScreen') as typeof import('@/modules/attendance/screens/AttendanceAuditsScreen');
+    return (
+      <AttendanceAuditsView
+        params={route.params}
+        onBack={navigation.goBack}
+        detailTabs={detailTabs}
+      />
+    );
+  }
+  if (manager && attendance.enabled && tab === 'recovery') {
+    const { AttendanceRecoveryView } =
+      require('@/modules/attendance/screens/AttendanceRecoveryScreen') as typeof import('@/modules/attendance/screens/AttendanceRecoveryScreen');
+    return (
+      <AttendanceRecoveryView
+        params={route.params}
+        onBack={navigation.goBack}
+        detailTabs={detailTabs}
+        onSaved={() =>
+          navigation.replace('SessionContext', {
+            ...route.params,
+            initialTab: 'attendance',
+          })
+        }
+      />
+    );
+  }
   return (
     <TeachingPage
       prefix="session"
@@ -55,12 +132,16 @@ export function SessionContextScreen({
       notFound={t('sessionNotFound')}
       {...(manager
         ? {
-            tabs: [
-              { value: 'overview', label: t('tabOverview') },
-              { value: 'students', label: t('tabStudents') },
-            ],
+            tabs: attendance.enabled
+              ? managerTabs
+              : [
+                  { value: 'overview', label: t('tabOverview') },
+                  { value: 'students', label: t('tabStudents') },
+                ],
             tab,
-            onTab: (value: string) => setTab(value as MentorTab),
+            onTab: attendance.enabled
+              ? changeManagerTab
+              : (value: string) => setTab(value as MentorTab),
           }
         : {
             tabs: [
@@ -73,10 +154,18 @@ export function SessionContextScreen({
           })}
     >
       {manager ? (
-        <Context
-          sessionId={route.params.sessionId}
-          tab={tab}
-        />
+        <>
+          <Context
+            sessionId={route.params.sessionId}
+            tab={tab}
+          />
+          {attendance.enabled && (
+            <ManagerAttendancePanel
+              sessionId={route.params.sessionId}
+              active={tab === 'attendance'}
+            />
+          )}
+        </>
       ) : (
         <MentorContext
           sessionId={route.params.sessionId}
@@ -86,7 +175,13 @@ export function SessionContextScreen({
     </TeachingPage>
   );
 }
-type MentorTab = 'overview' | 'students' | 'materials';
+type MentorTab =
+  | 'overview'
+  | 'students'
+  | 'materials'
+  | 'attendance'
+  | 'history'
+  | 'recovery';
 function MentorContext({
   sessionId,
   tab,
@@ -96,6 +191,7 @@ function MentorContext({
 }) {
   const { t, i18n } = useTranslation('teaching');
   const { notify } = useAuth();
+  const attendance = useAttendance();
   const query = useTeachingQuery({
     kind: 'context',
     sessionId,
@@ -113,7 +209,6 @@ function MentorContext({
     !!item,
     false
   ).data?.classInfo;
-  const link = safeMeetingLink(item?.meetingUrl ?? null);
   const stats = [
     {
       key: 'students',
@@ -190,62 +285,52 @@ function MentorContext({
                   {t('actualEnd', { time: time(item.actualEnd) })}
                 </Text>
               )}
-              <View className="flex-row gap-space-8">
-                {stats.map((stat) => (
-                  <View
-                    key={stat.key}
-                    testID={`session-stat-${stat.key}`}
-                    className="flex-1 gap-space-2 p-space-10 rounded-radius-14 bg-mdy-muted2"
-                  >
-                    <Text className="text-size-18 font-bvp-bold">
-                      {stat.value}
-                    </Text>
-                    <Text className="text-size-11 text-mdy-secondary">
-                      {stat.label}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-              {item.status === 'IN_PROGRESS' && (
-                <View className="flex-row flex-wrap gap-space-8">
-                  <Button
-                    testID="session-attend"
-                    size="sm"
-                    icon="fact_check"
-                    className="flex-1 min-w-[140px] px-space-12 gap-space-6"
-                    onPress={() => notify(t('attendLater'))}
-                  >
-                    {t('attend')}
-                  </Button>
-                  {link ? (
-                    <Button
-                      testID="session-link"
-                      size="sm"
-                      variant="secondary"
-                      icon="videocam"
-                      accessibilityRole="link"
-                      accessibilityLabel={`${t('enterRoom')}, ${link.host}`}
-                      accessibilityHint={t('linkHint')}
-                      className="flex-1 min-w-[140px] px-space-12 gap-space-6"
-                      onPress={() => {
-                        Linking.openURL(link.url).catch(() =>
-                          notify(t('linkFailed'))
-                        );
-                      }}
+              {!attendance.enabled && (
+                <View className="flex-row gap-space-8">
+                  {stats.map((stat) => (
+                    <View
+                      key={stat.key}
+                      testID={`session-stat-${stat.key}`}
+                      className="flex-1 gap-space-2 p-space-10 rounded-radius-14 bg-mdy-muted2"
                     >
-                      {t('enterRoom')}
-                    </Button>
-                  ) : (
-                    <Text
-                      testID="session-link-empty"
-                      className="flex-1 self-center text-size-13 text-mdy-secondary"
-                    >
-                      {t(item.meetingUrl ? 'linkInvalid' : 'linkEmpty')}
-                    </Text>
-                  )}
+                      <Text className="text-size-18 font-bvp-bold">
+                        {stat.value}
+                      </Text>
+                      <Text className="text-size-11 text-mdy-secondary">
+                        {stat.label}
+                      </Text>
+                    </View>
+                  ))}
                 </View>
               )}
-              {item.status === 'SCHEDULED' && (
+              {attendance.enabled && (
+                <MentorAttendanceEntry
+                  item={item}
+                  studentTotal={students.data?.total}
+                  roomAction={
+                    item.status === 'IN_PROGRESS' ? (
+                      <MentorRoomAction item={item} />
+                    ) : undefined
+                  }
+                />
+              )}
+              {!attendance.enabled && item.status === 'IN_PROGRESS' && (
+                <View className="flex-row flex-wrap gap-space-8">
+                  {!attendance.enabled && (
+                    <Button
+                      testID="session-attend"
+                      size="sm"
+                      icon="fact_check"
+                      className="flex-1 min-w-[140px] min-h-space-52 rounded-radius-22 px-space-12 gap-space-6"
+                      onPress={() => notify(t('attendLater'))}
+                    >
+                      {t('attend')}
+                    </Button>
+                  )}
+                  <MentorRoomAction item={item} />
+                </View>
+              )}
+              {!attendance.enabled && item.status === 'SCHEDULED' && (
                 <View
                   testID="session-starts-note"
                   className="flex-row items-center gap-space-8"
@@ -393,6 +478,35 @@ function MentorContext({
     </QueryBlock>
   );
 }
+function MentorRoomAction({ item }: { item: TeachingSession }) {
+  const { t } = useTranslation('teaching');
+  const { notify } = useAuth();
+  const link = safeMeetingLink(item.meetingUrl);
+  return link ? (
+    <Button
+      testID="session-link"
+      size="sm"
+      variant="secondary"
+      icon="videocam"
+      accessibilityRole="link"
+      accessibilityLabel={`${t('enterRoom')}, ${link.host}`}
+      accessibilityHint={t('linkHint')}
+      className="flex-1 min-w-[140px] min-h-space-52 rounded-radius-22 px-space-12 gap-space-6"
+      onPress={() => {
+        Linking.openURL(link.url).catch(() => notify(t('linkFailed')));
+      }}
+    >
+      {t('enterRoom')}
+    </Button>
+  ) : (
+    <Text
+      testID="session-link-empty"
+      className="flex-1 self-center text-size-13 text-mdy-secondary"
+    >
+      {t(item.meetingUrl ? 'linkInvalid' : 'linkEmpty')}
+    </Text>
+  );
+}
 function InfoRow({
   icon,
   label,
@@ -454,6 +568,10 @@ function Context({ sessionId, tab }: { sessionId: string; tab: MentorTab }) {
         >
           {item && (
             <>
+              <SessionOperations
+                session={item}
+                offline={query.result?.kind === 'offline'}
+              />
               <Card className="mx-space-0 px-space-24 py-space-16 gap-space-14">
                 <View className="flex-row items-center gap-space-12">
                   <View

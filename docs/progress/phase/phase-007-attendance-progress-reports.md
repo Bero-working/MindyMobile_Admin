@@ -9,7 +9,7 @@ Chưa có design, chưa duyệt UI, chưa tích hợp/nghiệm thu.
 
 ## Hồ sơ triển khai
 
-Mục triển khai: [phase-007-attendance-progress-reports](../../implement/README.md#phase-007-attendance-progress-reports). Khi bắt đầu, tạo folder `docs/implement/phase-007-attendance-progress-reports/` theo danh mục chung; hồ sơ và bằng chứng triển khai đặt tại đó. Tiến độ và nhật ký phase tiếp tục cập nhật trong file này.
+**02/11/2026 — người dùng đã duyệt [kế hoạch tổng](../../implement/phase-007-attendance-progress-reports/phase-007-attendance-progress-reports.md) qua phản hồi “Duyệt”; đã tách [hai kế hoạch slice](../../implement/phase-007-attendance-progress-reports/README.md#kế-hoạch-theo-slice).** [Hồ sơ phase](../../implement/phase-007-attendance-progress-reports/README.md) · [Danh mục](../../implement/README.md#phase-007-attendance-progress-reports). Không sử dụng SpecKit; chưa có chỉ thị implement, tạo design/contract hoặc code. Q-P1-01 cho báo cáo/KPI và policy còn chờ. UI/API giữ 0/2; nhật ký tiếp tục cập nhật tại đây.
 
 ## Các mốc
 
@@ -41,5 +41,9 @@ Mục triển khai: [phase-007-attendance-progress-reports](../../implement/READ
 | 30/10/2026 | Người dùng / Codex | Bổ sung cổng E2E Maestro | Người dùng yêu cầu E2E sau mỗi phase trước nghiệm thu và chọn Maestro; mốc E2E Todo, chưa có kết quả chạy; giữ nguyên tiến độ UI/API | ADR-009 bổ sung đã duyệt |
 
 ## Ghi nhận khi thực hiện
+
+02/11/2026 — Người dùng duyệt kế hoạch tổng qua phản hồi “Duyệt”. Codex tách hai kế hoạch slice S1/S2, đồng bộ kế hoạch tổng, README và trạng thái hiện hành theo ADR-017; không dùng SpecKit. Chưa có chỉ thị code hoặc duyệt UI; câu hỏi/policy còn mở giữ nguyên, UI/API 0/2. Chỉ kiểm tài liệu/liên kết, không chạy test ứng dụng/API/E2E hoặc thay đổi BR/ADR. Ghi nhận chờ duyệt ở lượt lập tổng bên dưới là lịch sử.
+
+02/11/2026 — Codex lập kế hoạch tổng P7 theo yêu cầu “Lập implement phase 7”, khảo sát source backend chuyên cần và stored progress, ghi mapping/quyền/giới hạn KPI/trình tự và kiểm chứng dự kiến. Người dùng chỉ thị không dùng SpecKit; hồ sơ được lập trực tiếp theo quy ước dự án. Chờ duyệt tổng trước tách slice theo ADR-017; chưa chạy test ứng dụng/API/E2E, chưa có commit/PR hoặc thay đổi BR/ADR; tiến độ giữ nguyên.
 
 Mỗi mốc cập nhật ngày, người làm/duyệt, command và kết quả test/lint/typecheck, môi trường thiết bị, commit/PR thật nếu có, điểm chờ và BR/ADR bị ảnh hưởng. Khi luật đã duyệt thay đổi, phải có ADR Accepted và ghi cả [changelog](../business-rules-changelog.md) trước code. Không chuyển Done chỉ vì đã viết mock UI hoặc có source backend.

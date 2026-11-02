@@ -1,5 +1,9 @@
 # Phase 1 — Spacing, feedback và hướng mở UI
 
+**Cập nhật command 01/11/2026:** Theo ADR-026, chỉ dùng `npm run test:e2e:phase-1` cho bộ E2E hiện hành; command tự kiểm API/tạo dataset rồi chạy UI native với API thật. Các command `test:api:phase-1` và `test:e2e:phase-1:ui` bên dưới là lịch sử đã bỏ khỏi package.json, không phải bước cần chạy thêm. Kết quả kiểm chứng cũ giữ nguyên.
+
+**Trạng thái hiện hành 01/11/2026:** Người dùng đã nghiệm thu Phase 1, UI/API 7/7, **Done**. [Rà soát source hiện tại và giới hạn kiểm chứng](review-cleanup.md). Nội dung theo ngày bên dưới là hồ sơ lịch sử; các câu chờ duyệt/API 0/7 không còn là trạng thái hiện hành.
+
 Ngày: 31/10/2026 (Asia/Bangkok). Người thực hiện: Codex.
 
 Nguồn: các ảnh review và yêu cầu trong chat; sau khi duyệt đợt sửa phase 0, người dùng yêu cầu “sửa các phần kia tiếp đi”. Đây là bản sửa UI mock để review, chưa approve UI toàn phase 1 và chưa mở tích hợp API.

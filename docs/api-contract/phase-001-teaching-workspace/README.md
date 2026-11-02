@@ -1,15 +1,17 @@
 # Phase 1 — Teaching Workspace API
 
+**01/11/2026 — Phase 1 đã nghiệm thu, UI/API 7/7, Done.** [Rà soát sau nghiệm thu](../../implement/phase-001-teaching-workspace/review-cleanup.md). Nguồn contract và snapshot ngày 31/10 bên dưới giữ nguyên.
+
 31/10/2026 (Asia/Bangkok). Chỉ thị “Triển khai API cho phase 1” cho phép chuyển sang tích hợp API. Không ghi nhận thay người dùng một quyết định nghiệm thu UI hoặc phase. Nguồn: [snapshot nguyên byte + SHA-256](../legacy/2026-10-31-teaching/README.md). Không sửa backend.
 
-| Slice | Contract |
-| --- | --- |
-| P1-S1 | [mentor-schedule](mentor-schedule.md) |
-| P1-S2 | [mentor-classes](mentor-classes.md) |
-| P1-S3 | [mentor-class-detail](mentor-class-detail.md) |
-| P1-S4 | [session-context](session-context.md) |
-| P1-S5 | [mentor-students](mentor-students.md) |
-| P1-S6 | [manager-classes](manager-classes.md) |
+| Slice | Contract                                        |
+| ----- | ----------------------------------------------- |
+| P1-S1 | [mentor-schedule](mentor-schedule.md)           |
+| P1-S2 | [mentor-classes](mentor-classes.md)             |
+| P1-S3 | [mentor-class-detail](mentor-class-detail.md)   |
+| P1-S4 | [session-context](session-context.md)           |
+| P1-S5 | [mentor-students](mentor-students.md)           |
+| P1-S6 | [manager-classes](manager-classes.md)           |
 | P1-S7 | [manager-class-detail](manager-class-detail.md) |
 
 ## Transport, session và lỗi

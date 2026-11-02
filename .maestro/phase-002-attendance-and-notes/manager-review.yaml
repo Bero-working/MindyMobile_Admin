@@ -1,0 +1,106 @@
+appId: com.mindymobile_admin
+name: Phase 2 Manager UI mock review
+---
+- launchApp
+- tapOn:
+    id: phase-2-review-open
+- tapOn:
+    id: phase-2-review-MANAGER
+- extendedWaitUntil:
+    visible:
+      id: workspace-open-incomplete
+    timeout: 15000
+- takeScreenshot: build-logs/phase-2-ui/04-manager-home
+- tapOn:
+    id: workspace-open-incomplete
+- assertVisible:
+    id: incomplete-screen
+- takeScreenshot: build-logs/phase-2-ui/05-incomplete
+- tapOn:
+    id: incomplete-row-overdue-not-finalized
+- assertVisible:
+    id: manager-att-row-attendance-1
+- takeScreenshot: build-logs/phase-2-ui/06-manager-attendance
+- scrollUntilVisible:
+    element:
+      id: session-back-button
+    direction: UP
+- tapOn:
+    id: session-back-button
+- tapOn:
+    id: incomplete-back
+- tapOn:
+    id: workspace-open-attendance-management
+- extendedWaitUntil:
+    visible:
+      id: attendance-classes-row-primary
+    timeout: 15000
+- tapOn:
+    id: attendance-classes-row-primary
+- assertVisible:
+    id: correction-screen
+- takeScreenshot: build-logs/phase-2-ui/07-correction
+- scrollUntilVisible:
+    element:
+      id: correction-mark-attendance-2-present
+    direction: DOWN
+- tapOn:
+    id: correction-mark-attendance-2-present
+- tapOn:
+    id: correction-continue
+- tapOn:
+    id: correction-reason
+- inputText: Verified class record
+- hideKeyboard
+- runFlow:
+    when:
+      visible:
+        id: leave-dialog
+    commands:
+      - tapOn:
+          id: leave-stay
+- runFlow:
+    when:
+      notVisible:
+        id: correction-submit
+    commands:
+      - tapOn:
+          id: correction-continue
+- scrollUntilVisible:
+    element:
+      id: correction-submit
+    direction: DOWN
+- tapOn:
+    id: correction-submit
+- extendedWaitUntil:
+    notVisible:
+      id: correction-sheet
+    timeout: 15000
+- tapOn:
+    id: attendance-tools-mode-history
+- assertVisible:
+    id: audit-row-audit-1
+- takeScreenshot: build-logs/phase-2-ui/08-audits
+- tapOn:
+    id: audit-back
+- tapOn:
+    id: attendance-classes-back
+- tapOn:
+    id: workspace-open-incomplete
+- scrollUntilVisible:
+    element:
+      id: incomplete-row-overdue-not-started
+    direction: UP
+- tapOn:
+    id: incomplete-row-overdue-not-started
+- tapOn:
+    id: session-tab-overview
+- scrollUntilVisible:
+    element:
+      id: manager-att-recover
+    direction: DOWN
+- tapOn:
+    id: manager-att-recover
+- assertVisible:
+    id: recovery-screen
+- takeScreenshot: build-logs/phase-2-ui/09-recovery

@@ -1,8 +1,10 @@
 # Phase 2 — Kế hoạch triển khai Attendance and Notes
 
+**Cập nhật hiện hành:** [Hai tiện ích Manager, header tabs, filter ngang và correction rút gọn](ui-utilities-update.md) theo yêu cầu trực tiếp ngày 01/11/2026; phần mô tả baseline khác với cập nhật này được giữ để truy vết.
+
 Ngày lập: **01/11/2026 (Asia/Bangkok)**. Người soạn: Codex.
 
-**Kế hoạch tổng — chờ người dùng duyệt.** Lượt này lập tài liệu; chưa tách kế hoạch slice, chưa viết design/code hoặc tích hợp API. Tiến độ UI/API giữ 0/7; trạng thái thực tế tại [progress P2](../../progress/phase/phase-002-attendance-and-notes.md).
+**Cập nhật 01/11/2026 — người dùng yêu cầu “đã có design chia slice đi”, cho phép tách kế hoạch theo ADR-017.** Đã có design Claude cấp phase và đủ 7 slice; đã tách kế hoạch tại [README](README.md). Sau đó người dùng yêu cầu “Triển khai đi”: đã có mã UI mock 7/7 và [bản review](ui-review.md). Người dùng đã duyệt UI ngày 02/11/2026 với chỉ thị “Duyệt UI phase 2”; đã nối API thật 7/7 theo yêu cầu “Tích hợp api đi”; UI được duyệt 7/7, API 7/7; trạng thái thực tế tại [progress P2](../../progress/phase/phase-002-attendance-and-notes.md).
 
 ## 1. Mục tiêu và phạm vi
 
@@ -24,7 +26,7 @@ Confirmation, loading, conflict và recovery feedback là trạng thái trong c�
 
 - P1 đã được người dùng nghiệm thu ngày 01/11/2026, UI/API 7/7: [hồ sơ rà soát](../phase-001-teaching-workspace/review-cleanup.md). P0 đã được duyệt; giới hạn nền tảng/bằng chứng còn lại tiếp tục theo [progress P0](../../progress/phase/phase-000-foundation-auth.md).
 - Đã có `src/modules/teaching/`, context buổi, auth, HTTP cookie, i18n/theme và UI primitives. `SessionContextScreen.tsx` hiện giữ số điểm danh chưa có nguồn là `—`; P2 cần thay bằng dữ liệu thật trong phạm vi được duyệt, không suy từ roster toàn lớp.
-- Chưa có module attendance, design `attendance-and-notes`, contract hoặc bộ E2E P2. HTML tham khảo không thay design/test case cấp phase và từng slice.
+- Chưa có module attendance, contract hoặc bộ E2E P2. Đã có [design Claude cấp phase](../../design/attendance-and-notes/design.md) và đủ 7 design/test case từng slice. HTML tham khảo không thay nguồn design.
 - Đã đọc source backend cạnh repo ngày 01/11/2026: [attendance controller](../../../../Mindy-BE/src/modules/attendance/controllers/attendance.controller.ts), [management controller](../../../../Mindy-BE/src/modules/attendance/controllers/attendance-management.controller.ts), [query DTO](../../../../Mindy-BE/src/modules/attendance/dtos/attendance-report-query.dto.ts), [input DTO](../../../../Mindy-BE/src/modules/attendance/dtos/attendance-input.dto.ts), [note controller](../../../../Mindy-BE/src/modules/teaching-operations/controllers/teaching-notes.controller.ts), [note DTO](../../../../Mindy-BE/src/modules/teaching-operations/dtos/teaching-note.dto.ts). Đây là căn cứ lập kế hoạch, chưa xác minh deploy/runtime, chưa chạy mutation backend.
 - Working tree có thay đổi từ công việc P1 trước lượt này; giữ nguyên và không dùng làm bằng chứng thực hiện P2.
 
@@ -34,23 +36,24 @@ Confirmation, loading, conflict và recovery feedback là trạng thái trong c�
 
 | Cổng / câu hỏi | Nội dung | Phần phụ thuộc |
 | --- | --- | --- |
-| Duyệt kế hoạch tổng | Người dùng đọc và duyệt tài liệu này theo ADR-017 | Sau duyệt mới tách 7 kế hoạch slice; chưa tự cho phép code |
-| Q-DATA-01 | Có persist roster/draft không; mã hóa, retention và logout/đổi tài khoản xử lý thế nào? | Chưa bật query persistence, draft/queue lưu bền hoặc hứa phục hồi sau app-kill |
-| Q-OFF-01 | Offline chỉ với trang đã tải hay phải đủ snapshot; batch/serialize thao tác liên tiếp, mất response và reconnect xử lý thế nào? | Trước design/implement phần draft/queue offline S1; không tự bỏ offline khỏi scope |
-| Q-ATT-01 | Manager chỉ cần incomplete list hay thêm KPI; chốt filter theo DTO | Trước chốt design S3; đề xuất chỉ dùng danh sách endpoint hiện có |
+| Duyệt tổng / tách slice | Chỉ thị trực tiếp ngày 01/11/2026 cho phép tách kế hoạch theo design hiện có | Đã tách 7 slice; chưa cho phép code |
+| Q-DATA-01 | Đã chốt cho P2: roster/draft/note/form chỉ trong RAM, không lưu thiết bị; app-kill/logout/đổi tài khoản mất draft | Design chung mục 2/10; không mở query persistence |
+| Q-OFF-01 | Đã chốt: chỉ đánh dấu hàng đã tải, đã start online và lần tải gần nhất có quyền; reconnect refetch nhưng không tự gửi | S1 mục 6; người dùng tự bấm Lưu, không queue/replay |
+| Q-ATT-01 | Đã chốt: chỉ danh sách; lọc issue/classId; chưa làm from/to/KPI | S3 và design chung mục 2 |
+| Q-P2-01 / Q-P2-02 | Đã chốt: Manager chốt thay; Home Manager đọc tổng incomplete pageSize=1 | S5 mục 7 và S3; không tăng số slice |
 | Q-PLAT-01 | Mốc nghiệm thu Android/iOS và thiết bị/OS tối thiểu | Chốt bằng chứng nền tảng trước nghiệm thu P2; không lấy test P1 thay thế |
-| Design toàn phase | Claude cung cấp design chung và đủ 7 slice, trạng thái/quyền/test case | Trước UI TDD; Codex không tự viết/sửa design nguồn |
-| Chỉ thị implement | Người dùng yêu cầu code sau khi đọc kế hoạch | Mở giai đoạn UI mock khi đủ đầu vào |
+| Design toàn phase | Đã có design chung và đủ 7 slice Claude, trạng thái/quyền/test case | Đối chiếu nguồn trước UI TDD; không tự sửa design |
+| Chỉ thị implement | Đã nhận “Triển khai đi” ngày 01/11/2026 | Đã triển khai UI mock; không mở cổng API |
 | Duyệt UI toàn phase | Người dùng approve cả 7 slice | Trước tạo contract/schema/service/hook API thật và tích hợp |
 | Contract và dữ liệu thử | Legacy snapshot, route/DTO/quyền, tài khoản và session phù hợp từng case | Trước API/E2E thật; không bịa endpoint/dataset hoặc tự sửa backend |
 
-Đề xuất trong tài liệu chưa thay câu trả lời người dùng. Phần độc lập có thể tiếp tục đúng cổng; phần phụ thuộc câu hỏi vẫn chờ. S1 chưa hoàn tất nếu phần offline được giữ trong phạm vi mà chưa chốt/kiểm chứng. Mọi thay đổi luật hoặc ranh giới đã duyệt đi qua ADR theo quy trình hiện hành.
+Các quyết định P2 ở design chung mục 2 đã có nguồn duyệt của người dùng; không mở rộng policy này sang phase khác. Q-PLAT-01 và các cổng code/UI/API/nghiệm thu còn giữ nguyên. Quyết định đã chốt vẫn cần triển khai và kiểm chứng, không tự tăng tiến độ. Mọi thay đổi luật hoặc ranh giới khác đi qua ADR theo quy trình hiện hành.
 
 ## 4. Hồ sơ và cấu trúc dự kiến
 
-Sau duyệt tổng mới tạo `slice-001-attendance-editor.md` đến `slice-007-attendance-audits.md` trong folder này. Chưa tạo các file đó trong lượt lập kế hoạch.
+Đã tạo `slice-001-attendance-editor.md` đến `slice-007-attendance-audits.md` theo chỉ thị tách slice. Xem [danh mục và thứ tự công việc](README.md#kế-hoạch-theo-slice).
 
-Design Claude cần cung cấp: `docs/design/attendance-and-notes/design.md` và `docs/design/attendance-and-notes/<slice-slug>/design.md` theo 7 slug ở mục 1. Design chung cần có điều hướng từ Home/context P1, component tái sử dụng, vi/en, light/dark, accessibility, keyboard, spacing, loading/empty/error/offline/no-permission/success, conflict và test case tương ứng. Đường dẫn này là đích dự kiến, chưa có file.
+Design Claude đã cung cấp: `docs/design/attendance-and-notes/design.md` và `docs/design/attendance-and-notes/<slice-slug>/design.md` theo 7 slug ở mục 1. Design chung có điều hướng từ Home/context P1, component tái sử dụng, vi/en, light/dark, accessibility, keyboard, spacing, loading/empty/error/offline/no-permission/success, conflict và test case tương ứng. Các file design đã tồn tại, giữ nguyên nguồn Claude.
 
 | Vị trí dự kiến | Trách nhiệm |
 | --- | --- |
@@ -79,7 +82,7 @@ Giữ React Native/TypeScript strict, không explicit `any`/`unknown`, screen kh
 7. 409 version: tải bản mới, giữ rõ phần chưa được chấp nhận và yêu cầu đối chiếu; không last-write-wins/rebase tự động. 409 trạng thái/hết hạn không bị gộp thành version conflict hoặc báo đã đồng bộ. Hiển thị mã hỗ trợ/requestId khi có.
 8. Teaching note nội bộ: content tối đa 10000, nextSteps 5000; chưa có note dùng version 0. Note version riêng, không dùng `session.version`. Mutation có key; không mở rộng queue offline attendance sang note.
 9. Manager correction chỉ sửa record hiện hữu, reason bắt buộc. Recovery là insert-only, cần evidence lịch sử, người dạy/actual times/quan hệ thanh toán hợp lệ, giới hạn body 256 KiB theo backend. Không tự lấy roster hoặc thời gian hiện tại để dựng lịch sử còn thiếu.
-10. Quyền lấy từ server, revalidate sau focus/mutation theo nhu cầu. Route/deep link phải kiểm role/scope; không lộ dữ liệu tài khoản trước. Chưa chốt Q-DATA/Q-OFF thì chưa hứa persist draft, replay sau restart hoặc tự xóa draft theo policy mới.
+10. Quyền lấy từ server, revalidate sau focus/mutation theo nhu cầu. Route/deep link phải kiểm role/scope; không lộ dữ liệu tài khoản trước. Q-DATA/Q-OFF đã chốt cho P2: chỉ RAM, không persist/replay; logout/đổi tài khoản xóa cache/draft, app-kill mất draft. Reconnect không tự gửi.
 
 ## 6. Tải dữ liệu, trạng thái ban đầu và cache
 
@@ -87,28 +90,28 @@ Các lựa chọn mới dưới đây là đề xuất để duyệt/design, áp
 
 | Slice | Lựa chọn ban đầu / lúc tải | Phân trang và refresh |
 | --- | --- | --- |
-| S1 | Session từ context P1; tải context/quyền, rồi candidates nếu chưa start hoặc attendance nếu đã có snapshot. Không tải candidates và snapshot đồng loạt để trang trí | Trang đầu khi mở; load more chỉ danh sách đang mở. Mutation cập nhật/invalidate snapshot, totals và context đúng session; không tăng page khi request đang chạy |
+| S1 | Context + attendance trang 1 pageSize=100 để lấy quyền (G-P2-01); chỉ thêm candidates khi SCHEDULED. Không dùng snapshot rỗng trước start làm số thật | Trang đầu khi mở; load more chỉ danh sách đang mở. Mutation cập nhật/invalidate snapshot, totals và context đúng session; không tăng page khi request đang chạy |
 | S2 | Đọc note/version khi mở editor; không preload mọi note từ danh sách session | Không phân trang. Sau lưu lấy version note server trả; refresh không âm thầm ghi đè nội dung đang sửa |
-| S3 | Mặc định toàn backlog unresolved overdue theo API, không tự giới hạn tuần hoặc gán from/to. Issue/class chưa chọn; chỉ tải trang đầu | Đổi filter mới tải; DTO có classId, issue OVERDUE_NOT_STARTED/STARTED_NOT_FINALIZED và cặp from/to tối đa 93 ngày. Không dựng KPI từ một trang |
-| S4 | Đọc context và trang attendance đầu khi mở session Manager; note/audit không tự tải kèm | Load more đúng session/filter. Refresh sau correction/recovery; quyền quyết định action, không suy chỉ từ role/status |
-| S5 | Record được chọn từ S4, đối chiếu snapshot/version trước sửa; form lý do trống | Chỉ tải thêm khi cần chọn record; sau mutation refresh S4/context và invalidate queue/audit liên quan |
-| S6 | Form evidence trống theo DTO/design; lấy context và dữ liệu cần xác minh khi mở | Không preload mọi enrollment/lịch sử; lỗi thiếu dữ liệu không được điền bằng dữ liệu phỏng đoán |
-| S7 | Trang audit đầu của session, chưa lọc enrollment; mở S7 mới gọi audit | Filter theo query backend; đổi filter reset page, lỗi load more retry đúng trang và giữ hàng cũ |
+| S3 | Mặc định toàn backlog unresolved overdue theo API, không tự giới hạn tuần hoặc gán from/to. Issue/class chưa chọn; chỉ tải trang đầu | Đổi filter mới tải; UI chỉ classId/issue OVERDUE_NOT_STARTED/STARTED_NOT_FINALIZED; from/to dù DTO có hỗ trợ vẫn chưa làm ở P2. Tra tên lớp bằng bảng OPEN/IN_PROGRESS đủ trang, không gọi theo hàng |
+| S4 | Context + attendance pageSize=1 lấy quyền/totals; tab Điểm danh mới tải pageSize=20 hoặc candidates nếu SCHEDULED; note/audit không tải kèm | Load more đúng session/filter. Refresh sau correction/recovery; quyền quyết định action, không suy chỉ từ role/status |
+| S5 | Attendance pageSize=100, form reason trống; không có params record/version. Sheet chốt thay mở ở S4 lấy lại totals/version/quyền, giờ kết thúc và reason để trống | Chỉ tải thêm khi cần chọn record; sau mutation refresh S4/context và invalidate queue/audit liên quan |
+| S6 | Context + attendance pageSize=1, form evidence/ngày giờ trống trừ giờ server đã biết; roster Manager chỉ khi mở sheet chọn, snapshot đủ trang để loại record đã có | Không preload mọi enrollment/lịch sử; lỗi thiếu dữ liệu không được điền bằng dữ liệu phỏng đoán |
+| S7 | Trang audit đầu pageSize=20, mặc định không lọc; từ hàng S4 lọc đúng regular/guest. Lookup tên từ attendance pageSize=100 đủ trang, không chặn audit; có tên params khi lọc thì bỏ lookup | Filter theo query backend; đổi filter reset page, lỗi load more retry đúng trang và giữ hàng cũ |
 
 Query key phải bao gồm tài khoản/role, session/resource, filter và page theo kiến trúc. Đổi session/filter/tài khoản không hiển thị dữ liệu cũ dưới nhãn mới; response cũ không ghi đè lựa chọn mới. Không gọi API từng hàng chỉ để lấy thông tin phụ hoặc đếm status chưa mở.
 
-Cache đọc dự kiến chỉ trong bộ nhớ, không bật persist nhạy cảm. Khi mất mạng: dữ liệu đã tải của cùng query có thể hiển thị read-only với cảnh báo cũ/chưa đồng bộ; chưa tải thì hiển thị trạng thái chưa có dữ liệu offline, không giả empty/0. Không Retry trong warning offline; phục hồi qua kết nối/focus/pull-to-refresh. Start/sync/finalize/correction/recovery/note save cần online; draft attendance offline theo Q-OFF-01, không dùng read-only cache để tự quyết chính sách draft. Phiên/quyền không còn hợp lệ phải che/xóa dữ liệu theo auth boundary hiện hành.
+Cache đọc dự kiến chỉ trong bộ nhớ, không bật persist nhạy cảm. Khi mất mạng: dữ liệu đã tải của cùng query có thể hiển thị read-only với cảnh báo cũ/chưa đồng bộ; chưa tải thì hiển thị trạng thái chưa có dữ liệu offline, không giả empty/0. Không Retry trong warning offline; phục hồi qua kết nối/focus/pull-to-refresh. Start/sync/finalize/correction/recovery/note save cần online; draft attendance offline theo Q-OFF-01 đã chốt: chỉ hàng đã tải, giữ RAM và tự bấm Lưu khi online. Phiên/quyền không còn hợp lệ phải che/xóa dữ liệu theo auth boundary hiện hành.
 
 Skeleton theo nội dung từng phần; tải thêm giữ hàng có sẵn. Empty/content trước warning/Retry; lỗi phần độc lập không khóa cả màn trừ lỗi auth/quyền. Mở màn/Back/tab trực tiếp, không animation/gesture chuyển màn; spacing/token và vùng chạm theo hệ thống chung. Không lấy số đếm chưa tải làm 0.
 
 ## 7. Thứ tự thực hiện UI mock
 
-Sau duyệt tổng: tách kế hoạch slice → giải quyết đầu vào → Claude hoàn tất design/test case → người dùng yêu cầu implement. Tất cả task dưới đây **chưa thực hiện**; TDD từ test fail → mock pass, chưa dùng HTTP thật.
+Hiện đã tách slice và có đủ design/test case Claude. Bước tiếp theo: đối chiếu mapping/đầu vào → người dùng yêu cầu implement → UI mock toàn phase. Các task là baseline; mã UI hiện đã được triển khai theo TDD, kết quả/giới hạn tại [verification](ui-verification.md). HTTP thật chưa được thực hiện.
 
 | Task | Công việc | Phụ thuộc / điều kiện hoàn thành |
 | --- | --- | --- |
-| UI-00 | Đối chiếu design/BR/ADR, mapping test case 7 slice, ghi phần thiếu và quyết định offline/filter | Đủ đầu vào mục 3; không tự sửa design Claude |
-| UI-01 | Module/mock fixture/route/role, shared feedback, i18n/theme và entry point context/Home theo design | UI-00; giữ hồi quy P0/P1 |
+| UI-00 | Đối chiếu design/BR/ADR, mapping test case 7 slice, ghi phần thiếu và áp dụng quyết định offline/filter đã chốt | Đủ đầu vào mục 3; không tự sửa design Claude |
+| UI-01 | Module/mock fixture/route/role, shared feedback, i18n/theme và entry point context/Home theo design | UI-00; giữ hồi quy P0/P1, cập nhật test bị thay thế ở design chung mục 4.4 |
 | UI-02 | S1 preview/start/roster regular+guest, đánh dấu, bulk mọi trang, sync, finalize và sửa trong hạn | UI-01; bao phủ empty snapshot, hết hạn, conflict/mất response, phần draft sau chốt policy |
 | UI-03 | S2 note editor, version riêng, validation, dirty state/Back, lỗi/quyền | UI-01; không dùng version buổi hoặc hứa offline save |
 | UI-04 | S3 queue và S4 Manager snapshot/action | UI-01; backlog/filter/totals đúng; correction và recovery phân biệt rõ |
@@ -124,15 +127,15 @@ Sau duyệt tổng: tách kế hoạch slice → giải quyết đầu vào → 
 | --- | --- |
 | S1 | GET `/class-sessions/:sessionId/attendance-candidates`; GET `/class-sessions/:sessionId/attendance`; POST `/class-sessions/:sessionId/start`; PUT `/class-sessions/:sessionId/attendance`; PUT `/class-sessions/:sessionId/attendance/bulk`; POST `/class-sessions/:sessionId/attendance/sync-roster`; POST `/class-sessions/:sessionId/finalize` |
 | S2 | GET/PUT `/class-sessions/:sessionId/teaching-notes` cho Mentor |
-| S3 | GET `/management/class-sessions/incomplete` |
-| S4 | GET `/class-sessions/:sessionId/context`; GET `/class-sessions/:sessionId/attendance` |
-| S5 | PUT attendance và attendance/bulk như S1, kèm reason bắt buộc đối với Manager |
-| S6 | POST `/management/class-sessions/:sessionId/attendance/recover` |
-| S7 | GET `/management/class-sessions/:sessionId/attendance-audits` |
+| S3 | GET `/management/class-sessions/incomplete`; Home dùng pageSize=1; lookup GET `/manager/classes` OPEN/IN_PROGRESS |
+| S4 | GET `/class-sessions/:sessionId/context`; GET `/class-sessions/:sessionId/attendance`; GET `/class-sessions/:sessionId/attendance-candidates` khi SCHEDULED |
+| S5 | PUT attendance và attendance/bulk như S1, reason bắt buộc; **POST `/class-sessions/:sessionId/finalize` cho Manager với reason/actualEndedAt/expectedVersion** (Q-P2-01, G-P2-07) |
+| S6 | POST `/management/class-sessions/:sessionId/attendance/recover`; đọc context/attendance và roster GET `/manager/classes/:classId/students` theo nhu cầu |
+| S7 | GET `/management/class-sessions/:sessionId/attendance-audits`; attendance lookup tên theo design |
 
 | Task | Công việc | Phụ thuộc / điều kiện hoàn thành |
 | --- | --- | --- |
-| API-00 | Nhập legacy nguyên bản, contract 7 slice: request/response/error, permission, pagination, header/key/version và limit | Duyệt UI; đối chiếu source/OpenAPI/runtime khi có; chênh lệch ghi rõ |
+| API-00 | Nhập legacy nguyên bản, contract 7 slice: request/response/error, permission, pagination, header/key/version và limit; đối chiếu G-P2-01–12 (Origin note, UUID v4, lookup, finalize giờ thật) | Duyệt UI; đối chiếu source/OpenAPI/runtime khi có; chênh lệch ghi rõ |
 | API-01 | Schema/service/query/mutation tests fail → pass; query key và account isolation | API-00; không fallback mock khi server lỗi |
 | API-02 | Tích hợp S1; serialize mutation, retry cùng intent, conflict, refresh snapshot/totals/context | API-01; kiểm regular/guest và toàn snapshot nhiều trang |
 | API-03 | Tích hợp S2; version note độc lập và retry/conflict riêng | API-01; kiểm null note/version 0 và giới hạn ký tự |
@@ -142,7 +145,7 @@ Sau duyệt tổng: tách kế hoạch slice → giải quyết đầu vào → 
 | E2E-01 | Runner duy nhất, API/dataset mới → Maestro phase 2 và hồi quy liên quan | VERIFY-01; mọi bước bắt buộc pass, không dùng dataset cũ nếu setup lỗi |
 | ACCEPT-01 | Trình bằng chứng, giới hạn và toàn luồng hai role cho người dùng nghiệm thu | E2E-01; chỉ chuyển Done sau nghiệm thu |
 
-Sau mutation cập nhật/invalidate đúng dữ liệu buổi, totals, note, queue/audit và context P1 bị ảnh hưởng; không refetch mọi lớp/ngày/tab. Không auto-refetch ghi đè draft đang sửa. Các hành động chốt/mutation phụ thuộc phải chờ intent trước được xác định kết quả.
+Sau mutation cập nhật/invalidate theo design chung mục 10.1: note chỉ invalidate note; attendance/context theo buổi; chốt/correction/recovery thêm backlog/tổng Home/audit/danh sách buổi lớp; không refetch mọi lớp/ngày/tab. Không auto-refetch ghi đè draft đang sửa. Các hành động chốt/mutation phụ thuộc phải chờ intent trước được xác định kết quả.
 
 ## 9. Ma trận kiểm chứng bắt buộc
 
@@ -163,8 +166,8 @@ UI test dùng mock rõ ràng; API tests kiểm schema/HTTP/header và lỗi th�
 
 Khi triển khai chạy `npm run lint`, `npm run lint:type-check`, `npm test -- --runInBand` theo cấu hình thực tế; lint hiện đã gồm typecheck nên có thể ghi bằng chứng gộp thay chạy trùng. Chạy kiểm tra trên bản source cuối, ghi test count thật, môi trường và failed/skipped/blocked; không tái sử dụng kết quả P1.
 
-E2E công khai duy nhất dự kiến: **`npm run test:e2e:phase-2`** theo [ADR-026](../../adr/ADR-026-single-e2e-command-per-phase.md). Chưa có command này. Khi tạo, runner tự kiểm cấu hình/backend/tài khoản, tạo và xác minh dataset mới phù hợp các nhánh trước khi chạy Maestro toàn phase và hồi quy P0/P1 liên quan theo [quy ước E2E](../e2e-maestro.md). Không thêm command công khai `:ui`/`:api` riêng hoặc yêu cầu ghép bước thủ công. Credentials ở cấu hình local, không vào Git/log; dataset không chứa secret.
+E2E công khai duy nhất dự kiến: **`npm run test:e2e:phase-2`** theo [ADR-026](../../adr/ADR-026-single-e2e-command-per-phase.md). Command đã có theo [hồ sơ E2E](e2e.md). Runner tự kiểm cấu hình/backend/tài khoản, tạo và xác minh dataset mới phù hợp các nhánh trước khi chạy Maestro toàn phase và hồi quy P0/P1 liên quan theo [quy ước E2E](../e2e-maestro.md). Không thêm command công khai `:ui`/`:api` riêng hoặc yêu cầu ghép bước thủ công. Credentials ở cấu hình local, không vào Git/log; dataset không chứa secret.
 
 Dataset cần session preview/start, IN_PROGRESS, COMPLETED còn hạn/quá hạn, regular/guest, snapshot nhiều trang, incomplete backlog và trường hợp correction/recovery có bằng chứng hợp lệ. Kịch bản mutation dùng dữ liệu thử được phép; recovery không tạo lịch sử giả chỉ để test pass. Thiếu dữ liệu bắt buộc phải báo blocked và dừng flow phụ thuộc, không âm thầm skip. Lỗi setup/API/flow/interruption trả exit code khác 0; chỉ trả 0 khi mọi bước bắt buộc thành công.
 
-Trước nghiệm thu cần contract đủ 7 slice; mapping design → UI/API/native tests; hồ sơ API/E2E có command, môi trường, dataset, ảnh native đã xem và kết quả; cleanup đạt chuẩn; câu hỏi ảnh hưởng đã giải quyết. Ghi nhật ký tại progress P2, duy trì mẫu số 7 và trạng thái riêng UI/API. Bàn giao hiện tại gồm kế hoạch tổng và README; chờ duyệt tổng trước bước tách slice theo ADR-017.
+Trước nghiệm thu cần contract đủ 7 slice; mapping design → UI/API/native tests; hồ sơ API/E2E có command, môi trường, dataset, ảnh native đã xem và kết quả; cleanup đạt chuẩn; câu hỏi ảnh hưởng đã giải quyết. Ghi nhật ký tại progress P2, duy trì mẫu số 7 và trạng thái riêng UI/API. Bàn giao hiện tại gồm kế hoạch tổng, README và 7 kế hoạch slice có mapping tới test case design thật. Đã nhận chỉ thị implement và có mã UI mock 7 slice; UI đã được người dùng duyệt ngày 02/11/2026 theo ADR-009; đã có contract/API TDD 7/7; kết quả native/E2E và giới hạn tại [hồ sơ tích hợp](api-integration.md), chưa nghiệm thu.

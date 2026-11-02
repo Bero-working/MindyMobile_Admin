@@ -1,0 +1,19 @@
+appId: com.mindymobile_admin
+---
+- tapOn:
+    id: manager-detail-tab-schedule
+- scrollUntilVisible:
+    element:
+      id: manager-detail-session-${P5_SESSION_ID}
+    direction: DOWN
+    timeout: 30000
+- tapOn:
+    id: manager-detail-session-${P5_SESSION_ID}
+- extendedWaitUntil:
+    visible:
+      id: session-title
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: session-ops-group
+    direction: DOWN

@@ -1,10 +1,16 @@
 # Mindy Mobile — tài liệu dự án
 
-Ngày khởi tạo: **30/10/2026** (Asia/Bangkok). Trạng thái hiện hành 31/10/2026: **phase 0 đã triển khai UI/API 4/4; người dùng xác nhận duyệt phase 0 và yêu cầu kiểm tra, dọn dẹp**. Kết quả và giới hạn kiểm chứng tại [tiến độ P0](progress/phase/phase-000-foundation-auth.md); các phase còn lại theo kế hoạch.
+**P5 hiện hành — 02/11/2026:** Đã triển khai UI/API 5/5, bỏ cổng UI accept riêng theo ADR-027 và E2E theo ADR-030; chưa nghiệm thu. [Kiểm chứng/giới hạn](implement/phase-005-manager-operations-cash/api-integration.md). Các ghi nhận P5 chờ design/code bên dưới là lịch sử.
+
+Ngày khởi tạo: **30/10/2026** (Asia/Bangkok). Trạng thái hiện hành 31/10/2026: **phase 0 đã triển khai UI/API 4/4; người dùng xác nhận duyệt phase 0 và yêu cầu kiểm tra, dọn dẹp**. Kết quả và giới hạn kiểm chứng tại [tiến độ P0](progress/phase/phase-000-foundation-auth.md); **Phase 1 đã được người dùng nghiệm thu ngày 01/11/2026, UI/API 7/7, phase Done**; xem [rà soát P1](implement/phase-001-teaching-workspace/review-cleanup.md). P2–P8 theo kế hoạch.
 
 ## Mục lục
 
-**01/11/2026:** Đã lập [kế hoạch tổng phase 2](implement/phase-002-attendance-and-notes/phase-002-attendance-and-notes.md), chờ duyệt trước khi tách slice; chưa triển khai, UI/API 0/7.
+**P5 — 02/11/2026:** Người dùng đã yêu cầu triển khai và chốt phạm vi; đã có [5 checklist slice](implement/phase-005-manager-operations-cash/README.md#kế-hoạch-theo-slice). Chờ [design/test case Claude](implement/phase-005-manager-operations-cash/design-handoff.md) trước code theo ADR-009; UI/API 0/5. Các ghi nhận kế hoạch P5 chờ duyệt trước đó là lịch sử.
+
+**02/11/2026 — P4:** Đã lập [kế hoạch tổng nghỉ và lịch bù](implement/phase-004-leave-and-makeup/phase-004-leave-and-makeup.md), chờ duyệt; chưa tách slice hoặc triển khai code. Q-LEAVE-01/Q-MAKEUP-01 còn mở, UI/API 0/7.
+
+**01/11/2026:** Đã lập [kế hoạch tổng phase 2](implement/phase-002-attendance-and-notes/phase-002-attendance-and-notes.md), đã có design Claude và tách đủ [7 kế hoạch slice](implement/phase-002-attendance-and-notes/README.md#kế-hoạch-theo-slice) theo chỉ thị người dùng; sau yêu cầu implement đã có [UI mock 7/7 để review](implement/phase-002-attendance-and-notes/ui-review.md). UI được người dùng duyệt 7/7 ngày 02/11/2026 theo chỉ thị “Duyệt UI phase 2”; đã nối API 7/7 theo yêu cầu “Tích hợp api đi”, xem [hồ sơ P2](implement/phase-002-attendance-and-notes/api-integration.md).
 
 | Tài liệu                                                  | Nội dung                                                        |
 | --------------------------------------------------------- | --------------------------------------------------------------- |
