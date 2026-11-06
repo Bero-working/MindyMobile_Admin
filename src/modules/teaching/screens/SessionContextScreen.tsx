@@ -3,6 +3,9 @@ import { useAttendance } from '@/modules/attendance';
 import { MentorAttendanceEntry } from '@/modules/attendance/components/EntryPoints';
 import { ManagerAttendancePanel } from '@/modules/attendance/components/ManagerAttendancePanel';
 import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import '@/modules/whiteboard/messages';
 import { Linking, Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -190,6 +193,9 @@ function MentorContext({
   tab: MentorTab;
 }) {
   const { t, i18n } = useTranslation('teaching');
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AuthStackParams>>();
+  const { t: whiteboard } = useTranslation('whiteboard');
   const { notify } = useAuth();
   const attendance = useAttendance();
   const query = useTeachingQuery({
@@ -345,6 +351,21 @@ function MentorContext({
                 </View>
               )}
             </Card>
+            {active && (
+              <Button
+                testID="session-open-whiteboard"
+                variant="secondary"
+                icon="edit_note"
+                onPress={() =>
+                  navigation.navigate('SessionWhiteboard', {
+                    sessionId,
+                    ...(classInfo ? { classTitle: classInfo.name } : {}),
+                  })
+                }
+              >
+                {whiteboard('open')}
+              </Button>
+            )}
             <Group>{t('sessionInfo')}</Group>
             <Card className="mx-space-0 p-space-6 gap-space-0">
               <InfoRow

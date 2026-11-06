@@ -72,11 +72,13 @@ export function StudentAttendanceFormScreen({
   const enrollments =
     classes.data?.managementStudents.find((item) => item.id === student.id)
       ?.enrollments ?? student.enrollments;
-  const enrollment = enrollments.find((item) => item.classId === classId);
-  const row = roster.data?.rows.find(
-    (item) =>
-      item.enrollmentId === enrollment?.enrollmentId &&
-      (item.makeupPlacementId ?? undefined) === enrollment?.makeupPlacementId
+  const row = roster.data?.rows.find((item) =>
+    enrollments.some(
+      (enrollment) =>
+        enrollment.classId === classId &&
+        item.enrollmentId === enrollment.enrollmentId &&
+        (item.makeupPlacementId ?? undefined) === enrollment.makeupPlacementId
+    )
   );
   const session = roster.data?.session;
   const locked = mutation.busy || mutation.uncertain;
@@ -88,8 +90,16 @@ export function StudentAttendanceFormScreen({
   const editable = !!row && !!session?.permissions.canEditAttendance && !denied;
   const changed = !!mark && mark !== row?.status;
   const dirty = changed || !!reason;
-  const classOptions = (classes.data?.classes ?? []).filter((item) =>
-    enrollments.some((entry) => entry.classId === item.id)
+  // The API pages enrollment history: several records can refer to one class.
+  // Keep every enrollment for roster matching, but show each class only once.
+  const classOptions = Array.from(
+    new Map(
+      (classes.data?.classes ?? [])
+        .filter((item) =>
+          enrollments.some((entry) => entry.classId === item.id)
+        )
+        .map((item) => [item.id, item])
+    ).values()
   );
   const sessionOptions = sessions.data?.sessions ?? [];
   const sessionLabel = (item: (typeof sessionOptions)[number]) =>
@@ -210,7 +220,13 @@ export function StudentAttendanceFormScreen({
           >
             <More
               query={classes}
-              count={classes.data?.classes.length ?? 0}
+              count={
+                classes.data?.managementStudents.find(
+                  (item) => item.id === student.id
+                )?.enrollments.length ??
+                classes.data?.classes.length ??
+                0
+              }
               prefix="student-attendance-classes"
             />
             {classOptions.length === 0 && (

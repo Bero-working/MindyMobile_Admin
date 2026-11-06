@@ -7,7 +7,6 @@ import {
   Alert,
   Avatar,
   Button,
-  Card,
   Chip,
   Icon,
   Sheet,
@@ -63,7 +62,7 @@ export function ReportTabs<T extends string>({
   return (
     <View
       accessibilityRole="radiogroup"
-      className="flex-row gap-space-8 pb-space-28"
+      className="flex-row gap-space-8"
     >
       {tabs.map(([tab, label]) => (
         <Pressable
@@ -74,8 +73,8 @@ export function ReportTabs<T extends string>({
           onPress={() => onChange(tab)}
           className={
             tab === value
-              ? 'min-h-space-44 rounded-radius-99 px-space-16 justify-center bg-mdy-surface'
-              : 'min-h-space-44 rounded-radius-99 px-space-16 justify-center bg-mdy-headerGlass'
+              ? 'min-h-space-44 flex-1 items-center rounded-radius-12 px-space-16 justify-center bg-mdy-surface'
+              : 'min-h-space-44 flex-1 items-center rounded-radius-12 px-space-16 justify-center bg-mdy-headerGlass'
           }
         >
           <Text
@@ -233,17 +232,27 @@ export function AttendanceSummaryRow({
   const name = item.student.displayName ?? t('noName');
   const id = `${prefix}-row-${item.enrollmentId}`;
   const body = (
-    <Card className="mx-space-0 gap-space-10 p-space-14">
+    <View className="gap-space-12 rounded-radius-16 border border-mdy-border bg-mdy-surface p-space-16">
       <View className="flex-row items-center gap-space-12">
         <Avatar
           name={name}
           size={36}
         />
-        <Text className="flex-1 text-size-15 font-bvp-semibold">{name}</Text>
-        <RateText
-          rate={item.rate}
-          testID={`${id}-rate`}
-        />
+        <Text
+          numberOfLines={2}
+          className="flex-1 text-size-15 font-bvp-semibold"
+        >
+          {name}
+        </Text>
+        <View className="items-end gap-space-2">
+          <RateText
+            rate={item.rate}
+            testID={`${id}-rate`}
+          />
+          <Text className="text-size-11 text-mdy-secondary">
+            {t('mentor.tabAttendance')}
+          </Text>
+        </View>
         {onPress && (
           <Icon
             name="chevron_right"
@@ -251,11 +260,21 @@ export function AttendanceSummaryRow({
           />
         )}
       </View>
-      <CountLines
-        counts={item}
-        prefix={id}
-      />
-    </Card>
+      <View className="gap-space-8 border-t border-mdy-border pt-space-12">
+        {item.rate !== null && (
+          <View className="h-space-4 overflow-hidden rounded-radius-99 bg-mdy-muted2">
+            <View
+              className="h-space-4 rounded-radius-99 bg-mdy-primary"
+              style={{ width: `${item.rate}%` }}
+            />
+          </View>
+        )}
+        <CountLines
+          counts={item}
+          prefix={id}
+        />
+      </View>
+    </View>
   );
   return onPress ? (
     <Pressable

@@ -12,6 +12,7 @@ import { ChatProvider } from '@/modules/chat/ChatProvider';
 import {
   ChatConversationScreen,
   ChatConversationsScreen,
+  ChatNewMessageScreen,
   ChatNotificationsScreen,
 } from '@/modules/chat/ChatScreens';
 import { ChatBubble } from '@/modules/chat/EntryPoints';
@@ -262,6 +263,78 @@ test('previews name the sender; only direct chats join the people strip', async 
     title: 'An',
   });
 });
+test('empty direct chats stay in the people strip while empty groups stay in the inbox', async () => {
+  mount(
+    fake({
+      conversations: jest.fn().mockResolvedValue({
+        items: [
+          conversation(),
+          conversation({
+            id: 'group',
+            type: 'GROUP',
+            name: 'Lớp A',
+            peer: null,
+          }),
+        ],
+        hasMore: false,
+        next: null,
+      }),
+    }),
+    <ChatConversationsScreen
+      {...({ route: {}, navigation } as object as ComponentProps<
+        typeof ChatConversationsScreen
+      >)}
+    />,
+    fakeSocket().factory
+  );
+  expect(await screen.findByTestId('chat-list-person-c1')).toBeTruthy();
+  expect(screen.queryByTestId('chat-list-row-c1')).toBeNull();
+  expect(screen.getByTestId('chat-list-row-group')).toBeTruthy();
+  fireEvent.press(screen.getByTestId('chat-list-create'));
+  expect(mockNavigate).toHaveBeenCalledWith('ChatNewMessage');
+});
+
+test('new messages require selecting a matching recipient and search later pages', async () => {
+  const conversations = jest
+    .fn()
+    .mockResolvedValueOnce({
+      items: [conversation()],
+      hasMore: true,
+      next: 'next',
+    })
+    .mockResolvedValue({
+      items: [
+        conversation({ id: 'c2', peer: { id: 'peer2', displayName: 'Hải' } }),
+      ],
+      hasMore: false,
+      next: null,
+    });
+  const send = jest.fn();
+  mount(
+    fake({ conversations, send }),
+    <ChatNewMessageScreen
+      {...({ route: {}, navigation } as object as ComponentProps<
+        typeof ChatNewMessageScreen
+      >)}
+    />,
+    fakeSocket().factory
+  );
+  const input = screen.getByTestId('chat-new-recipient-input');
+  expect(screen.queryByTestId('chat-composer-input')).toBeNull();
+  fireEvent.changeText(input, 'hai');
+  expect(await screen.findByTestId('chat-new-person-c2')).toBeTruthy();
+  expect(conversations).toHaveBeenCalledWith('DIRECT', 'next');
+  expect(screen.queryByTestId('chat-new-person-c1')).toBeNull();
+  expect(mockNavigate).not.toHaveBeenCalled();
+  expect(send).not.toHaveBeenCalled();
+  fireEvent.press(screen.getByTestId('chat-new-person-c2'));
+  expect(mockNavigate).toHaveBeenCalledWith('ChatConversation', {
+    conversationId: 'c2',
+    title: 'Hải',
+    compose: true,
+  });
+});
+
 test('runs group one sender; breaks come from sender, time and unread', () => {
   const at = (minute: number) =>
     `2026-11-02T07:${String(minute).padStart(2, '0')}:00.000Z`;

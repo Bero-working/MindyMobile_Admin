@@ -1,6 +1,10 @@
 import i18n from '@/translations';
 
 const vi = {
+  'managerOverview.students': 'Học sinh',
+  'managerOverview.openClasses': 'Lớp đang mở',
+  'managerOverview.revenue': 'Doanh thu tháng',
+  'managerOverview.mockPeriod': 'Dữ liệu mẫu · Tháng {{month}}/{{year}}',
   settingsTitle: 'Cài đặt',
   settingsSubtitle: 'Ngôn ngữ và giao diện',
   profileTitle: 'Hồ sơ',
@@ -94,6 +98,10 @@ const vi = {
   workspaceManagerBody: 'Các việc cần theo dõi sẽ hiển thị tại đây.',
 };
 const en: Record<keyof typeof vi, string> = {
+  'managerOverview.students': 'Students',
+  'managerOverview.openClasses': 'Open classes',
+  'managerOverview.revenue': 'Monthly revenue',
+  'managerOverview.mockPeriod': 'Sample data · {{month}}/{{year}}',
   settingsTitle: 'Settings',
   settingsSubtitle: 'Language and appearance',
   profileTitle: 'Profile',

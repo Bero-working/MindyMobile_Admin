@@ -80,6 +80,7 @@ export function MentorAttendanceReportScreen({
     subtitle: classTitle,
     backLabel: t('back'),
     onBack: navigation.goBack,
+    contentContainerStyle: { paddingTop: 16 },
     headerExtra: (
       <ReportTabs
         prefix={prefix}
@@ -123,13 +124,16 @@ export function MentorAttendanceReportScreen({
               })
             }
           >
-            <Card className="mx-space-0 gap-space-8 p-space-14">
+            <View className="gap-space-12 rounded-radius-16 border border-mdy-border bg-mdy-surface p-space-16">
               <View className="flex-row items-center gap-space-12">
                 <Avatar
                   name={row.displayName}
                   size={36}
                 />
-                <Text className="flex-1 text-size-15 font-bvp-semibold">
+                <Text
+                  numberOfLines={2}
+                  className="flex-1 text-size-15 font-bvp-semibold"
+                >
                   {row.displayName}
                 </Text>
                 <Icon
@@ -154,7 +158,7 @@ export function MentorAttendanceReportScreen({
                   })}
                 </InvalidLine>
               )}
-            </Card>
+            </View>
           </Pressable>
         )}
         header={

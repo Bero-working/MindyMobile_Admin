@@ -242,6 +242,8 @@ export function ChatConversationsScreen({
       : content;
   };
   const people = list.items?.filter((row) => row.type === 'DIRECT') ?? [];
+  const conversations =
+    list.items?.filter((row) => row.type === 'GROUP' || row.lastMessage) ?? [];
   return (
     <View
       testID={`${prefix}-screen`}
@@ -261,10 +263,22 @@ export function ChatConversationsScreen({
         >
           {t('title')}
         </Text>
+        <Button
+          testID="chat-list-create"
+          variant="text"
+          size="sm"
+          accessibilityLabel={t('newMessage')}
+          onPress={() => navigation.navigate('ChatNewMessage')}
+        >
+          <Icon
+            name="edit_note"
+            color={colors.primary}
+          />
+        </Button>
       </FlatHeader>
       <FlatList
         className="flex-1"
-        data={list.items ?? []}
+        data={conversations}
         keyExtractor={(row) => row.id}
         keyboardShouldPersistTaps="handled"
         refreshControl={
@@ -369,7 +383,7 @@ export function ChatConversationsScreen({
                 })}
               </ScrollView>
             )}
-            {list.items?.length ? null : (
+            {conversations.length || people.length ? null : (
               <View className="gap-space-12 px-space-16 py-space-12">
                 <ListGate
                   prefix={prefix}
@@ -393,6 +407,127 @@ export function ChatConversationsScreen({
           </View>
         }
       />
+    </View>
+  );
+}
+/** Recipient selection is explicit; typing a name never enables sending. */
+export function ChatNewMessageScreen({
+  navigation,
+}: NativeStackScreenProps<AuthStackParams, 'ChatNewMessage'>) {
+  const { t } = useTranslation('chat');
+  const { state } = useAuth();
+  const { colors, variables } = useMindyTheme();
+  const [query, setQuery] = useState('');
+  const list = useConversations('DIRECT');
+  const normalize = (value: string) =>
+    value
+      .trim()
+      .toLocaleLowerCase()
+      .normalize('NFD')
+      .replace(/\p{M}/gu, '')
+      .replace(/đ/g, 'd');
+  const search = normalize(query);
+  const people = (list.items ?? []).filter(
+    (row) =>
+      row.peer &&
+      row.peer.id !== state.user?.id &&
+      normalize(row.peer.displayName).includes(search)
+  );
+  // Search across every page, including contacts whose DM has no messages.
+  useEffect(() => {
+    if (search && list.hasMore && !list.loadingMore && !list.footerError)
+      list.more();
+  }, [search, list]);
+  return (
+    <View
+      testID="chat-new-screen"
+      className="flex-1 bg-mdy-bg"
+      style={variables}
+    >
+      <FlatHeader
+        prefix="chat-new"
+        backLabel={t('back')}
+        backColor={colors.primary}
+        navigation={navigation}
+      >
+        <Text
+          accessibilityRole="header"
+          className="flex-1 text-size-17 font-bvp-semibold"
+        >
+          {t('newMessage')}
+        </Text>
+      </FlatHeader>
+      <View className="flex-row items-center gap-space-8 px-space-16 py-space-8">
+        <Text className="text-size-15 font-bvp-medium">{t('to')}</Text>
+        <TextInput
+          testID="chat-new-recipient-input"
+          autoFocus
+          autoCapitalize="none"
+          autoCorrect={false}
+          value={query}
+          onChangeText={setQuery}
+          placeholder={t('recipientPlaceholder')}
+          accessibilityLabel={t('recipientPlaceholder')}
+          placeholderTextColor={colors.tertiary}
+          className="min-h-space-44 flex-1 text-size-15 text-mdy-ink"
+        />
+      </View>
+      <FlatList
+        className="flex-1"
+        data={search ? people : []}
+        keyExtractor={(row) => row.id}
+        keyboardShouldPersistTaps="handled"
+        renderItem={({ item: row }) => (
+          <Pressable
+            testID={`chat-new-person-${row.id}`}
+            accessibilityRole="button"
+            accessibilityLabel={row.peer?.displayName}
+            className="flex-row items-center gap-space-12 px-space-16 py-space-8 active:opacity-80"
+            onPress={() =>
+              navigation.navigate('ChatConversation', {
+                conversationId: row.id,
+                title: conversationTitle(row, t('unnamed')),
+                compose: true,
+              })
+            }
+          >
+            <Avatar
+              name={conversationTitle(row, t('unnamed'))}
+              size={40}
+            />
+            <Text className="flex-1 text-size-15 font-bvp-medium">
+              {conversationTitle(row, t('unnamed'))}
+            </Text>
+          </Pressable>
+        )}
+        ListEmptyComponent={
+          <View className="p-space-16">
+            <ListGate
+              prefix="chat-new"
+              read={list}
+            >
+              <Text className="text-size-14 text-mdy-secondary">
+                {t(
+                  search
+                    ? list.hasMore
+                      ? 'loading'
+                      : 'noRecipients'
+                    : 'chooseRecipient'
+                )}
+              </Text>
+            </ListGate>
+          </View>
+        }
+        ListFooterComponent={
+          <View className="px-space-16">
+            <ListEnd
+              prefix="chat-new"
+              list={list}
+            />
+          </View>
+        }
+      />
+      <KeyboardSpacer />
     </View>
   );
 }
@@ -713,6 +848,9 @@ export function ChatConversationScreen({
         backColor={colors.primary}
         navigation={navigation}
       >
+        {route.params.compose && (
+          <Text className="text-size-15 font-bvp-medium">{t('to')}</Text>
+        )}
         <Avatar
           name={title}
           size={40}

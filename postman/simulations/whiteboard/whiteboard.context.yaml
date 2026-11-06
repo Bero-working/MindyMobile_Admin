@@ -1,0 +1,11 @@
+source: Mindy-BE origin/dev 0d87a0f
+scope: Mobile REST serialization, authentication headers, idempotency and version conflicts.
+owner_search: Skipped; Postman CLI reports no signed-in account. Reused backend collection and source locally.
+assumptions:
+  - Test session is in progress and test actor is its assigned mentor.
+  - Snapshot projection is empty in this fixture.
+  - Cookie access_token=test represents an authenticated test session only.
+unverified:
+  - Actual backend deployment, WHITEBOARD_ENABLED, PostgreSQL and MinIO.
+  - Native cookie handshake through the production WSS proxy.
+  - REST fixture does not implement Yjs or Socket.IO; those are tested with the actual Yjs library separately.

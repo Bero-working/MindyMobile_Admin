@@ -3,6 +3,10 @@ module.exports = {
   roots: ['<rootDir>/src', '<rootDir>/__tests__', '<rootDir>/__mocks__'],
   watchman: false,
   moduleNameMapper: {
+    '^lib0/webcrypto$': require('node:path').join(
+      require('node:path').dirname(require.resolve('lib0/package.json')),
+      'dist/webcrypto.cjs'
+    ),
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@components/(.*)$': '<rootDir>/src/components/$1',
     '^@modules/(.*)$': '<rootDir>/src/modules/$1',

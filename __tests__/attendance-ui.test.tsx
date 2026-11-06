@@ -285,6 +285,62 @@ test('Student attendance form selects class and session inline and requires a re
   expect(after.data.audits[0]?.reason).toBe('Verified with mentor');
 });
 
+test('Student correction groups repeated class history and matches the roster enrollment', async () => {
+  const source = createAttendanceMock();
+  open('MANAGER', {
+    ...source,
+    read: async (request) => {
+      const result = await source.read(request);
+      if (request.kind !== 'classes' || result.kind !== 'success')
+        return result;
+      const students = await source.read({
+        kind: 'managementStudents',
+        role: 'MANAGER',
+      });
+      if (students.kind !== 'success') return result;
+      const student = students.data.managementStudents.find(
+        (item) => item.id === request.studentId
+      )!;
+      return {
+        ...result,
+        data: {
+          ...result.data,
+          classes: [...result.data.classes, ...result.data.classes],
+          managementStudents: [
+            {
+              ...student,
+              enrollments: [
+                { classId: 'primary', enrollmentId: 'old-registration' },
+                ...student.enrollments,
+              ],
+            },
+          ],
+          total: student.enrollments.length + 1,
+        },
+      };
+    },
+  });
+  fireEvent.press(
+    await screen.findByTestId('workspace-open-attendance-management')
+  );
+  fireEvent.press(
+    await screen.findByTestId('attendance-students-row-student-2')
+  );
+  fireEvent.press(await screen.findByTestId('student-attendance-class'));
+  expect(
+    await screen.findAllByTestId('student-attendance-class-option-primary')
+  ).toHaveLength(1);
+  fireEvent.press(
+    screen.getByTestId('student-attendance-class-option-primary')
+  );
+  fireEvent.press(await screen.findByTestId('student-attendance-session'));
+  fireEvent.press(
+    await screen.findByTestId('student-attendance-session-option-today-primary')
+  );
+  await screen.findByTestId('student-attendance-current');
+  expect(screen.getByTestId('student-attendance-present')).not.toBeDisabled();
+});
+
 test('Selecting a class keeps the form fields mounted while sessions load', async () => {
   const source = createAttendanceMock();
   let finishLoading!: () => void;

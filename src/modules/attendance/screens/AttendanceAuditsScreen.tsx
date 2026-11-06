@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { View } from 'react-native';
+import { useState, type PropsWithChildren } from 'react';
+import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { AuthStackParams } from '@/modules/auth/AuthApp';
-import { Button, Card, Chip, Text } from '@/components/ui/primitives';
+import { Button, Card, Chip, Icon, Text } from '@/components/ui/primitives';
 import { useAttendanceQuery } from '../hooks';
 import { useUtilityTabs } from '../components/useUtilityTabs';
 import { isoDate, isoTime } from '../model';
@@ -208,7 +208,7 @@ function AuditRow({ item, name }: { item: Audit; name: string }) {
   return (
     <View
       testID={`audit-row-${item.id}`}
-      className="p-space-12 gap-space-6 border-b border-mdy-divider"
+      className="p-space-16 gap-space-12 border-b border-mdy-divider"
     >
       <View className="flex-row flex-wrap justify-between gap-space-8">
         <Chip
@@ -249,55 +249,172 @@ function AuditRow({ item, name }: { item: Audit; name: string }) {
         {t('audit.by', { name: item.actor ?? t('nameMissing') })}
       </Text>
       {item.reason && (
-        <Text testID={`audit-row-reason-${item.id}`}>
-          {t('audit.reason', { reason: item.reason })}
-        </Text>
+        <EvidenceField label={t('audit.reasonLabel')}>
+          <ExpandableText
+            testID={`audit-row-reason-${item.id}`}
+            text={item.reason}
+          />
+        </EvidenceField>
       )}
       {details && (
         <>
-          <Button
+          <Pressable
             testID={`audit-evidence-toggle-${item.id}`}
-            variant="text"
+            accessibilityRole="button"
+            accessibilityState={{ expanded: evidence }}
             onPress={() => setEvidence(!evidence)}
+            className="flex-row items-center justify-between min-h-space-44 border-t border-mdy-divider pt-space-8"
           >
-            {t(evidence ? 'audit.evidenceClose' : 'audit.evidenceOpen')}
-          </Button>
+            <View className="flex-row items-center gap-space-8">
+              <Icon
+                name="description"
+                size={18}
+              />
+              <Text className="text-size-13 font-bvp-semibold text-mdy-link">
+                {t(evidence ? 'audit.evidenceClose' : 'audit.evidenceOpen')}
+              </Text>
+            </View>
+            <View
+              style={{ transform: [{ rotate: evidence ? '180deg' : '0deg' }] }}
+            >
+              <Icon
+                name="expand_more"
+                size={20}
+              />
+            </View>
+          </Pressable>
           {evidence && (
             <View
               testID={`audit-evidence-${item.id}`}
-              className="gap-space-8"
+              className="gap-space-16 rounded-radius-14 bg-mdy-muted2 p-space-14"
             >
-              <Text>
-                {t('audit.evidenceNote')}: {details.evidenceNote}
-              </Text>
-              <Text>
-                {t('audit.basis')}: {t(`basis.${details.admissionBasis}`)}
-              </Text>
-              <Text>
-                {t('audit.paidAt')}: {instant(details.paidAt)}
-              </Text>
-              <Text>
-                {t('audit.sessionStatus')}:{' '}
-                {statusName(details.oldSessionStatus)} →{' '}
-                {statusName(details.newSessionStatus)}
-              </Text>
-              <Text>
-                {t('audit.actualStart')}:{' '}
-                {details.oldActualStartedAt
-                  ? `${instant(details.oldActualStartedAt)} → `
-                  : ''}
-                {instant(details.newActualStartedAt)}
-              </Text>
-              <Text>
-                {t('audit.actualEnd')}:{' '}
-                {details.oldActualEndedAt
-                  ? `${instant(details.oldActualEndedAt)} → `
-                  : ''}
-                {instant(details.newActualEndedAt)}
-              </Text>
+              <EvidenceField label={t('audit.evidenceNote')}>
+                <ExpandableText
+                  testID={`audit-evidence-note-${item.id}`}
+                  text={details.evidenceNote}
+                />
+              </EvidenceField>
+              <View className="border-t border-mdy-divider pt-space-12 gap-space-12">
+                <EvidenceField label={t('audit.basis')}>
+                  <Text className="text-size-13 font-bvp-medium">
+                    {t(`basis.${details.admissionBasis}`)}
+                  </Text>
+                </EvidenceField>
+                <EvidenceField label={t('audit.paymentLabel')}>
+                  <AuditTimestamp value={details.paidAt} />
+                </EvidenceField>
+              </View>
+              <View className="border-t border-mdy-divider pt-space-12 gap-space-12">
+                <EvidenceField label={t('audit.sessionStatus')}>
+                  <View className="flex-row flex-wrap items-center gap-space-6">
+                    <Chip variant="neutral">
+                      {statusName(details.oldSessionStatus)}
+                    </Chip>
+                    <Text className="text-size-13 text-mdy-secondary">→</Text>
+                    <Chip variant="info">
+                      {statusName(details.newSessionStatus)}
+                    </Chip>
+                  </View>
+                </EvidenceField>
+                <View className="flex-row gap-space-12">
+                  <View className="flex-1 min-w-0">
+                    <EvidenceField label={t('audit.startLabel')}>
+                      <AuditTimestamp
+                        value={details.newActualStartedAt}
+                        previous={details.oldActualStartedAt}
+                      />
+                    </EvidenceField>
+                  </View>
+                  <View className="flex-1 min-w-0 border-l border-mdy-divider pl-space-12">
+                    <EvidenceField label={t('audit.endLabel')}>
+                      <AuditTimestamp
+                        value={details.newActualEndedAt}
+                        previous={details.oldActualEndedAt}
+                      />
+                    </EvidenceField>
+                  </View>
+                </View>
+              </View>
             </View>
           )}
         </>
+      )}
+    </View>
+  );
+}
+
+function EvidenceField({
+  label,
+  children,
+}: PropsWithChildren<{ label: string }>) {
+  return (
+    <View className="gap-space-6">
+      <Text className="text-size-11 font-bvp-medium text-mdy-secondary">
+        {label}
+      </Text>
+      {children}
+    </View>
+  );
+}
+
+function ExpandableText({ text, testID }: { text: string; testID: string }) {
+  const { t } = useTranslation('attendance');
+  const [expanded, setExpanded] = useState(false);
+  const [truncated, setTruncated] = useState(false);
+  return (
+    <View className="gap-space-4">
+      <Text
+        testID={testID}
+        numberOfLines={expanded ? undefined : 3}
+        onTextLayout={(event) => {
+          if (!expanded) setTruncated(event.nativeEvent.lines.length > 3);
+        }}
+        className="text-size-13"
+      >
+        {text}
+      </Text>
+      {(truncated || expanded) && (
+        <Pressable
+          testID={`${testID}-expand`}
+          accessibilityRole="button"
+          accessibilityState={{ expanded }}
+          onPress={() => setExpanded(!expanded)}
+          className="self-start min-h-space-44 justify-center"
+        >
+          <Text className="text-size-12 font-bvp-semibold text-mdy-link">
+            {t(expanded ? 'audit.showLess' : 'audit.showMore')}
+          </Text>
+        </Pressable>
+      )}
+    </View>
+  );
+}
+
+function AuditTimestamp({
+  value,
+  previous,
+}: {
+  value: string | null;
+  previous?: string | null;
+}) {
+  const { t } = useTranslation('attendance');
+  return (
+    <View className="gap-space-4">
+      <Text className="text-size-15 font-bvp-semibold">
+        {value ? isoTime(value) : '—'}
+      </Text>
+      {!!value && (
+        <Text className="text-size-11 text-mdy-secondary">
+          {isoDate(value)}
+        </Text>
+      )}
+      {!!previous && previous !== value && (
+        <Text className="text-size-11 text-mdy-tertiary">
+          {t('audit.previousTime', {
+            time: isoTime(previous),
+            date: isoDate(previous),
+          })}
+        </Text>
       )}
     </View>
   );

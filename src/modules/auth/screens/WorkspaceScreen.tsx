@@ -7,7 +7,7 @@ import '@/modules/quiz/messages';
 import '@/modules/reports/messages';
 import { ChatBubble } from '@/modules/chat/EntryPoints';
 import { useAttendance } from '@/modules/attendance';
-import { ManagerIncompleteSummary } from '@/modules/attendance/components/EntryPoints';
+import { ManagerOverviewCard } from '../components/ManagerOverviewCard';
 import { useCallback, useRef, useState } from 'react';
 import { RefreshContext } from '@/modules/teaching/TeachingProvider';
 import { cn } from '@/utils/cn';
@@ -143,8 +143,8 @@ export function WorkspaceScreen({
         </BrandHeader>
         <View className={cn(local.overlap)}>
           <RefreshContext.Provider value={registerRefresh}>
-            {!mentor && attendance.enabled ? (
-              <ManagerIncompleteSummary />
+            {!mentor ? (
+              <ManagerOverviewCard />
             ) : (
               <TodayCard
                 mentor={mentor}

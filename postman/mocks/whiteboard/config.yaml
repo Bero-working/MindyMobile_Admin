@@ -1,0 +1,11 @@
+version: 1
+id: d112ec26-37de-4530-8a7d-10b8e810dd7a
+name: whiteboard
+slug: whiteboard
+protocol: http
+port: 4317
+interceptRequests: true
+scenarios:
+  - name: default
+    path: ./default.js
+    default: true

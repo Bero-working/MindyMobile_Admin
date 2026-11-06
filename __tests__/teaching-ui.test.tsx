@@ -76,20 +76,31 @@ beforeEach(async () => {
   await i18n.changeLanguage('vi');
 });
 test('TC-P1-S2-04/09, S3-02/06, S4-15: substitute uses session roster only', async () => {
-  open();
-  fireEvent.press(
-    await screen.findByTestId('workspace-open-classes', {}, { timeout: 10000 })
-  );
-  fireEvent.press(await screen.findByTestId('classes-card-substitute'));
-  await screen.findByTestId('class-detail-scope-alert');
-  expect(screen.queryByTestId('class-detail-students-button')).toBeNull();
-  fireEvent.press(
-    await screen.findByTestId('class-detail-session-today-substitute')
-  );
-  fireEvent.press(await screen.findByTestId('session-tab-students'));
-  await screen.findByTestId('session-student-enrollment-1');
-  expect(screen.getByTestId('session-students-provisional')).toBeTruthy();
-  expect(screen.queryByText('Chờ thanh toán')).toBeNull();
+  const clock = jest
+    .spyOn(Date, 'now')
+    .mockReturnValue(Date.parse(`${vietnamDate()}T19:00:00+07:00`));
+  try {
+    open();
+    fireEvent.press(
+      await screen.findByTestId(
+        'workspace-open-classes',
+        {},
+        { timeout: 10000 }
+      )
+    );
+    fireEvent.press(await screen.findByTestId('classes-card-substitute'));
+    await screen.findByTestId('class-detail-scope-alert');
+    expect(screen.queryByTestId('class-detail-students-button')).toBeNull();
+    fireEvent.press(
+      await screen.findByTestId('class-detail-session-today-substitute')
+    );
+    fireEvent.press(await screen.findByTestId('session-tab-students'));
+    await screen.findByTestId('session-student-enrollment-1');
+    expect(screen.getByTestId('session-students-provisional')).toBeTruthy();
+    expect(screen.queryByText('Chờ thanh toán')).toBeNull();
+  } finally {
+    clock.mockRestore();
+  }
 });
 test('TC-P6-CTX-03: Mentor home tile opens the quiz class picker, then the class list', async () => {
   open();
@@ -377,6 +388,9 @@ test('Manager overview reads attendance permissions but defers roster pages unti
 });
 
 test('Mentor class detail: sessions split into upcoming and taught', async () => {
+  const clock = jest
+    .spyOn(Date, 'now')
+    .mockReturnValue(Date.parse(`${vietnamDate()}T19:00:00+07:00`));
   const original = teachingMock.createTeachingMock;
   const read = jest.fn();
   const factory = jest
@@ -414,7 +428,7 @@ test('Mentor class detail: sessions split into upcoming and taught', async () =>
       screen.queryByTestId('class-detail-session-past-primary')
     ).toBeNull();
     expect(screen.getByTestId('class-detail-sessions-done')).toHaveTextContent(
-      '2/5 buổi'
+      '5/5 buổi'
     );
     fireEvent.press(screen.getByTestId('class-detail-tab-done'));
     await screen.findByTestId('class-detail-session-past-primary');
@@ -428,8 +442,50 @@ test('Mentor class detail: sessions split into upcoming and taught', async () =>
     ).toBe(true);
   } finally {
     factory.mockRestore();
+    clock.mockRestore();
   }
 });
+test('Mentor detail derives labels and tabs when API sessions remain scheduled', async () => {
+  const original = teachingMock.createTeachingMock;
+  const factory = jest
+    .spyOn(teachingMock, 'createTeachingMock')
+    .mockImplementation((scenario) => {
+      const source = original(scenario);
+      return {
+        ...source,
+        read: async (request) => {
+          const result = await source.read(request);
+          if (request.kind === 'sessions' && result.kind === 'success') {
+            const now = Date.now();
+            result.data.sessions = result.data.sessions.map((item, index) => ({
+              ...item,
+              status: 'SCHEDULED',
+              actualStart: null,
+              actualEnd: null,
+              startsAt: new Date(now + (index - 1.5) * 3600000).toISOString(),
+              endsAt: new Date(now + (index - 0.5) * 3600000).toISOString(),
+            }));
+          }
+          return result;
+        },
+      };
+    });
+  try {
+    open();
+    fireEvent.press(await screen.findByTestId('workspace-open-classes'));
+    fireEvent.press(await screen.findByTestId('classes-card-primary'));
+    await screen.findByText('Đang diễn ra');
+    expect(screen.getAllByText('Sắp tới').length).toBeGreaterThan(0);
+    expect(screen.queryByText('Đã kết thúc')).toBeNull();
+    fireEvent.press(screen.getByTestId('class-detail-tab-done'));
+    await screen.findByText('Đã kết thúc');
+    expect(screen.queryByText('Đang diễn ra')).toBeNull();
+    expect(screen.queryByText('Sắp tới')).toBeNull();
+  } finally {
+    factory.mockRestore();
+  }
+});
+
 test('TC-P1-S6-08/14/21: English search and reset', async () => {
   await i18n.changeLanguage('en');
   open('MANAGER');

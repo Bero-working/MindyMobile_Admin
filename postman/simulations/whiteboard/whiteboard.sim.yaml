@@ -1,0 +1,8 @@
+simulation: whiteboard-mobile
+routing: path
+mocks:
+  - name: Mindy whiteboard REST
+    routeKey: mindy
+    origin:
+      - whiteboard.example.test
+    path: postman/mocks/whiteboard

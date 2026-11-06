@@ -22,6 +22,8 @@ import {
   type MaterialStackParams,
 } from '@/modules/materials/MaterialProvider';
 import { createMaterialService } from '@/modules/materials/service';
+import { WhiteboardProvider } from '@/modules/whiteboard/WhiteboardProvider';
+import { createWhiteboardService } from '@/modules/whiteboard/service';
 import { createQuizService } from '@/modules/quiz/service';
 import { QuizProvider, type QuizStackParams } from '@/modules/quiz';
 import {
@@ -66,6 +68,7 @@ export type AuthStackParams = TeachingStackParams &
     Workspace: undefined;
     Settings: undefined;
     Profile: undefined;
+    SessionWhiteboard: { sessionId: string; classTitle?: string };
   };
 const Stack = createNativeStackNavigator<AuthStackParams>();
 function AuthNavigation({
@@ -195,6 +198,27 @@ function AuthNavigation({
           (state.user?.role === 'MANAGER' || state.user?.role === 'MENTOR'),
       }),
     [leaveSource, service, identity, expireSession]
+  );
+  const whiteboardService = useMemo(
+    () =>
+      createWhiteboardService({
+        restore: async () => {
+          const result = await service.restore();
+          if (
+            result.kind === 'user' &&
+            (result.user.email !== state.user?.email ||
+              result.user.role !== 'MENTOR')
+          )
+            return { kind: 'signedOut', notice: 'sessionExpired' };
+          return result;
+        },
+        onExpired: expireSession,
+        isActive: () =>
+          mounted.current &&
+          currentIdentity.current === identity &&
+          state.user?.role === 'MENTOR',
+      }),
+    [service, expireSession, identity]
   );
   const materialService = useMemo(
     () =>
@@ -370,6 +394,21 @@ function AuthNavigation({
                                   ).WorkspaceScreen
                                 }
                               />
+                              {state.user?.role === 'MENTOR' && (
+                                <Stack.Screen name="SessionWhiteboard">
+                                  {(props) => {
+                                    const { WhiteboardScreen } =
+                                      require('../whiteboard/WhiteboardScreen') as typeof import('../whiteboard/WhiteboardScreen');
+                                    return (
+                                      <WhiteboardProvider
+                                        service={whiteboardService}
+                                      >
+                                        <WhiteboardScreen {...props} />
+                                      </WhiteboardProvider>
+                                    );
+                                  }}
+                                </Stack.Screen>
+                              )}
                               {state.user?.role === 'MENTOR' && (
                                 <Stack.Screen
                                   name="TeachingSchedule"
@@ -766,6 +805,14 @@ function AuthNavigation({
                                       (
                                         require('../chat/ChatScreens') as typeof import('../chat/ChatScreens')
                                       ).ChatConversationsScreen
+                                    }
+                                  />
+                                  <Stack.Screen
+                                    name="ChatNewMessage"
+                                    getComponent={() =>
+                                      (
+                                        require('../chat/ChatScreens') as typeof import('../chat/ChatScreens')
+                                      ).ChatNewMessageScreen
                                     }
                                   />
                                   <Stack.Screen

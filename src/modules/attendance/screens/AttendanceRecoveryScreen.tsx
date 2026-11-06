@@ -1,17 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  TextInput,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { AuthStackParams } from '@/modules/auth/AuthApp';
 import { useAuth } from '@/modules/auth/hooks/useAuth';
 import {
   Alert,
+  Avatar,
   Button,
   Card,
   Icon,
   Sheet,
   Text,
 } from '@/components/ui/primitives';
+import { useMindyTheme } from '@/components/ui/theme';
 import {
   useAttendanceMutation,
   useAttendanceQuery,
@@ -62,6 +70,8 @@ export function AttendanceRecoveryView({
 }) {
   const { t } = useTranslation('attendance'),
     { notify } = useAuth();
+  const { colors } = useMindyTheme();
+  const { height } = useWindowDimensions();
   const id = params.sessionId;
   const query = useAttendanceQuery({
     kind: 'context',
@@ -174,6 +184,12 @@ export function AttendanceRecoveryView({
     });
   }, [started]);
   const entries = Object.values(selected);
+  const visibleStudents =
+    students.data?.students.filter((student) =>
+      (student.name ?? t('nameMissing'))
+        .toLocaleLowerCase()
+        .includes(search.trim().toLocaleLowerCase())
+    ) ?? [];
   const makeBody = (version = session?.version ?? 0): Omit<Intent, 'key'> => ({
     kind: 'recover',
     sessionId: id,
@@ -571,78 +587,161 @@ export function AttendanceRecoveryView({
           title={t('recoveryPick')}
           onClose={() => setPicker(false)}
         >
-          <Text>{t('recoverGuestLimit')}</Text>
-          <Field
-            id="recovery-search"
-            label={t('search')}
-            value={search}
-            onChange={setSearch}
-            multiline={false}
-          />
+          <View className="flex-row items-start gap-space-8">
+            <Icon
+              name="info"
+              size={18}
+            />
+            <Text className="flex-1 text-size-12 text-mdy-secondary">
+              {t('recoverGuestLimit')}
+            </Text>
+          </View>
+          <View className="flex-row items-center gap-space-8 rounded-radius-14 border border-mdy-border bg-mdy-surface pl-space-12 pr-space-4">
+            <Icon
+              name="search"
+              size={20}
+            />
+            <TextInput
+              testID="recovery-search"
+              accessibilityLabel={t('recovery.pickSearch')}
+              placeholder={t('recovery.pickerPlaceholder')}
+              placeholderTextColor={colors.placeholder}
+              value={search}
+              onChangeText={setSearch}
+              autoCorrect={false}
+              returnKeyType="search"
+              className="flex-1 min-w-0 min-h-space-48 text-size-14 font-bvp-regular text-mdy-ink py-space-10"
+            />
+            {!!search && (
+              <Pressable
+                testID="recovery-search-clear"
+                accessibilityRole="button"
+                accessibilityLabel={t('recovery.clearSearch')}
+                onPress={() => setSearch('')}
+                className="w-space-44 h-space-44 items-center justify-center"
+              >
+                <Icon
+                  name="close"
+                  size={18}
+                />
+              </Pressable>
+            )}
+          </View>
           <QueryBlock
             query={students}
             prefix="recovery-students"
           >
             <ScrollView
-              className="max-h-[300px]"
-              contentContainerClassName="gap-space-8"
+              style={{ maxHeight: Math.min(320, height * 0.38) }}
+              keyboardShouldPersistTaps="handled"
+              contentContainerClassName="gap-space-10 pb-space-4"
             >
-              {students.data?.students
-                .filter((student) =>
-                  (student.name ?? '')
-                    .toLocaleLowerCase()
-                    .includes(search.toLocaleLowerCase())
-                )
-                .map((student) => {
-                  const already = existing.data?.rows.some(
-                      (row) => row.enrollmentId === student.id
+              {visibleStudents.map((student) => {
+                const already = existing.data?.rows.some(
+                    (row) => row.enrollmentId === student.id
+                  ),
+                  basis =
+                    started &&
+                    admissionBasis(
+                      student.enrollmentStatus,
+                      student.paymentType,
+                      student.paidAt,
+                      started
                     ),
-                    basis =
-                      started &&
-                      admissionBasis(
-                        student.enrollmentStatus,
-                        student.paymentType,
-                        student.paidAt,
-                        started
-                      ),
-                    waiting =
-                      (permissions.data?.totals?.eligible ?? 0) > 0 &&
-                      (!existing.data ||
-                        existing.busy ||
-                        existing.data.rows.length < existing.data.total);
-                  const unavailable = already
-                    ? t('alreadyRecorded')
-                    : student.enrollmentStatus === 'PENDING_PAYMENT'
-                      ? t('notEligible')
-                      : !student.paidAt
-                        ? t('noPayment')
-                        : !basis
-                          ? t('latePayment')
-                          : waiting
-                            ? t('loading')
-                            : undefined;
-                  return (
-                    <View
-                      key={student.id}
-                      className="gap-space-4"
-                    >
-                      <Button
-                        testID={`recovery-option-${student.id}`}
-                        variant={selected[student.id] ? 'primary' : 'secondary'}
-                        disabled={!!unavailable}
-                        onPress={() => pick(student)}
-                      >
+                  waiting =
+                    (permissions.data?.totals?.eligible ?? 0) > 0 &&
+                    (!existing.data ||
+                      existing.busy ||
+                      existing.data.rows.length < existing.data.total);
+                const unavailable = already
+                  ? t('alreadyRecorded')
+                  : student.enrollmentStatus === 'PENDING_PAYMENT'
+                    ? t('notEligible')
+                    : !student.paidAt
+                      ? t('noPayment')
+                      : !basis
+                        ? t('latePayment')
+                        : waiting
+                          ? t('loading')
+                          : undefined;
+                return (
+                  <Pressable
+                    key={student.id}
+                    testID={`recovery-option-${student.id}`}
+                    accessibilityRole="button"
+                    accessibilityLabel={student.name ?? t('nameMissing')}
+                    accessibilityHint={
+                      unavailable ?? t('recovery.chooseStudent')
+                    }
+                    accessibilityState={{
+                      disabled: !!unavailable,
+                      selected: !!selected[student.id],
+                    }}
+                    disabled={!!unavailable}
+                    onPress={() => pick(student)}
+                    className={`rounded-radius-14 border p-space-14 gap-space-10 ${selected[student.id] ? 'border-mdy-link bg-mdy-tint2' : 'border-mdy-border bg-mdy-surface'} ${unavailable ? '' : 'active:bg-mdy-muted2'}`}
+                  >
+                    <View className="flex-row items-center gap-space-10">
+                      <Avatar
+                        name={student.name ?? t('nameMissing')}
+                        size={36}
+                      />
+                      <Text className="flex-1 text-size-14 font-bvp-semibold">
                         {student.name ?? t('nameMissing')}
-                      </Button>
-                      <Text className="text-size-12 text-mdy-secondary">
-                        {unavailable ?? t(`basis.${basis}`)}
-                        {student.paidAt
-                          ? ` · ${isoTime(student.paidAt)} ${isoDate(student.paidAt)}`
-                          : ''}
                       </Text>
+                      <Icon
+                        name={
+                          unavailable
+                            ? 'lock'
+                            : selected[student.id]
+                              ? 'check_circle'
+                              : 'chevron_right'
+                        }
+                        size={20}
+                        color={unavailable ? colors.tertiary : colors.primary}
+                      />
                     </View>
-                  );
-                })}
+                    <View className="gap-space-4">
+                      <Text
+                        className={`text-size-12 font-bvp-medium ${unavailable ? 'text-mdy-secondary' : 'text-mdy-link'}`}
+                      >
+                        {unavailable ?? t('recovery.canSelect')}
+                      </Text>
+                      {!unavailable && basis && (
+                        <Text className="text-size-11 text-mdy-secondary">
+                          {t(`basis.${basis}`)}
+                        </Text>
+                      )}
+                      {!!student.paidAt && (
+                        <Text className="text-size-11 text-mdy-tertiary">
+                          {t('recovery.paymentTime', {
+                            time: isoTime(student.paidAt),
+                            date: isoDate(student.paidAt),
+                          })}
+                        </Text>
+                      )}
+                    </View>
+                  </Pressable>
+                );
+              })}
+              {students.data && visibleStudents.length === 0 && (
+                <View
+                  testID="recovery-search-empty"
+                  className="items-center py-space-24 gap-space-8"
+                >
+                  <Icon
+                    name="search"
+                    size={28}
+                  />
+                  <Text className="text-center text-size-13 text-mdy-secondary">
+                    {t(
+                      search.trim()
+                        ? 'recovery.noSearchResults'
+                        : 'recovery.emptyClass'
+                    )}
+                  </Text>
+                </View>
+              )}
               <More
                 query={students}
                 count={students.data?.students.length ?? 0}
@@ -650,6 +749,13 @@ export function AttendanceRecoveryView({
               />
             </ScrollView>
           </QueryBlock>
+          <Button
+            testID="recovery-picker-close"
+            variant="secondary"
+            onPress={() => setPicker(false)}
+          >
+            {t('close')}
+          </Button>
         </Sheet>
       )}
       {review && (

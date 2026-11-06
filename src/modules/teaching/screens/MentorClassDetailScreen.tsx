@@ -17,6 +17,7 @@ import { MentorSessionRow, StatusChip } from '../components/rows';
 import { useTeachingQuery } from '../hooks/useTeachingQuery';
 import { safeMeetingLink } from '../format';
 import type { TeachingClass } from '../types';
+import { sessionDisplayStatus } from '../services/sessionDisplayStatus';
 export function MentorClassDetailScreen({
   route,
   navigation,
@@ -50,6 +51,11 @@ function Detail({
 }) {
   const { t } = useTranslation('teaching');
   const { notify } = useAuth();
+  const [now, setNow] = useState(Date.now);
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 30000);
+    return () => clearInterval(timer);
+  }, []);
   const query = useTeachingQuery({
     kind: 'class',
     classId,
@@ -64,16 +70,16 @@ function Detail({
   const nextSession = [...list]
     .sort(
       (a, b) =>
-        (a.status === 'IN_PROGRESS' ? 0 : 1) -
-          (b.status === 'IN_PROGRESS' ? 0 : 1) ||
+        (sessionDisplayStatus(a, now) === 'IN_PROGRESS' ? 0 : 1) -
+          (sessionDisplayStatus(b, now) === 'IN_PROGRESS' ? 0 : 1) ||
         Date.parse(a.startsAt) - Date.parse(b.startsAt)
     )
     .find(
       (session) =>
         session.readSessionContext &&
-        (session.status === 'IN_PROGRESS' ||
-          (session.status === 'SCHEDULED' &&
-            Date.parse(session.endsAt) > Date.now()))
+        ['IN_PROGRESS', 'SCHEDULED'].includes(
+          sessionDisplayStatus(session, now)
+        )
     );
   const context = useTeachingQuery(
     {
@@ -206,6 +212,7 @@ function Detail({
             </Alert>
           )}
           <Sessions
+            now={now}
             classInfo={item}
             query={sessions}
             title={item.name}
@@ -239,11 +246,13 @@ function Fact({
   );
 }
 function Sessions({
+  now,
   classInfo,
   query,
   title,
   navigation,
 }: {
+  now: number;
   classInfo: TeachingClass;
   query: QueryState;
   title: string;
@@ -261,13 +270,15 @@ function Sessions({
   const isDone = (status: string) =>
     ['COMPLETED', 'CANCELLED'].includes(status);
   const upcoming = list
-    .filter((item) => !isDone(item.status))
+    .filter((item) => !isDone(sessionDisplayStatus(item, now)))
     .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
   const done = list
-    .filter((item) => isDone(item.status))
+    .filter((item) => isDone(sessionDisplayStatus(item, now)))
     .sort((a, b) => b.startsAt.localeCompare(a.startsAt));
   const shown = tab === 'upcoming' ? upcoming : done;
-  const taught = done.filter((item) => item.status === 'COMPLETED').length;
+  const taught = done.filter(
+    (item) => sessionDisplayStatus(item, now) === 'COMPLETED'
+  ).length;
   return (
     <>
       <View className="flex-row items-center justify-between pt-space-8">
@@ -325,6 +336,7 @@ function Sessions({
         <Card className="mx-space-0 p-space-6 gap-space-0">
           {shown.map((item) => (
             <MentorSessionRow
+              now={now}
               key={item.id}
               item={item}
               onPress={() =>

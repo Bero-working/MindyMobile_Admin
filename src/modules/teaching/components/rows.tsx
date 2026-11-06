@@ -2,6 +2,7 @@ import { Pressable, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { Avatar, Card, Chip, Icon, Text } from '@/components/ui/primitives';
 import type { TeachingClass, TeachingSession, TeachingStudent } from '../types';
+import { sessionDisplayStatus } from '../services/sessionDisplayStatus';
 import {
   calendarDate,
   monthLabel,
@@ -249,9 +250,11 @@ export function ClassCard({
 export function MentorSessionRow({
   item,
   onPress,
+  now,
 }: {
   item: TeachingSession;
   onPress: () => void;
+  now?: number;
 }) {
   const { t, i18n } = useTranslation('teaching');
   const allowed = item.readSessionContext;
@@ -324,14 +327,10 @@ export function MentorSessionRow({
         )}
       </View>
       <View>
-        {today && !['COMPLETED', 'CANCELLED'].includes(item.status) ? (
-          <Chip variant="success">{t('today')}</Chip>
-        ) : (
-          <StatusChip
-            group="classSessionStatus"
-            value={item.status}
-          />
-        )}
+        <StatusChip
+          group="mentorSessionStatus"
+          value={sessionDisplayStatus(item, now)}
+        />
       </View>
     </Pressable>
   );

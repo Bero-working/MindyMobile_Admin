@@ -1,5 +1,13 @@
 import type { ReactElement, ReactNode } from 'react';
-import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  View,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BrandHeader, Button, Icon, Text } from './primitives';
 import { useMindyTheme } from './theme';
 
@@ -72,6 +80,7 @@ export function ListPage<T>({
   renderRow,
   footer,
   refresh,
+  contentContainerStyle,
 }: {
   prefix: string;
   title: string;
@@ -85,8 +94,10 @@ export function ListPage<T>({
   renderRow: (row: T, index: number) => ReactElement;
   footer?: ReactElement | null;
   refresh?: (() => void) | undefined;
+  contentContainerStyle?: StyleProp<ViewStyle>;
 }) {
   const { variables } = useMindyTheme();
+  const insets = useSafeAreaInsets();
   return (
     <View
       testID={`${prefix}-screen`}
@@ -103,11 +114,15 @@ export function ListPage<T>({
         {headerExtra}
       </SubpageHeader>
       <FlatList
-        className="-mt-space-28 rounded-tl-radius-28 rounded-tr-radius-28 bg-mdy-bg"
+        className="flex-1 -mt-space-28 rounded-tl-radius-28 rounded-tr-radius-28 bg-mdy-bg"
         data={rows}
         keyExtractor={rowKey}
         renderItem={({ item, index }) => renderRow(item, index)}
-        contentContainerStyle={styles.content}
+        contentContainerStyle={[
+          styles.content,
+          { paddingBottom: insets.bottom + 24 },
+          contentContainerStyle,
+        ]}
         keyboardShouldPersistTaps="handled"
         initialNumToRender={8}
         maxToRenderPerBatch={8}

@@ -78,10 +78,12 @@ export function createApiClient({
       method = 'GET',
       params = {},
       data,
+      idempotencyKey,
     }: {
       method?: 'GET' | 'POST' | 'PUT' | 'PATCH';
       params?: Record<string, string | number | boolean>;
       data?: object;
+      idempotencyKey?: string;
     } = {}
   ) {
     if (!isActive()) throw new ApiError('denied');
@@ -97,7 +99,10 @@ export function createApiClient({
       method,
       params,
       ...(data ? { data } : {}),
-      headers: write ? { Origin: origin! } : {},
+      headers: {
+        ...(write ? { Origin: origin! } : {}),
+        ...(idempotencyKey ? { 'Idempotency-Key': idempotencyKey } : {}),
+      },
       withCredentials: true,
       timeout,
       validateStatus: () => true,
